@@ -80,7 +80,7 @@ export default function EnquiryModal({
         throw new Error(data.error ?? "Something went wrong. Please try again.");
       }
       setStatus("ok");
-      // Lead is safely saved — hand the guest straight to FareHarbor to
+      // Lead is safely saved; hand the guest straight to FareHarbor to
       // actually book, carrying everything they just typed.
       openFareHarbor(prefill());
     } catch (err) {
@@ -101,7 +101,7 @@ export default function EnquiryModal({
             <h3>Thanks, {name || "friend"}! 🎉</h3>
             <p className="sub">
               {FAREHARBOR_ENABLED
-                ? "Your details are saved and the booking window is opening — pick your date and confirm. Jimmy will be in touch either way."
+                ? "Your details are saved and the booking window is opening: pick your date and confirm. Jimmy will be in touch either way."
                 : "Your enquiry is in. Jimmy will be in touch shortly to lock in the details."}
             </p>
             <div className="modal-actions">
@@ -142,17 +142,27 @@ export default function EnquiryModal({
                   </span>
                 </div>
               ))}
-              <div className="row">
-                <b>Estimate</b>
-                <b>
-                  <Price aud={draft.total} />
-                </b>
-              </div>
               {/*
-                Last screen before checkout, so the amount that will actually
-                hit the card belongs here whenever the total above is converted.
+                No estimate at all for a plain destination enquiry (gallery
+                cards pass total: 0, addOns: []): showing "$0" would read as
+                a real price rather than the absence of one.
               */}
-              <ChargedInAud aud={draft.total} className="summary-charged" />
+              {(draft.total > 0 || draft.addOns.length > 0) && (
+                <>
+                  <div className="row">
+                    <b>Estimate</b>
+                    <b>
+                      <Price aud={draft.total} />
+                    </b>
+                  </div>
+                  {/*
+                    Last screen before checkout, so the amount that will
+                    actually hit the card belongs here whenever the total
+                    above is converted.
+                  */}
+                  <ChargedInAud aud={draft.total} className="summary-charged" />
+                </>
+              )}
             </div>
 
             {status === "err" && (

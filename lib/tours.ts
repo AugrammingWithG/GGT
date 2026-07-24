@@ -5,7 +5,7 @@ export type AddOn = {
 };
 
 /**
- * Guest cap for a tour with none set — the 16-seat bus, which every tour
+ * Guest cap for a tour with none set: the 16-seat bus, which every tour
  * currently runs on. Kept only as the fallback for tour records written
  * before `max` existed; the real limit lives on each tour, so a second,
  * smaller vehicle just means a lower `max` on the tours that use it.
@@ -29,15 +29,15 @@ export const PRIVATE_TOUR_RATE = {
 export type Tour = {
   id: string;
   name: string;
-  /** Hunter Valley only — its own per-person adult rate. */
+  /** Hunter Valley only: its own per-person adult rate. */
   priceAdult?: number;
-  /** Hunter Valley only — its own per-person senior rate. */
+  /** Hunter Valley only: its own per-person senior rate. */
   priceSenior?: number;
-  /** Hunter Valley only — its own per-person child/student (5-17) rate. */
+  /** Hunter Valley only: its own per-person child/student (5-17) rate. */
   priceChild?: number;
   /** Absent where group size is negotiated per private tour rather than fixed. */
   min?: number;
-  /** Most guests this tour can take — the capacity of the vehicle it runs on. */
+  /** Most guests this tour can take: the capacity of the vehicle it runs on. */
   max: number;
   addOns: AddOn[];
   /** Optional display order in the builder dropdown. */

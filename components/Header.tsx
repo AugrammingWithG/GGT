@@ -13,9 +13,8 @@ import {
 /**
  * Site header.
  *
- * Three zones on a grid — brand pill / centred links / actions — so the links
- * sit dead centre of the viewport rather than being pushed around by however
- * wide the brand happens to be.
+ * Three zones on a grid — brand pill / links / actions — with the links
+ * bunched against the CTA on the right rather than centred in the bar.
  *
  * `overlay` floats the bar over a full-bleed hero (the home page) instead of
  * sitting above it as its own cream band. In that mode it starts transparent

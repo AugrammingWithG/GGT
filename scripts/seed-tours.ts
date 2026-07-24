@@ -26,7 +26,7 @@ function loadEnvLocal() {
       }
     }
   } catch {
-    /* no .env.local — rely on the ambient environment */
+    /* no .env.local; rely on the ambient environment */
   }
 }
 
