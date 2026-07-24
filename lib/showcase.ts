@@ -1,7 +1,7 @@
 import { mediaBg } from "./media";
 
 /**
- * The eight private-tour showcase destinations, inspiration only, shown
+ * The seven private-tour showcase destinations, inspiration only, shown
  * below the Hunter Valley hero. Hunter Valley itself isn't here: it's the
  * one tour bookable online, so it gets its own hero (HunterHero) instead of
  * a slot in this enquiry-only gallery.
@@ -52,14 +52,6 @@ export const SHOWCASE_TOURS: ShowcaseTour[] = [
       "Bakery, fish market, cheese, chocolate and a pie or two. Bring an appetite.",
     bg: "linear-gradient(150deg,#b4ad8a,#484537)",
     image: "/images/tours/foodie.webp",
-  },
-  {
-    id: "jenolan",
-    region: "Cliffs, caves & campfire",
-    name: "Blue Mountains & Jenolan Overnight",
-    blurb: "A big day in the ranges, a night under canvas, a campfire dinner.",
-    bg: "linear-gradient(150deg,#7b8c90,#31383a)",
-    image: "/images/tours/jenolan.webp",
   },
   {
     id: "highlands",

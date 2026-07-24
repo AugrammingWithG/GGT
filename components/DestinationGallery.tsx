@@ -51,7 +51,7 @@ function untiltCard(e: ReactPointerEvent<HTMLDivElement>) {
 const CLONE = 2;
 
 /**
- * The eight private-tour destinations, below the Hunter Valley hero: plain
+ * The seven private-tour destinations, below the Hunter Valley hero: plain
  * inspiration, not a booking flow. A horizontal scroll-snap row the visitor
  * drags/swipes/scrolls or uses the arrows on, auto-advancing every 5s for
  * anyone who isn't; whichever card lands nearest the centre scales up (see
@@ -202,7 +202,7 @@ export default function DestinationGallery() {
   return (
     <section className="dg wrap" id="destinations">
       <div ref={head.ref} className={`dg-head ${head.className}`}>
-        <p className="eyebrow">8 destinations · your itinerary</p>
+        <p className="eyebrow">7 destinations · your itinerary</p>
         <h2 className="dg-title">Build a private tour</h2>
         <p className="dg-lead">
           Just your group. Choose a destination, the number of guests and the
@@ -211,7 +211,7 @@ export default function DestinationGallery() {
         <a href="#builder" className="btn btn-primary dg-head-cta btn-shine">
           Start building <span className="btn-arrow">→</span>
         </a>
-        <p className="eyebrow dg-kicker">Eight more ways to spend the day</p>
+        <p className="eyebrow dg-kicker">Seven more ways to spend the day</p>
       </div>
 
       <div ref={viewport.ref} className={viewport.className}>
@@ -278,6 +278,7 @@ export default function DestinationGallery() {
             tourName: enquiryTour.name,
             guests: 2,
             addOns: [],
+            payOnDayAddOns: [],
             total: 0,
             fareharborItemId: tourItemId(),
           }}

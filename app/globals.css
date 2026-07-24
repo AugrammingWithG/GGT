@@ -193,7 +193,11 @@ select{width:100%;padding:14px 16px;font-family:var(--font);font-size:16px;borde
 .addon .left{display:flex;align-items:center;gap:12px;font-size:15px}
 .addon .box{width:22px;height:22px;border:2px solid var(--stone);border-radius:6px;display:flex;align-items:center;justify-content:center;flex:none;font-size:14px;color:#fff}
 .addon.on .box{background:var(--olive);border-color:var(--olive)}
-.addon .price{font-family:var(--font-mono),'IBM Plex Mono';font-size:14px;color:var(--ink)}
+.addon .price{font-family:var(--font-mono),'IBM Plex Mono';font-size:14px;color:var(--ink);text-align:right;flex:none}
+/* Third-party extras: same row, deliberately quieter than a price we charge,
+   with the "paid on the day" caption always visible — not only once ticked. */
+.addon-note{display:block;font-size:12px;color:var(--stone);margin-top:2px}
+.addon.onday .price{color:var(--stone)}
 
 .bill{background:var(--olive-deep);color:var(--paper);border-radius:20px;padding:clamp(20px,2.6vw,28px);box-shadow:0 30px 60px -30px rgba(0,0,0,.5);position:sticky;top:calc(var(--nav-h) + 20px)}
 .bill .t{font-family:var(--font-mono),'IBM Plex Mono';font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
@@ -206,6 +210,11 @@ select{width:100%;padding:14px 16px;font-family:var(--font);font-size:16px;borde
 /* Height is reserved even when empty so the bill doesn't reflow when converted
    prices replace AUD after hydration. */
 .bill-charged{display:block;text-align:right;min-height:17px;margin-top:2px;font-family:var(--font-mono),'IBM Plex Mono';font-size:12px;opacity:.75}
+/* Pay-on-the-day extras, ruled off below the total so they read as a separate
+   list of the guest's own costs rather than part of the estimate. */
+.bill-onday{margin-top:18px;padding-top:14px;border-top:1px solid rgba(246,242,233,.25)}
+.bill-onday .line:last-of-type{border-bottom:none}
+.bill-onday-note{font-size:12px;line-height:1.45;opacity:.75;margin-top:6px}
 @media(max-width:780px){.builder-grid{grid-template-columns:1fr}.bill{position:relative;top:0}}
 
 /* brand motto */
@@ -541,6 +550,41 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
 .cpick select option{color:var(--ink)}
 .cpick-note{margin-top:8px;font-size:12px;line-height:1.45;opacity:.62}
 
+/* reviews */
+.reviews{background:var(--oat);padding:80px 0}
+.reviews .head{margin-bottom:34px}
+.reviews h2{font-size:clamp(28px,4.2vw,46px);margin-top:4px}
+.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.review-card{background:#fff;border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:16px;box-shadow:0 24px 50px -34px rgba(33,28,36,.5)}
+.review-card blockquote{font-size:16px;line-height:1.55;color:var(--ink);flex:1}
+.review-card figcaption{display:flex;flex-direction:column;gap:2px;font-size:13px;color:#5a564f}
+.review-card figcaption b{font-size:15px;color:var(--ink)}
+.review-source{font-family:var(--font-mono),'IBM Plex Mono';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--olive);margin-top:4px}
+.stars{color:var(--gold);font-size:16px;letter-spacing:2px}
+
+/* trust / accreditation strip */
+.trust{border:1.5px solid rgba(33,28,36,.12);border-radius:20px;padding:26px 30px;margin:0 0 84px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:22px}
+.trust-lead{font-size:16px;font-weight:bold;max-width:22ch}
+.trust-badges{list-style:none;display:flex;flex-wrap:wrap;gap:14px}
+.trust-badge{display:flex;align-items:center;gap:10px;background:var(--oat);border-radius:12px;padding:10px 14px}
+.trust-badge-mark{font-family:var(--font-mono),'IBM Plex Mono';font-weight:500;font-size:15px;color:var(--olive-deep);letter-spacing:.02em}
+.trust-badge-detail{font-size:12px;line-height:1.3;color:#5a564f;max-width:16ch}
+
+/* whatsapp floating button */
+.wa-fab{position:fixed;right:20px;bottom:20px;z-index:90;display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:12px 18px;border-radius:999px;box-shadow:0 14px 30px -10px rgba(0,0,0,.4);font-size:15px;font-weight:bold;transition:transform .15s ease,box-shadow .15s ease}
+.wa-fab:hover{transform:translateY(-2px);box-shadow:0 18px 34px -10px rgba(0,0,0,.5);color:#fff}
+.wa-fab-icon{flex:none}
+.wa-fab-text{white-space:nowrap}
+
+@media(max-width:760px){
+  .review-grid{grid-template-columns:1fr}
+  .trust{flex-direction:column;align-items:flex-start}
+  .wa-fab-text{display:none}
+  .wa-fab{padding:14px;right:16px;bottom:16px}
+}
+@media(prefers-reduced-motion:reduce){
+  .wa-fab:hover{transform:none}
+}
 /* Disc set into the leading edge of a pill button. Negative margins let it sit
    flush inside the button's own padding instead of adding to its width. */
 .btn-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex:none;margin:-7px 2px -7px -12px;border-radius:999px;background:#fff;color:var(--marmalade);font-size:14px;line-height:1}
@@ -785,6 +829,11 @@ header.scrolled{box-shadow:0 10px 30px -20px rgba(33,28,36,.5)}
 .modal .summary{background:var(--oat);border-radius:12px;padding:14px 16px;font-family:var(--font-mono),'IBM Plex Mono';font-size:13px;margin-bottom:20px}
 .modal .summary .row{display:flex;justify-content:space-between;padding:3px 0}
 .summary-charged{display:block;text-align:right;padding:2px 0 0;font-size:12px;opacity:.72}
+.modal .summary .row.onday{color:var(--stone)}
+/* The first pay-on-the-day row always follows the charged-in-AUD line, so this
+   rules off the estimate from the guest's own costs below it. */
+.summary-charged + .row.onday{margin-top:8px;padding-top:8px;border-top:1px solid rgba(33,28,36,.14)}
+.summary-onday-note{font-size:12px;line-height:1.45;color:var(--stone);padding-top:4px}
 .modal-actions{display:flex;gap:12px;margin-top:8px}
 .modal-close{background:none;border:none;font-size:26px;cursor:pointer;color:var(--stone);float:right;line-height:1}
 .form-msg{padding:12px 14px;border-radius:12px;font-size:14px;margin-bottom:16px}
@@ -809,6 +858,9 @@ header.scrolled{box-shadow:0 10px 30px -20px rgba(33,28,36,.5)}
 .tour-edit{display:grid;grid-template-columns:1fr 90px 70px;gap:10px;align-items:center;margin-bottom:8px}
 /* the name/base/min/max row needs a fourth column; add-on rows keep three */
 .tour-edit.nums{grid-template-columns:1fr 90px 70px 70px}
+.tour-edit.addon-row{grid-template-columns:1fr 90px auto 70px}
+.addon-flag{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--stone);white-space:nowrap;cursor:pointer}
+@media(max-width:640px){.tour-edit.addon-row{grid-template-columns:1fr 90px}}
 .tour-edit input{padding:10px 12px;font-family:var(--font);font-size:14px;border:1.5px solid rgba(33,28,36,.2);border-radius:10px}
 .muted{color:var(--stone);font-size:14px}
 
