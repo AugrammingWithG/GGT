@@ -8,8 +8,38 @@ export const SITE_NAME = "Gourmet Getaway Tours";
 export const SITE_DESCRIPTION =
   "Owner-operated food, wine and adventure tours across New South Wales. Pick the place, set your group, choose your extras — and watch the price add up as you go.";
 
+/**
+ * Home page meta description. Deliberately narrower than SITE_DESCRIPTION,
+ * which stays broad because it describes the business itself in the
+ * Organization JSON-LD. This one leads with the search phrase the home page
+ * is meant to rank for, mirroring its H1/H2 pair.
+ */
+export const HOME_DESCRIPTION =
+  "Hunter Valley food and wine tours from Sydney, NSW. Owner-operated small-group and private day tours — meals cooked by your guide, wines matched to the menu, door to door.";
+
 /** Business phone, mirrored from the site footer. */
 export const BUSINESS_PHONE = "+61416139567";
+
+/** Public enquiry address, mirrored from the site footer. */
+export const BUSINESS_EMAIL = "info@gourmetgetawaytours.com.au";
+
+/**
+ * Registered business identifiers shown in the footer so visitors can verify
+ * who they are dealing with. The client has confirmed no ABN is to be shown;
+ * the ACN is a separate, nine-digit company number, so never relabel it as one.
+ */
+export const ACCREDITATION_NUMBER = "40079";
+export const BUSINESS_ACN = "627 789 146";
+
+/** Registered business address, mirrored from the site footer. */
+export const BUSINESS_ADDRESS = {
+  street: "17 Allambie Rd",
+  suburb: "Allambie Heights",
+  state: "New South Wales",
+  stateCode: "NSW",
+  postcode: "2100",
+  country: "AU",
+} as const;
 
 /**
  * Social profiles — single source of truth for the footer, the "follow" band
@@ -47,16 +77,28 @@ export function organizationJsonLd() {
     url: SITE_URL,
     image: `${SITE_URL}/opengraph-image`,
     telephone: BUSINESS_PHONE,
+    email: BUSINESS_EMAIL,
     priceRange: "$$",
     sameAs: SOCIAL_LINKS.map((s) => s.url),
+    identifier: [
+      { "@type": "PropertyValue", name: "ACN", value: BUSINESS_ACN },
+      {
+        "@type": "PropertyValue",
+        name: "Accreditation number",
+        value: ACCREDITATION_NUMBER,
+      },
+    ],
     areaServed: {
       "@type": "State",
       name: "New South Wales",
     },
     address: {
       "@type": "PostalAddress",
-      addressRegion: "NSW",
-      addressCountry: "AU",
+      streetAddress: BUSINESS_ADDRESS.street,
+      addressLocality: BUSINESS_ADDRESS.suburb,
+      addressRegion: BUSINESS_ADDRESS.stateCode,
+      postalCode: BUSINESS_ADDRESS.postcode,
+      addressCountry: BUSINESS_ADDRESS.country,
     },
   };
 }
@@ -77,13 +119,19 @@ export function toursJsonLd(tours: Tour[]) {
         name: tour.name,
         url: `${SITE_URL}/#builder`,
         provider: { "@id": `${SITE_URL}/#organization` },
-        offers: {
-          "@type": "Offer",
-          price: tour.base,
-          priceCurrency: "AUD",
-          availability: "https://schema.org/InStock",
-          url: `${SITE_URL}/#builder`,
-        },
+        // Private tours are quoted by enquiry — no confirmed price, and a $0
+        // or null Offer is worse than omitting it. Hunter Valley is the only
+        // tour with its own price; its adult rate stands in as "the" price
+        // since Offer has no clean way to express three age-tier rates.
+        ...(tour.priceAdult != null && {
+          offers: {
+            "@type": "Offer",
+            price: tour.priceAdult,
+            priceCurrency: "AUD",
+            availability: "https://schema.org/InStock",
+            url: `${SITE_URL}/#builder`,
+          },
+        }),
       },
     })),
   };

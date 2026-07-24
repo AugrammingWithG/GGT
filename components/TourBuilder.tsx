@@ -9,6 +9,8 @@ import {
   tourTotal,
   type Tour,
 } from "@/lib/tours";
+import Price from "./Price";
+import type { Tour } from "@/lib/tours";
 import { useReveal } from "./useReveal";
 import EnquiryModal, { type EnquiryDraft } from "./EnquiryModal";
 import { FAREHARBOR_ENABLED, tourItemId } from "@/lib/fareharbor";
@@ -33,8 +35,9 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
     setCurrentId(id);
     setSelected({});
     // Clamp into the new tour's range — switching to a smaller vehicle can
-    // put the current party size above its maximum.
-    setGuests((g) => Math.min(Math.max(g, next.min), next.max));
+    // put the current party size above its maximum. Showcase tours have no
+    // fixed minimum, so fall back to 1.
+    setGuests((g) => Math.min(Math.max(g, next.min ?? 1), next.max));
   }
 
   // Preselect a tour when another section (e.g. the destination carousel) asks
@@ -60,10 +63,20 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
 
   if (!current) return null;
 
+  // Hunter Valley is the only tour whose base price includes cellar-door
+  // wine tasting (plus the "Extra winery" add-on) — surface the age
+  // requirement as soon as it's selected, not just in the terms page.
+  const isWineTour = current.id === "hunter-valley";
+
   const selectedAddOns = current.addOns.filter((a) => selected[a.id]);
   const charged = chargeableAddOns(selectedAddOns);
   const onTheDay = payOnDayAddOns(selectedAddOns);
   const total = tourTotal(current.base, guests, selectedAddOns);
+  // No tour has a computable total any more: Hunter Valley is priced per
+  // age tier (this stepper only tracks one guest count) and every other
+  // tour is quoted per itinerary by enquiry. This is provisional — the
+  // builder is being converted to a non-interactive showcase shortly.
+  const extrasTotal = selectedAddOns.reduce((sum, a) => sum + a.price * guests, 0);
 
   // Handed on already split, so nothing downstream — the enquiry record, the
   // emails, FareHarbor — can fold a third party's ticket back into our total.
@@ -103,6 +116,20 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   </option>
                 ))}
               </select>
+              {isWineTour && (
+                <p
+                  className="muted"
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    marginTop: 8,
+                    paddingTop: 8,
+                    borderTop: "1px solid rgba(255,255,255,0.15)",
+                  }}
+                >
+                  Guests must be 18 or older to taste wine.
+                </p>
+              )}
             </div>
 
             <div className="field">
@@ -112,7 +139,7 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   type="button"
                   aria-label="Fewer guests"
                   onClick={() =>
-                    setGuests((g) => (g > current.min ? g - 1 : g))
+                    setGuests((g) => (g > (current.min ?? 1) ? g - 1 : g))
                   }
                 >
                   −
@@ -180,36 +207,15 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
             <div>
               <div className="line">
                 <span>
-                  Base · {guests} guest{guests > 1 ? "s" : ""}
-                </span>
-                <span>
-                  <Price aud={current.base * guests} />
+                  {guests} guest{guests > 1 ? "s" : ""}
                 </span>
               </div>
               {charged.map((a) => (
                 <div className="line add" key={a.id}>
-                  <span>
-                    + {a.name} ×{guests}
-                  </span>
-                  <span>
-                    <Price aud={a.price * guests} />
-                  </span>
+                  <span>+ {a.name}</span>
                 </div>
               ))}
             </div>
-            <div className="total">
-              <span className="mono">Estimate</span>
-              {/* key changes on total → remount re-runs the bump animation */}
-              <b key={total} className="bill-bump">
-                <Price aud={total} />
-              </b>
-            </div>
-            {/*
-              The amount actually charged, when the figure above isn't in AUD.
-              Always rendered so the card doesn't reflow once converted prices
-              swap in; empty and invisible for AUD visitors.
-            */}
-            <ChargedInAud aud={total} className="bill-charged" />
             {/*
               Third-party tickets and hire, kept outside the estimate above and
               below the total line so it reads as what it is: money the guest
@@ -242,10 +248,14 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
             {/*
               Private tours are quoted per itinerary in FareHarbor, so this
               figure is a guide, not the price charged at checkout.
+              No live total: Hunter Valley is priced per age tier (adult /
+              senior / child), which this single guest-count stepper can't
+              represent, and every other tour is quoted per itinerary by
+              enquiry. Pricing is confirmed once Jimmy has the details.
             */}
             <p className="muted" style={{ fontSize: 12, marginTop: 8 }}>
-              A guide only — pick-up point and itinerary change the final price,
-              which is confirmed when you book.
+              Pricing is confirmed when you enquire — send us your day and
+              we&rsquo;ll get back to you with the cost.
             </p>
             <button
               type="button"
