@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { FieldValue } from "firebase-admin/firestore";
 import { z } from "zod";
 import { adminDb, verifyAdmin } from "@/lib/firebase.admin";
+import { DEFAULT_MAX_GUESTS } from "@/lib/tours";
 import { getTours } from "@/lib/tours.server";
 
 export const runtime = "nodejs";
@@ -8,7 +10,10 @@ export const runtime = "nodejs";
 const addOnSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
+  /** On a pay-on-the-day extra this is a guide price; 0 means it varies. */
   price: z.number().nonnegative(),
+  /** Third-party cost the guest settles on the day — kept out of every total. */
+  payOnDay: z.boolean().default(false),
 });
 
 const tourSchema = z.object({
@@ -17,10 +22,17 @@ const tourSchema = z.object({
     .min(1)
     .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and dashes only."),
   name: z.string().min(1),
-  base: z.number().nonnegative(),
-  min: z.number().int().min(1),
+  priceAdult: z.number().nonnegative().optional(),
+  priceSenior: z.number().nonnegative().optional(),
+  priceChild: z.number().nonnegative().optional(),
+  min: z.number().int().min(1).optional(),
+  max: z.number().int().min(1).default(DEFAULT_MAX_GUESTS),
   order: z.number().int().optional(),
   addOns: z.array(addOnSchema).default([]),
+  fareharborItemId: z
+    .string()
+    .regex(/^[0-9]*$/, "FareHarbor item IDs are numeric.")
+    .default(""),
 });
 
 /** GET — public: list tours (falls back to seed data). */
@@ -44,8 +56,18 @@ export async function PUT(req: Request) {
     );
   }
 
-  const { id, ...rest } = parsed.data;
-  await adminDb().collection("tours").doc(id).set(rest, { merge: true });
+  const { id, priceAdult, priceSenior, priceChild, min, ...rest } = parsed.data;
+  // Firestore rejects `undefined` field values, and a merge write silently
+  // keeps whatever was already there for a field it's not given — so an
+  // admin clearing a price/min needs an explicit delete, not just an omission.
+  const doc = {
+    ...rest,
+    priceAdult: priceAdult ?? FieldValue.delete(),
+    priceSenior: priceSenior ?? FieldValue.delete(),
+    priceChild: priceChild ?? FieldValue.delete(),
+    min: min ?? FieldValue.delete(),
+  };
+  await adminDb().collection("tours").doc(id).set(doc, { merge: true });
   return NextResponse.json({ ok: true, id });
 }
 

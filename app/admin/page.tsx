@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { getFirebaseAuth } from "@/lib/firebase.client";
 import { money } from "@/lib/money";
-import type { Tour } from "@/lib/tours";
+import { DEFAULT_MAX_GUESTS, type Tour } from "@/lib/tours";
 
 type EnquiryStatus = "new" | "confirmed" | "handled";
 
@@ -17,7 +17,10 @@ type Enquiry = {
   message: string;
   tourName: string;
   guests: number;
+  preferredDate: string;
   addOns: { id: string; name: string; price: number }[];
+  /** Third-party extras the guest pays direct — outside `total`. */
+  payOnDayAddOns: { id: string; name: string; price: number }[];
   total: number;
   preferredDate: string | null;
   tourDate: string | null;
@@ -108,6 +111,18 @@ export default function AdminPage() {
         e.id === id ? { ...e, status: "confirmed", tourDate } : e,
       ),
     );
+  async function deleteEnquiry(id: string) {
+    if (!confirm("Delete this enquiry? This cannot be undone.")) return;
+    const headers = await authHeader();
+    const res = await fetch(`/api/enquiries/${id}`, {
+      method: "DELETE",
+      headers,
+    });
+    if (!res.ok) {
+      alert("Failed to delete enquiry.");
+      return;
+    }
+    setEnquiries((list) => list.filter((e) => e.id !== id));
   }
 
   async function saveTour(tour: Tour) {
@@ -170,6 +185,71 @@ export default function AdminPage() {
             onConfirm={confirmBooking}
             onSetStatus={setStatus}
           />
+          <div className="card-box" key={e.id}>
+            <div className="enq-head">
+              <b>
+                {e.name} · {e.tourName}
+              </b>
+              <span className={`badge ${e.status === "handled" ? "handled" : ""}`}>
+                {e.status}
+              </span>
+            </div>
+            <p className="enq-meta">
+              {e.email}
+              {e.phone ? ` · ${e.phone}` : ""}
+              {e.createdAt
+                ? ` · ${new Date(e.createdAt).toLocaleString("en-AU")}`
+                : ""}
+            </p>
+            <p style={{ marginTop: 8, fontSize: 14 }}>
+              {e.guests} guest{e.guests > 1 ? "s" : ""} ·{" "}
+              {e.preferredDate ? `${e.preferredDate} · ` : ""}
+              {e.addOns.length
+                ? e.addOns.map((a) => a.name).join(", ")
+                : "no add-ons"}{" "}
+              · <b>{money(e.total)}</b>
+            </p>
+            {e.payOnDayAddOns?.length > 0 && (
+              <p className="enq-meta" style={{ marginTop: 6 }}>
+                Pays on the day:{" "}
+                {e.payOnDayAddOns
+                  .map(
+                    (a) =>
+                      `${a.name} (${a.price > 0 ? `~${money(a.price)} pp` : "varies"})`,
+                  )
+                  .join(", ")}{" "}
+                — direct to the provider, not in the total above
+              </p>
+            )}
+            {e.message && (
+              <p style={{ marginTop: 8, fontSize: 14 }} className="muted">
+                “{e.message}”
+              </p>
+            )}
+            <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {e.status === "new" ? (
+                <button
+                  className="btn btn-ghost"
+                  onClick={() => setStatus(e.id, "handled")}
+                >
+                  Mark handled
+                </button>
+              ) : (
+                <button
+                  className="btn btn-ghost"
+                  onClick={() => setStatus(e.id, "new")}
+                >
+                  Reopen
+                </button>
+              )}
+              <button
+                className="btn btn-ghost"
+                onClick={() => deleteEnquiry(e.id)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         ))}
 
         <h2>Tours ({tours.length})</h2>
@@ -295,31 +375,88 @@ function TourEditor({
 
   return (
     <div className="card-box">
-      <div className="tour-edit">
+      <div className="tour-edit nums">
         <input
           value={draft.name}
           onChange={(e) => setDraft({ ...draft, name: e.target.value })}
           placeholder="Tour name"
         />
+        {draft.id === "hunter-valley" && (
+          <>
+            <input
+              type="number"
+              value={draft.priceAdult ?? ""}
+              onChange={(e) =>
+                setDraft({
+                  ...draft,
+                  priceAdult:
+                    e.target.value === "" ? undefined : Number(e.target.value),
+                })
+              }
+              placeholder="Adult price"
+            />
+            <input
+              type="number"
+              value={draft.priceSenior ?? ""}
+              onChange={(e) =>
+                setDraft({
+                  ...draft,
+                  priceSenior:
+                    e.target.value === "" ? undefined : Number(e.target.value),
+                })
+              }
+              placeholder="Senior price"
+            />
+            <input
+              type="number"
+              value={draft.priceChild ?? ""}
+              onChange={(e) =>
+                setDraft({
+                  ...draft,
+                  priceChild:
+                    e.target.value === "" ? undefined : Number(e.target.value),
+                })
+              }
+              placeholder="Child/student (5-17) price"
+            />
+          </>
+        )}
         <input
           type="number"
-          value={draft.base}
-          onChange={(e) => setDraft({ ...draft, base: Number(e.target.value) })}
-          placeholder="Base"
+          value={draft.min ?? ""}
+          onChange={(e) =>
+            setDraft({
+              ...draft,
+              min: e.target.value === "" ? undefined : Number(e.target.value),
+            })
+          }
+          placeholder="Min (blank = negotiated)"
         />
         <input
           type="number"
-          value={draft.min}
-          onChange={(e) => setDraft({ ...draft, min: Number(e.target.value) })}
-          placeholder="Min"
+          value={draft.max}
+          onChange={(e) => setDraft({ ...draft, max: Number(e.target.value) })}
+          placeholder="Max"
+        />
+      </div>
+      <div className="tour-edit">
+        <input
+          value={draft.fareharborItemId ?? ""}
+          onChange={(e) =>
+            setDraft({ ...draft, fareharborItemId: e.target.value.trim() })
+          }
+          placeholder="FareHarbor item ID (e.g. 123456)"
         />
       </div>
       <p className="enq-meta" style={{ marginBottom: 10 }}>
-        id: {draft.id}
+        id: {draft.id} · booking CTA opens{" "}
+        {draft.fareharborItemId
+          ? `FareHarbor item ${draft.fareharborItemId}`
+          : "the full FareHarbor item list"}
       </p>
 
       {draft.addOns.map((a, i) => (
-        <div className="tour-edit" key={a.id}>
+        <div className="tour-edit addon-row" key={a.id}>
           <input
             value={a.name}
             onChange={(e) => updateAddon(i, { name: e.target.value })}
@@ -329,8 +466,16 @@ function TourEditor({
             type="number"
             value={a.price}
             onChange={(e) => updateAddon(i, { price: Number(e.target.value) })}
-            placeholder="Price"
+            placeholder={a.payOnDay ? "Approx (0 = varies)" : "Price"}
           />
+          <label className="addon-flag">
+            <input
+              type="checkbox"
+              checked={!!a.payOnDay}
+              onChange={(e) => updateAddon(i, { payOnDay: e.target.checked })}
+            />
+            Paid on the day
+          </label>
           <button
             className="btn btn-ghost"
             onClick={() =>
@@ -390,8 +535,7 @@ function NewTour({
     onSave({
       id: slug,
       name: name.trim(),
-      base: 0,
-      min: 2,
+      max: DEFAULT_MAX_GUESTS,
       order: existingCount + 1,
       addOns: [],
     });
