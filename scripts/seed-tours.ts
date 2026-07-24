@@ -26,7 +26,7 @@ function loadEnvLocal() {
       }
     }
   } catch {
-    /* no .env.local — rely on the ambient environment */
+    /* no .env.local; rely on the ambient environment */
   }
 }
 
@@ -60,6 +60,7 @@ async function main() {
         priceSenior: priceSenior ?? FieldValue.delete(),
         priceChild: priceChild ?? FieldValue.delete(),
         min: min ?? FieldValue.delete(),
+        base: FieldValue.delete(),
       },
       { merge: true },
     );

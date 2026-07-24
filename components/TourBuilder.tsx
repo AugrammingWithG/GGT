@@ -6,6 +6,7 @@ import {
   chargeableAddOns,
   hasFixedPrice,
   payOnDayAddOns,
+  tourTotal,
   type Tour,
 } from "@/lib/tours";
 import { useReveal } from "./useReveal";
@@ -68,12 +69,13 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
   const selectedAddOns = current.addOns.filter((a) => selected[a.id]);
   const charged = chargeableAddOns(selectedAddOns);
   const onTheDay = payOnDayAddOns(selectedAddOns);
-  // No tour has a computable total any more: Hunter Valley is priced per
-  // age tier (this stepper only tracks one guest count) and every other
-  // tour is quoted per itinerary by enquiry. This is provisional — the
-  // builder is being converted to a non-interactive showcase shortly.
-  const extrasTotal = selectedAddOns.reduce((sum, a) => sum + a.price * guests, 0);
-  const total = extrasTotal;
+  // No tour has a computable base fare any more: Hunter Valley is priced per
+  // age tier (this stepper only tracks one guest count) and every other tour
+  // is quoted per itinerary by enquiry. `total` is chargeable extras only
+  // (base 0, and pay-on-day extras excluded via tourTotal's own filtering) —
+  // enough for EnquiryModal to know whether there's anything to show an
+  // estimate for, not a real quote.
+  const total = tourTotal(0, guests, selectedAddOns);
 
   // Handed on already split, so nothing downstream — the enquiry record, the
   // emails, FareHarbor — can fold a third party's ticket back into our total.

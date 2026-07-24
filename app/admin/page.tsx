@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { getFirebaseAuth } from "@/lib/firebase.client";
@@ -17,11 +17,11 @@ type Enquiry = {
   message: string;
   tourName: string;
   guests: number;
+  preferredDate: string;
   addOns: { id: string; name: string; price: number }[];
   /** Third-party extras the guest pays direct — outside `total`. */
   payOnDayAddOns: { id: string; name: string; price: number }[];
   total: number;
-  preferredDate: string | null;
   tourDate: string | null;
   status: EnquiryStatus;
   createdAt: string | null;
@@ -180,81 +180,13 @@ export default function AdminPage() {
         <h2>Enquiries ({enquiries.length})</h2>
         {enquiries.length === 0 && <p className="muted">No enquiries yet.</p>}
         {enquiries.map((e) => (
-          <Fragment key={e.id}>
           <EnquiryCard
+            key={e.id}
             enquiry={e}
             onConfirm={confirmBooking}
             onSetStatus={setStatus}
             onDelete={deleteEnquiry}
           />
-          {false && (
-          <div className="card-box" key={e.id}>
-            <div className="enq-head">
-              <b>
-                {e.name} · {e.tourName}
-              </b>
-              <span className={`badge ${e.status === "handled" ? "handled" : ""}`}>
-                {e.status}
-              </span>
-            </div>
-            <p className="enq-meta">
-              {e.email}
-              {e.phone ? ` · ${e.phone}` : ""}
-              {e.createdAt
-                ? ` · ${new Date(e.createdAt!).toLocaleString("en-AU")}`
-                : ""}
-            </p>
-            <p style={{ marginTop: 8, fontSize: 14 }}>
-              {e.guests} guest{e.guests > 1 ? "s" : ""} ·{" "}
-              {e.preferredDate ? `${e.preferredDate} · ` : ""}
-              {e.addOns.length
-                ? e.addOns.map((a) => a.name).join(", ")
-                : "no add-ons"}{" "}
-              · <b>{money(e.total)}</b>
-            </p>
-            {e.payOnDayAddOns?.length > 0 && (
-              <p className="enq-meta" style={{ marginTop: 6 }}>
-                Pays on the day:{" "}
-                {e.payOnDayAddOns
-                  .map(
-                    (a) =>
-                      `${a.name} (${a.price > 0 ? `~${money(a.price)} pp` : "varies"})`,
-                  )
-                  .join(", ")}{" "}
-                — direct to the provider, not in the total above
-              </p>
-            )}
-            {e.message && (
-              <p style={{ marginTop: 8, fontSize: 14 }} className="muted">
-                “{e.message}”
-              </p>
-            )}
-            <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
-              {e.status === "new" ? (
-                <button
-                  className="btn btn-ghost"
-                  onClick={() => setStatus(e.id, "handled")}
-                >
-                  Mark handled
-                </button>
-              ) : (
-                <button
-                  className="btn btn-ghost"
-                  onClick={() => setStatus(e.id, "new")}
-                >
-                  Reopen
-                </button>
-              )}
-              <button
-                className="btn btn-ghost"
-                onClick={() => deleteEnquiry(e.id)}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-          )}
-          </Fragment>
         ))}
 
         <h2>Tours ({tours.length})</h2>

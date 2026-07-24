@@ -11,6 +11,12 @@ export type EnquiryFields = {
   tourName: string;
   guests: number;
   addOns: { id: string; name: string; price: number }[];
+  /**
+   * Third-party extras the guest pays direct on the day. Listed separately
+   * in every email below `total`, never folded into it — a price of 0 means
+   * it varies rather than being free.
+   */
+  payOnDayAddOns: { id: string; name: string; price: number }[];
   total: number;
   /** "YYYY-MM-DD" */
   preferredDate: string;
@@ -61,6 +67,21 @@ function guestsLabel(n: number): string {
 }
 
 /**
+ * Pay-on-the-day extras with their guide prices, for the plain-text emails
+ * below. Never totalled — a sum here would read as an amount owed to us,
+ * which is exactly what these aren't.
+ */
+function payOnDayLines(addOns: EnquiryFields["payOnDayAddOns"]): string[] {
+  if (!addOns.length) return [];
+  return [
+    `Paid on the day: ${addOns
+      .map((a) => `${a.name} (${a.price > 0 ? `~${money(a.price)} pp` : "price varies"})`)
+      .join(", ")}`,
+    `  Paid direct to the provider on the day — not included in the estimate.`,
+  ];
+}
+
+/**
  * Notifies the business (Jimmy) that a new enquiry arrived. Moved from the
  * enquiries route; unchanged except for the added preferred-date line.
  */
@@ -86,6 +107,7 @@ export async function sendEnquiryNotification(
         `Guests: ${data.guests}`,
         `Add-ons: ${addOnsLine(data.addOns)}`,
         `Estimated total: ${money(data.total)}`,
+        ...payOnDayLines(data.payOnDayAddOns),
         ``,
         `Name: ${data.name}`,
         `Email: ${data.email}`,
@@ -120,6 +142,7 @@ export async function sendEnquiryAck(data: EnquiryFields): Promise<void> {
         `Guests: ${guestsLabel(data.guests)}`,
         `Add-ons: ${addOnsLine(data.addOns)}`,
         `Estimated total: ${money(data.total)}`,
+        ...payOnDayLines(data.payOnDayAddOns),
         ``,
         `Jimmy will be in touch shortly to lock in the details and confirm your`,
         `booking. Nothing is booked just yet — this is only to say we've received`,
@@ -163,6 +186,7 @@ export async function sendConfirmation(booking: BookingFields): Promise<boolean>
         `Guests: ${guestsLabel(booking.guests)}`,
         `Add-ons: ${addOnsLine(booking.addOns)}`,
         `Total: ${money(booking.total)}`,
+        ...payOnDayLines(booking.payOnDayAddOns),
         ``,
         `Add it to your calendar:`,
         `- The attached invite (booking.ics) works with Apple Calendar & Outlook.`,

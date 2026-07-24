@@ -72,6 +72,7 @@ export async function PATCH(
       tourName: v.tourName,
       guests: v.guests,
       addOns: v.addOns ?? [],
+      payOnDayAddOns: v.payOnDayAddOns ?? [],
       total: v.total,
       preferredDate: v.preferredDate,
       tourDate: finalDate,
