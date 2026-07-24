@@ -1,10 +1,14 @@
+import { mediaBg } from "./media";
+
 /**
- * The "Nine ways to spend the day" showcase tours.
+ * The "Eight ways to spend the day" showcase tours.
  *
- * Single source of truth shared by the StackingCards section and the
- * DestinationCarousel thumbnails, so both always show the same tours.
- * Each `bg` is a CSS background value — swap in `url("/photo.jpg") center/cover`
- * for real photography with no other changes.
+ * Single source of truth behind the DestinationCarousel thumbnails.
+ *
+ * `bg` is the CSS gradient fallback. To use real photography, set `image` to a
+ * path (e.g. `/images/tours/hunter.jpg`) — the photo layers over the gradient,
+ * which stays behind as a fallback while the image loads or if it's missing.
+ * Consume both together via `showcaseBg(tour)` rather than reading `bg` raw.
  */
 export type ShowcaseTour = {
   id: string;
@@ -12,9 +16,27 @@ export type ShowcaseTour = {
   region: string;
   name: string;
   blurb: string;
-  from: string;
+  /**
+   * "From" price per person, in AUD — the currency every price in this codebase
+   * is stored in. Rendered through `<Price>`, which converts it to the
+   * visitor's currency, so this must stay a number rather than a formatted
+   * string.
+   */
+  fromAud: number;
+  /** CSS gradient fallback, shown behind any photo. */
   bg: string;
+  /** Optional photo path/URL, e.g. `/images/tours/hunter.webp`. */
+  image?: string;
+  /**
+   * Optional CSS `background-position` for photos whose subject sits off-centre,
+   * so the 150×210 thumbnail doesn't crop it away. Defaults to `center`.
+   */
+  focus?: string;
 };
+
+/** Effective CSS background for a showcase tour: photo over gradient fallback. */
+export const showcaseBg = (t: ShowcaseTour): string =>
+  mediaBg(t.bg, t.image, t.focus);
 
 export const SHOWCASE_TOURS: ShowcaseTour[] = [
   {
@@ -22,8 +44,11 @@ export const SHOWCASE_TOURS: ShowcaseTour[] = [
     region: "Vineyards & cellar doors",
     name: "Hunter Valley, private",
     blurb: "Cellar doors, long lunch, and a chef who cooks to match every glass.",
-    from: "A$220",
-    bg: "linear-gradient(150deg,#8FB31E,#3C4A14)",
+    fromAud: 220,
+    bg: "linear-gradient(150deg,#858d47,#35381d)",
+    image: "/images/tours/hunter.webp",
+    // Keep the cellar-door cottage, which sits left of centre.
+    focus: "32% center",
   },
   {
     id: "beaches",
@@ -31,8 +56,9 @@ export const SHOWCASE_TOURS: ShowcaseTour[] = [
     name: "Sydney Beaches & Brewery",
     blurb:
       "The coast at its best, finishing with a tasting paddle at a local brewery.",
-    from: "A$160",
-    bg: "linear-gradient(150deg,#19B3B3,#0A6E6E)",
+    fromAud: 160,
+    bg: "linear-gradient(150deg,#7d7f6e,#32332c)",
+    image: "/images/tours/beaches.webp",
   },
   {
     id: "foodie",
@@ -40,24 +66,18 @@ export const SHOWCASE_TOURS: ShowcaseTour[] = [
     name: "Half-Day Sydney Foodie",
     blurb:
       "Bakery, fish market, cheese, chocolate and a pie or two. Bring an appetite.",
-    from: "A$120",
-    bg: "linear-gradient(150deg,#FF7A2E,#D63E00)",
-  },
-  {
-    id: "jenolan",
-    region: "Cliffs, caves & campfire",
-    name: "Blue Mountains & Jenolan Overnight",
-    blurb: "A big day in the ranges, a night under canvas, a campfire dinner.",
-    from: "A$320",
-    bg: "linear-gradient(150deg,#F4B400,#B5790A)",
+    fromAud: 120,
+    bg: "linear-gradient(150deg,#b4ad8a,#484537)",
+    image: "/images/tours/foodie.webp",
   },
   {
     id: "highlands",
     region: "Cool-climate cellar doors",
     name: "Southern Highlands",
     blurb: "Rolling green hills, pinot and pie, and a fireside long lunch.",
-    from: "A$210",
-    bg: "linear-gradient(150deg,#8E4585,#3B1E4A)",
+    fromAud: 210,
+    bg: "linear-gradient(150deg,#a59389,#423b37)",
+    image: "/images/tours/highlands.webp",
   },
   {
     id: "central-coast",
@@ -65,8 +85,9 @@ export const SHOWCASE_TOURS: ShowcaseTour[] = [
     name: "Central Coast Oysters",
     blurb:
       "Shuck-your-own oysters on the flats, then lunch where the river meets the sea.",
-    from: "A$175",
-    bg: "linear-gradient(150deg,#2E6E9E,#0E3B5C)",
+    fromAud: 175,
+    bg: "linear-gradient(150deg,#e1b373,#5a482e)",
+    image: "/images/tours/central-coast.webp",
   },
   {
     id: "blue-mountains-day",
@@ -74,16 +95,18 @@ export const SHOWCASE_TOURS: ShowcaseTour[] = [
     name: "Blue Mountains Day Trip",
     blurb:
       "Three Sisters, a bushwalk, and a gourmet picnic on the escarpment.",
-    from: "A$180",
-    bg: "linear-gradient(150deg,#C7522A,#6E2412)",
+    fromAud: 180,
+    bg: "linear-gradient(150deg,#82867d,#343532)",
+    image: "/images/tours/blue-mountains-day.webp",
   },
   {
     id: "orange-mudgee",
     region: "High-country vines",
     name: "Orange & Mudgee",
     blurb: "Altitude wines, orchard produce and a table set among the rows.",
-    from: "A$260",
-    bg: "linear-gradient(150deg,#9E2B45,#4A1020)",
+    fromAud: 260,
+    bg: "linear-gradient(150deg,#637571,#282f2d)",
+    image: "/images/tours/orange-mudgee.webp",
   },
   {
     id: "kangaroo-valley",
@@ -91,7 +114,10 @@ export const SHOWCASE_TOURS: ShowcaseTour[] = [
     name: "Kangaroo Valley",
     blurb:
       "Kayaks, cheese, and a slow drive through the greenest valley in the state.",
-    from: "A$195",
-    bg: "linear-gradient(150deg,#3FA796,#155246)",
+    fromAud: 195,
+    bg: "linear-gradient(150deg,#a3ac82,#414534)",
+    image: "/images/tours/kangaroo-valley.webp",
+    // Keep the kangaroos, which stand right of centre.
+    focus: "72% center",
   },
 ];

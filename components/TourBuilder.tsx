@@ -1,12 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { money } from "@/lib/money";
+import { useEffect, useMemo, useState } from "react";
+import Price, { ChargedInAud } from "./Price";
+import {
+  chargeableAddOns,
+  hasFixedPrice,
+  payOnDayAddOns,
+  tourTotal,
+  type Tour,
+} from "@/lib/tours";
+import Price from "./Price";
 import type { Tour } from "@/lib/tours";
 import { useReveal } from "./useReveal";
 import EnquiryModal, { type EnquiryDraft } from "./EnquiryModal";
-
-const MAX_GUESTS = 16;
+import { FAREHARBOR_ENABLED, tourItemId } from "@/lib/fareharbor";
 
 export default function TourBuilder({ tours }: { tours: Tour[] }) {
   const controls = useReveal<HTMLDivElement>("controls");
@@ -27,8 +34,28 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
     if (!next) return;
     setCurrentId(id);
     setSelected({});
-    setGuests((g) => (g < next.min ? next.min : g));
+    // Clamp into the new tour's range — switching to a smaller vehicle can
+    // put the current party size above its maximum. Showcase tours have no
+    // fixed minimum, so fall back to 1.
+    setGuests((g) => Math.min(Math.max(g, next.min ?? 1), next.max));
   }
+
+  // Preselect a tour when another section (e.g. the destination carousel) asks
+  // the builder to prefill. Match on id first, then name — the carousel and
+  // builder datasets use different ids but share tour names.
+  useEffect(() => {
+    function onPrefill(e: Event) {
+      const detail = (e as CustomEvent<{ id?: string; name?: string }>).detail;
+      const match = tours.find(
+        (t) => t.id === detail?.id || t.name === detail?.name,
+      );
+      if (match) changeTour(match.id);
+    }
+    window.addEventListener("ggt:prefill-tour", onPrefill as EventListener);
+    return () =>
+      window.removeEventListener("ggt:prefill-tour", onPrefill as EventListener);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tours]);
 
   function toggleAddon(id: string) {
     setSelected((s) => ({ ...s, [id]: !s[id] }));
@@ -36,17 +63,35 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
 
   if (!current) return null;
 
-  const selectedAddOns = current.addOns.filter((a) => selected[a.id]);
-  const total =
-    current.base * guests +
-    selectedAddOns.reduce((sum, a) => sum + a.price * guests, 0);
+  // Hunter Valley is the only tour whose base price includes cellar-door
+  // wine tasting (plus the "Extra winery" add-on) — surface the age
+  // requirement as soon as it's selected, not just in the terms page.
+  const isWineTour = current.id === "hunter-valley";
 
+  const selectedAddOns = current.addOns.filter((a) => selected[a.id]);
+  const charged = chargeableAddOns(selectedAddOns);
+  const onTheDay = payOnDayAddOns(selectedAddOns);
+  const total = tourTotal(current.base, guests, selectedAddOns);
+  // No tour has a computable total any more: Hunter Valley is priced per
+  // age tier (this stepper only tracks one guest count) and every other
+  // tour is quoted per itinerary by enquiry. This is provisional — the
+  // builder is being converted to a non-interactive showcase shortly.
+  const extrasTotal = selectedAddOns.reduce((sum, a) => sum + a.price * guests, 0);
+
+  // Handed on already split, so nothing downstream — the enquiry record, the
+  // emails, FareHarbor — can fold a third party's ticket back into our total.
   const draft: EnquiryDraft = {
     tourId: current.id,
     tourName: current.name,
     guests,
-    addOns: selectedAddOns.map((a) => ({ id: a.id, name: a.name, price: a.price })),
+    addOns: charged.map((a) => ({ id: a.id, name: a.name, price: a.price })),
+    payOnDayAddOns: onTheDay.map((a) => ({
+      id: a.id,
+      name: a.name,
+      price: a.price,
+    })),
     total,
+    fareharborItemId: tourItemId(current.fareharborItemId),
   };
 
   return (
@@ -71,6 +116,20 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   </option>
                 ))}
               </select>
+              {isWineTour && (
+                <p
+                  className="muted"
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    marginTop: 8,
+                    paddingTop: 8,
+                    borderTop: "1px solid rgba(255,255,255,0.15)",
+                  }}
+                >
+                  Guests must be 18 or older to taste wine.
+                </p>
+              )}
             </div>
 
             <div className="field">
@@ -80,7 +139,7 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   type="button"
                   aria-label="Fewer guests"
                   onClick={() =>
-                    setGuests((g) => (g > current.min ? g - 1 : g))
+                    setGuests((g) => (g > (current.min ?? 1) ? g - 1 : g))
                   }
                 >
                   −
@@ -90,7 +149,7 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   type="button"
                   aria-label="More guests"
                   onClick={() =>
-                    setGuests((g) => (g < MAX_GUESTS ? g + 1 : g))
+                    setGuests((g) => (g < current.max ? g + 1 : g))
                   }
                 >
                   +
@@ -106,14 +165,35 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   return (
                     <div
                       key={a.id}
-                      className={on ? "addon on" : "addon"}
+                      className={`addon${on ? " on" : ""}${a.payOnDay ? " onday" : ""}`}
                       onClick={() => toggleAddon(a.id)}
                     >
                       <span className="left">
                         <span className="box">{on ? "✓" : ""}</span>
-                        {a.name}
+                        <span>
+                          {a.name}
+                          {a.payOnDay && (
+                            <small className="addon-note">
+                              Paid direct on the day
+                            </small>
+                          )}
+                        </span>
                       </span>
-                      <span className="price">+{money(a.price)} pp</span>
+                      <span className="price">
+                        {a.payOnDay ? (
+                          hasFixedPrice(a) ? (
+                            <>
+                              ~<Price aud={a.price} /> pp
+                            </>
+                          ) : (
+                            "Price varies"
+                          )
+                        ) : (
+                          <>
+                            +<Price aud={a.price} /> pp
+                          </>
+                        )}
+                      </span>
                     </div>
                   );
                 })}
@@ -127,33 +207,63 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
             <div>
               <div className="line">
                 <span>
-                  Base · {guests} guest{guests > 1 ? "s" : ""}
+                  {guests} guest{guests > 1 ? "s" : ""}
                 </span>
-                <span>{money(current.base * guests)}</span>
               </div>
-              {selectedAddOns.map((a) => (
+              {charged.map((a) => (
                 <div className="line add" key={a.id}>
-                  <span>
-                    + {a.name} ×{guests}
-                  </span>
-                  <span>{money(a.price * guests)}</span>
+                  <span>+ {a.name}</span>
                 </div>
               ))}
             </div>
-            <div className="total">
-              <span className="mono">Total</span>
-              {/* key changes on total → remount re-runs the bump animation */}
-              <b key={total} className="bill-bump">
-                {money(total)}
-              </b>
-            </div>
+            {/*
+              Third-party tickets and hire, kept outside the estimate above and
+              below the total line so it reads as what it is: money the guest
+              hands to someone else, on the day, not to us.
+            */}
+            {onTheDay.length > 0 && (
+              <div className="bill-onday">
+                <p className="t">Paid direct on the day</p>
+                {onTheDay.map((a) => (
+                  <div className="line add" key={a.id}>
+                    <span>{a.name}</span>
+                    <span>
+                      {hasFixedPrice(a) ? (
+                        <>
+                          ~<Price aud={a.price * guests} />
+                        </>
+                      ) : (
+                        "Varies"
+                      )}
+                    </span>
+                  </div>
+                ))}
+                <p className="bill-onday-note">
+                  Approximate, and paid straight to the provider on the day — a
+                  ticket booth or hire counter. Not included in the estimate
+                  above and not collected by us.
+                </p>
+              </div>
+            )}
+            {/*
+              Private tours are quoted per itinerary in FareHarbor, so this
+              figure is a guide, not the price charged at checkout.
+              No live total: Hunter Valley is priced per age tier (adult /
+              senior / child), which this single guest-count stepper can't
+              represent, and every other tour is quoted per itinerary by
+              enquiry. Pricing is confirmed once Jimmy has the details.
+            */}
+            <p className="muted" style={{ fontSize: 12, marginTop: 8 }}>
+              Pricing is confirmed when you enquire — send us your day and
+              we&rsquo;ll get back to you with the cost.
+            </p>
             <button
               type="button"
               className="btn btn-primary"
               style={{ marginTop: 20, width: "100%", justifyContent: "center" }}
               onClick={() => setModalOpen(true)}
             >
-              Send enquiry →
+              {FAREHARBOR_ENABLED ? "Check availability →" : "Send enquiry →"}
             </button>
           </div>
         </div>

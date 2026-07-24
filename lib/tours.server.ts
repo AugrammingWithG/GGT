@@ -1,6 +1,6 @@
 import "server-only";
 import { adminDb } from "./firebase.admin";
-import { SEED_TOURS, type Tour } from "./tours";
+import { DEFAULT_MAX_GUESTS, SEED_TOURS, type Tour } from "./tours";
 
 /**
  * Fetches tours from the Firestore `tours` collection, ordered by `order`.
@@ -13,12 +13,13 @@ export async function getTours(): Promise<Tour[]> {
     if (snap.empty) return SEED_TOURS;
     return snap.docs.map((d) => {
       const data = d.data();
+      // Spread rather than list fields by hand — the field list has gone
+      // stale before (this is the second pricing-shape change) and a
+      // hand-copied list silently drops whatever's newest.
       return {
+        ...data,
         id: d.id,
-        name: data.name,
-        base: data.base,
-        min: data.min,
-        order: data.order,
+        max: data.max ?? DEFAULT_MAX_GUESTS,
         addOns: data.addOns ?? [],
       } as Tour;
     });
