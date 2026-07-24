@@ -11,6 +11,7 @@ import {
 } from "react";
 import { useReveal } from "./useReveal";
 import EnquiryModal from "./EnquiryModal";
+import Price from "./Price";
 import { tourItemId } from "@/lib/fareharbor";
 import { SHOWCASE_TOURS, showcaseBg, type ShowcaseTour } from "@/lib/showcase";
 
@@ -248,6 +249,11 @@ export default function DestinationGallery() {
                 <div className="dg-overlay" aria-hidden>
                   <p className="dg-name">{s.name}</p>
                   <p className="dg-region">{s.region}</p>
+                  {s.priceFromAdult != null && (
+                    <p className="dg-price">
+                      <Price aud={s.priceFromAdult} /> pp, adult
+                    </p>
+                  )}
                 </div>
                 <button
                   type="button"

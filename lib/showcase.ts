@@ -28,6 +28,14 @@ export type ShowcaseTour = {
    * so the 150×210 thumbnail doesn't crop it away. Defaults to `center`.
    */
   focus?: string;
+  /**
+   * Display-only adult rate for a tour with launch-day tiered pricing that
+   * the `Tour` schema doesn't model yet (see `lib/tours.ts`). Always shown
+   * qualified as "per adult" — never as a bare figure — since senior/child
+   * rates differ and aren't captured here; those stay enquiry-only until the
+   * schema grows guest types.
+   */
+  priceFromAdult?: number;
 };
 
 /** Effective CSS background for a showcase tour: photo over gradient fallback. */
@@ -43,6 +51,7 @@ export const SHOWCASE_TOURS: ShowcaseTour[] = [
       "The coast at its best, finishing with a tasting paddle at a local brewery.",
     bg: "linear-gradient(150deg,#7d7f6e,#32332c)",
     image: "/images/tours/beaches.webp",
+    priceFromAdult: 237,
   },
   {
     id: "foodie",
