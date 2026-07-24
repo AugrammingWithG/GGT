@@ -66,9 +66,6 @@ export default function EnquiryModal({
     };
   }
 
-  // Guests can't pick a date in the past.
-  const today = new Date().toLocaleDateString("en-CA");
-
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("sending");
@@ -82,7 +79,6 @@ export default function EnquiryModal({
           email,
           phone,
           message,
-          preferredDate,
           tourId: draft.tourId,
           tourName: draft.tourName,
           guests: draft.guests,
@@ -244,13 +240,11 @@ export default function EnquiryModal({
             </div>
             <div className="field">
               <label className="flabel" htmlFor="enq-date">
-                Preferred date
+                Preferred date (optional)
               </label>
               <input
                 id="enq-date"
                 type="date"
-                required
-                min={today}
                 value={preferredDate}
                 onChange={(e) => setPreferredDate(e.target.value)}
               />

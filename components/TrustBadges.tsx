@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 
 /** The business's public listing — the badge is proof, so it should be checkable. */

@@ -840,16 +840,21 @@ header.scrolled{box-shadow:0 10px 30px -20px rgba(33,28,36,.5)}
 .form-msg.ok{background:rgba(95,115,33,.12);color:var(--olive-deep)}
 .form-msg.err{background:rgba(255,94,26,.12);color:#b5300a}
 
-/* --- admin (new) --- */
-.admin{min-height:100vh;background:var(--paper);padding:40px 0}
+/* --- admin: landscape-backed frosted glass --- */
+.admin{
+  min-height:100vh;padding:40px 0;color:var(--on-glass);
+  background:linear-gradient(135deg,rgba(19,34,22,.78),rgba(25,46,39,.48)),url('/images/Hunter-Valley-Tour-image-1.jpg') center/cover fixed;
+}
 .admin .wrap{max-width:980px}
 .admin h1{font-size:32px;margin-bottom:24px}
 .admin h2{font-size:22px;margin:32px 0 14px}
 .admin-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .card-box{background:#fff;border:1.5px solid rgba(33,28,36,.12);border-radius:16px;padding:20px;margin-bottom:14px}
+.admin .card-box,.admin .login-box{background:var(--glass);border:1px solid var(--glass-border);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow),var(--glass-hi)}
 .enq-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .enq-head b{font-size:16px}
 .enq-meta{font-family:var(--font-mono),'IBM Plex Mono';font-size:12px;color:var(--stone)}
+.admin .enq-meta,.admin .muted,.admin .addon-flag{color:var(--on-glass-dim)}
 .badge{font-family:var(--font-mono),'IBM Plex Mono';font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--oat);color:var(--olive-deep)}
 .badge.handled{background:rgba(95,115,33,.18)}
 .login-box{max-width:380px;margin:80px auto;background:#fff;border:1.5px solid rgba(33,28,36,.12);border-radius:20px;padding:32px}
@@ -862,6 +867,14 @@ header.scrolled{box-shadow:0 10px 30px -20px rgba(33,28,36,.5)}
 .addon-flag{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--stone);white-space:nowrap;cursor:pointer}
 @media(max-width:640px){.tour-edit.addon-row{grid-template-columns:1fr 90px}}
 .tour-edit input{padding:10px 12px;font-family:var(--font);font-size:14px;border:1.5px solid rgba(33,28,36,.2);border-radius:10px}
+.admin input{color:var(--on-glass);background:rgba(8,20,15,.28);border-color:var(--glass-border);outline:none}
+.admin input::placeholder{color:rgba(255,255,255,.48)}
+.admin input:focus{border-color:rgba(255,255,255,.58);box-shadow:0 0 0 3px rgba(255,255,255,.1)}
+.admin .btn-ghost{color:var(--on-glass);border-color:var(--glass-border);background:rgba(255,255,255,.06)}
+.admin .btn-ghost:hover{background:var(--glass-strong);color:#fff}
+.admin .btn-primary{background:rgba(255,255,255,.18);border-color:var(--glass-border);box-shadow:var(--glass-hi)}
+.admin .badge{background:rgba(255,255,255,.14);color:var(--on-glass)}
+.admin .badge.handled{background:rgba(135,169,77,.3)}
 .muted{color:var(--stone);font-size:14px}
 
 /* --- testimonials: postcard flip-deck (new) --- */

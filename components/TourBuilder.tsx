@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Price, { ChargedInAud } from "./Price";
+import Price from "./Price";
 import {
   chargeableAddOns,
   hasFixedPrice,
@@ -72,8 +72,9 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
   // No tour has a computable base fare any more: Hunter Valley is priced per
   // age tier (this stepper only tracks one guest count) and every other tour
   // is quoted per itinerary by enquiry. `total` is chargeable extras only
-  // (base 0) — enough for EnquiryModal to know whether there's anything to
-  // show an estimate for, not a real quote.
+  // (base 0, and pay-on-day extras excluded via tourTotal's own filtering) —
+  // enough for EnquiryModal to know whether there's anything to show an
+  // estimate for, not a real quote.
   const total = tourTotal(0, guests, selectedAddOns);
 
   // Handed on already split, so nothing downstream — the enquiry record, the

@@ -185,6 +185,7 @@ export default function AdminPage() {
             enquiry={e}
             onConfirm={confirmBooking}
             onSetStatus={setStatus}
+            onDelete={deleteEnquiry}
           />
         ))}
 
@@ -219,10 +220,12 @@ function EnquiryCard({
   enquiry: e,
   onConfirm,
   onSetStatus,
+  onDelete,
 }: {
   enquiry: Enquiry;
   onConfirm: (id: string, tourDate: string) => void;
   onSetStatus: (id: string, status: EnquiryStatus) => void;
+  onDelete: (id: string) => void;
 }) {
   // Tour date the admin will lock in — defaults to the guest's preferred date.
   const [date, setDate] = useState(e.tourDate ?? e.preferredDate ?? "");
@@ -286,6 +289,9 @@ function EnquiryCard({
             Reopen
           </button>
         )}
+        <button className="btn btn-ghost" onClick={() => onDelete(e.id)}>
+          Delete
+        </button>
       </div>
     </div>
   );

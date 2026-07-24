@@ -65,8 +65,6 @@ export async function POST(req: Request) {
         confirmedAt: null,
         ackSentAt: null,
         confirmationSentAt: null,
-        reminderSentAt: null,
-        reviewSentAt: null,
       });
 
     // Notify the business and auto-acknowledge the customer. Both are
@@ -77,7 +75,6 @@ export async function POST(req: Request) {
       sendEnquiryAck(data),
     ]);
     await ref.update({ ackSentAt: FieldValue.serverTimestamp() });
-
     return NextResponse.json({ ok: true, id: ref.id });
   } catch (err) {
     console.error("Failed to save enquiry:", err);
