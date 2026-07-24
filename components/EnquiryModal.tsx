@@ -40,7 +40,6 @@ export default function EnquiryModal({
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
-  const [preferredDate, setPreferredDate] = useState("");
 
   /**
    * Everything the guest has told us so far, mapped onto FareHarbor's booking
@@ -67,9 +66,6 @@ export default function EnquiryModal({
     };
   }
 
-  // Guests can't pick a date in the past.
-  const today = new Date().toLocaleDateString("en-CA");
-
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("sending");
@@ -83,7 +79,6 @@ export default function EnquiryModal({
           email,
           phone,
           message,
-          preferredDate,
           tourId: draft.tourId,
           tourName: draft.tourName,
           guests: draft.guests,
@@ -234,14 +229,11 @@ export default function EnquiryModal({
             </div>
             <div className="field">
               <label className="flabel" htmlFor="enq-date">
-                Preferred date
                 Preferred date (optional)
               </label>
               <input
                 id="enq-date"
                 type="date"
-                required
-                min={today}
                 value={preferredDate}
                 min={new Date().toISOString().slice(0, 10)}
                 onChange={(e) => setPreferredDate(e.target.value)}
