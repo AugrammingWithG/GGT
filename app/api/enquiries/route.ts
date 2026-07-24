@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { FieldValue } from "firebase-admin/firestore";
 import { adminDb, verifyAdmin } from "@/lib/firebase.admin";
-import { money } from "@/lib/money";
+import { sendEnquiryAck, sendEnquiryNotification } from "@/lib/email";
 
 export const runtime = "nodejs";
 
@@ -36,7 +36,7 @@ const enquirySchema = z.object({
     .default(""),
 });
 
-/** POST — public: validate, save the enquiry, and email the business. */
+/** POST — public: validate, save the enquiry, notify the business, ack the guest. */
 export async function POST(req: Request) {
   let body: unknown;
   try {
@@ -60,9 +60,20 @@ export async function POST(req: Request) {
       .add({
         ...data,
         status: "new",
+        tourDate: null,
         createdAt: FieldValue.serverTimestamp(),
+        confirmedAt: null,
+        ackSentAt: null,
+        confirmationSentAt: null,
+        reminderSentAt: null,
+        reviewSentAt: null,
       });
 
+    await Promise.all([
+      sendEnquiryNotification(data, ref.id),
+      sendEnquiryAck(data),
+    ]);
+    await ref.update({ ackSentAt: FieldValue.serverTimestamp() });
     // Notify the business and auto-acknowledge the customer. Both are
     // best-effort — the enquiry is already saved, so email failures must
     // not fail the request.
@@ -108,6 +119,8 @@ export async function GET(req: Request) {
       addOns: v.addOns ?? [],
       payOnDayAddOns: v.payOnDayAddOns ?? [],
       total: v.total,
+      preferredDate: v.preferredDate ?? null,
+      tourDate: v.tourDate ?? null,
       status: v.status ?? "new",
       createdAt: v.createdAt?.toDate?.()?.toISOString() ?? null,
     };

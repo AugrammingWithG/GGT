@@ -7,6 +7,8 @@ import { getFirebaseAuth } from "@/lib/firebase.client";
 import { money } from "@/lib/money";
 import { DEFAULT_MAX_GUESTS, type Tour } from "@/lib/tours";
 
+type EnquiryStatus = "new" | "confirmed" | "handled";
+
 type Enquiry = {
   id: string;
   name: string;
@@ -20,7 +22,9 @@ type Enquiry = {
   /** Third-party extras the guest pays direct — outside `total`. */
   payOnDayAddOns: { id: string; name: string; price: number }[];
   total: number;
-  status: "new" | "handled";
+  preferredDate: string | null;
+  tourDate: string | null;
+  status: EnquiryStatus;
   createdAt: string | null;
 };
 
@@ -78,7 +82,7 @@ export default function AdminPage() {
     if (user) loadData();
   }, [user, loadData]);
 
-  async function setStatus(id: string, status: "new" | "handled") {
+  async function setStatus(id: string, status: EnquiryStatus) {
     const headers = { ...(await authHeader()), "Content-Type": "application/json" };
     await fetch(`/api/enquiries/${id}`, {
       method: "PATCH",
@@ -90,6 +94,23 @@ export default function AdminPage() {
     );
   }
 
+  async function confirmBooking(id: string, tourDate: string) {
+    const headers = { ...(await authHeader()), "Content-Type": "application/json" };
+    const res = await fetch(`/api/enquiries/${id}`, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({ status: "confirmed", tourDate }),
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      alert(d.error ?? "Failed to confirm booking.");
+      return;
+    }
+    setEnquiries((list) =>
+      list.map((e) =>
+        e.id === id ? { ...e, status: "confirmed", tourDate } : e,
+      ),
+    );
   async function deleteEnquiry(id: string) {
     if (!confirm("Delete this enquiry? This cannot be undone.")) return;
     const headers = await authHeader();
@@ -158,6 +179,12 @@ export default function AdminPage() {
         <h2>Enquiries ({enquiries.length})</h2>
         {enquiries.length === 0 && <p className="muted">No enquiries yet.</p>}
         {enquiries.map((e) => (
+          <EnquiryCard
+            key={e.id}
+            enquiry={e}
+            onConfirm={confirmBooking}
+            onSetStatus={setStatus}
+          />
           <div className="card-box" key={e.id}>
             <div className="enq-head">
               <b>
@@ -237,6 +264,94 @@ export default function AdminPage() {
         <NewTour onSave={saveTour} existingCount={tours.length} />
       </div>
     </main>
+  );
+}
+
+function fmtDate(ymd: string | null): string {
+  if (!ymd) return "—";
+  const [y, m, d] = ymd.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d, 12)).toLocaleDateString("en-AU", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function EnquiryCard({
+  enquiry: e,
+  onConfirm,
+  onSetStatus,
+}: {
+  enquiry: Enquiry;
+  onConfirm: (id: string, tourDate: string) => void;
+  onSetStatus: (id: string, status: EnquiryStatus) => void;
+}) {
+  // Tour date the admin will lock in — defaults to the guest's preferred date.
+  const [date, setDate] = useState(e.tourDate ?? e.preferredDate ?? "");
+
+  return (
+    <div className="card-box">
+      <div className="enq-head">
+        <b>
+          {e.name} · {e.tourName}
+        </b>
+        <span className={`badge ${e.status !== "new" ? "handled" : ""}`}>
+          {e.status}
+        </span>
+      </div>
+      <p className="enq-meta">
+        {e.email}
+        {e.phone ? ` · ${e.phone}` : ""}
+        {e.createdAt
+          ? ` · ${new Date(e.createdAt).toLocaleString("en-AU")}`
+          : ""}
+      </p>
+      <p style={{ marginTop: 8, fontSize: 14 }}>
+        {e.guests} guest{e.guests > 1 ? "s" : ""} ·{" "}
+        {e.addOns.length
+          ? e.addOns.map((a) => a.name).join(", ")
+          : "no add-ons"}{" "}
+        · <b>{money(e.total)}</b>
+      </p>
+      <p style={{ marginTop: 8, fontSize: 14 }} className="muted">
+        Preferred: {fmtDate(e.preferredDate)}
+        {e.status === "confirmed" && ` · Confirmed for ${fmtDate(e.tourDate)}`}
+      </p>
+      {e.message && (
+        <p style={{ marginTop: 8, fontSize: 14 }} className="muted">
+          “{e.message}”
+        </p>
+      )}
+
+      <div
+        style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}
+      >
+        <input
+          type="date"
+          value={date}
+          onChange={(ev) => setDate(ev.target.value)}
+          aria-label="Tour date"
+        />
+        <button
+          className="btn btn-primary"
+          disabled={!date}
+          onClick={() => onConfirm(e.id, date)}
+        >
+          {e.status === "confirmed" ? "Update date" : "Confirm booking"}
+        </button>
+        {e.status === "new" ? (
+          <button className="btn btn-ghost" onClick={() => onSetStatus(e.id, "handled")}>
+            Mark handled
+          </button>
+        ) : (
+          <button className="btn btn-ghost" onClick={() => onSetStatus(e.id, "new")}>
+            Reopen
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
