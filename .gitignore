@@ -3,6 +3,9 @@
 /.pnp
 .pnp.js
 
+# testing
+/coverage
+
 # next.js
 /.next/
 /out/
@@ -35,4 +38,8 @@ next-env.d.ts
 serviceAccount.json
 .firebase/
 firebase-debug.log
+
+# backups and media
 tours-backup-*.json
+*.mov
+*.mp4

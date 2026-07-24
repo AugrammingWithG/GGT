@@ -60,6 +60,7 @@ async function main() {
         priceSenior: priceSenior ?? FieldValue.delete(),
         priceChild: priceChild ?? FieldValue.delete(),
         min: min ?? FieldValue.delete(),
+        base: FieldValue.delete(),
       },
       { merge: true },
     );

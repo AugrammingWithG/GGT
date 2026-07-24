@@ -142,7 +142,6 @@ export const SEED_TOURS: Tour[] = [
     name: "Blue Mountains & Jenolan Overnight",
     max: 16,
     order: 5,
-    fareharborItemId: "65977",
     addOns: [
       { id: "cave", name: "Cave tour entry", price: 50 },
       { id: "gear", name: "Camp gear & bedding", price: 40 },
