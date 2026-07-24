@@ -65,8 +65,6 @@ export async function POST(req: Request) {
         confirmedAt: null,
         ackSentAt: null,
         confirmationSentAt: null,
-        reminderSentAt: null,
-        reviewSentAt: null,
       });
 
     await Promise.all([

@@ -25,15 +25,21 @@ from the original HTML mockup to **Next.js (App Router) + TypeScript**, with a
    npm install
    ```
 2. Create a Firebase project; enable **Firestore** and **Authentication →
-   Email/Password**. Create an admin user (Authentication → Users) and add their
-   email to `ADMIN_EMAILS`.
+   Email/Password**.
 3. Copy `.env.local.example` to `.env.local` and fill in all values (web app
    config + service-account JSON + admin email; Resend is optional).
-4. Seed tour data:
+4. Create the Firebase Authentication user whose email is in `ADMIN_EMAILS`:
+   ```
+   npm run admin:create -- you@example.com "choose-a-strong-password"
+   ```
+   Re-running this command resets that user's password and re-enables the
+   account. Alternatively, create the user under **Authentication → Users** in
+   Firebase Console.
+5. Seed tour data:
    ```
    npm run seed
    ```
-5. Run locally:
+6. Run locally:
    ```
    npm run dev
    ```
