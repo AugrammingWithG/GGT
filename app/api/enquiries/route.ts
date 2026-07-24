@@ -3,6 +3,7 @@ import { z } from "zod";
 import { FieldValue } from "firebase-admin/firestore";
 import { adminDb, verifyAdmin } from "@/lib/firebase.admin";
 import { sendEnquiryAck, sendEnquiryNotification } from "@/lib/email";
+import { money } from "@/lib/money";
 
 export const runtime = "nodejs";
 
@@ -72,14 +73,6 @@ export async function POST(req: Request) {
       sendEnquiryAck(data),
     ]);
     await ref.update({ ackSentAt: FieldValue.serverTimestamp() });
-    // Notify the business and auto-acknowledge the customer. Both are
-    // best-effort — the enquiry is already saved, so email failures must
-    // not fail the request.
-    await Promise.allSettled([
-      sendNotification(data, ref.id),
-      sendCustomerConfirmation(data, ref.id),
-    ]);
-
     return NextResponse.json({ ok: true, id: ref.id });
   } catch (err) {
     console.error("Failed to save enquiry:", err);
@@ -113,7 +106,6 @@ export async function GET(req: Request) {
       message: v.message ?? "",
       tourName: v.tourName,
       guests: v.guests,
-      preferredDate: v.preferredDate ?? "",
       addOns: v.addOns ?? [],
       payOnDayAddOns: v.payOnDayAddOns ?? [],
       total: v.total,

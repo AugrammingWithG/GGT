@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { getFirebaseAuth } from "@/lib/firebase.client";
@@ -17,7 +17,6 @@ type Enquiry = {
   message: string;
   tourName: string;
   guests: number;
-  preferredDate: string;
   addOns: { id: string; name: string; price: number }[];
   /** Third-party extras the guest pays direct — outside `total`. */
   payOnDayAddOns: { id: string; name: string; price: number }[];
@@ -111,6 +110,8 @@ export default function AdminPage() {
         e.id === id ? { ...e, status: "confirmed", tourDate } : e,
       ),
     );
+  }
+
   async function deleteEnquiry(id: string) {
     if (!confirm("Delete this enquiry? This cannot be undone.")) return;
     const headers = await authHeader();
@@ -179,12 +180,14 @@ export default function AdminPage() {
         <h2>Enquiries ({enquiries.length})</h2>
         {enquiries.length === 0 && <p className="muted">No enquiries yet.</p>}
         {enquiries.map((e) => (
+          <Fragment key={e.id}>
           <EnquiryCard
-            key={e.id}
             enquiry={e}
             onConfirm={confirmBooking}
             onSetStatus={setStatus}
+            onDelete={deleteEnquiry}
           />
+          {false && (
           <div className="card-box" key={e.id}>
             <div className="enq-head">
               <b>
@@ -198,7 +201,7 @@ export default function AdminPage() {
               {e.email}
               {e.phone ? ` · ${e.phone}` : ""}
               {e.createdAt
-                ? ` · ${new Date(e.createdAt).toLocaleString("en-AU")}`
+                ? ` · ${new Date(e.createdAt!).toLocaleString("en-AU")}`
                 : ""}
             </p>
             <p style={{ marginTop: 8, fontSize: 14 }}>
@@ -250,6 +253,8 @@ export default function AdminPage() {
               </button>
             </div>
           </div>
+          )}
+          </Fragment>
         ))}
 
         <h2>Tours ({tours.length})</h2>
@@ -283,10 +288,12 @@ function EnquiryCard({
   enquiry: e,
   onConfirm,
   onSetStatus,
+  onDelete,
 }: {
   enquiry: Enquiry;
   onConfirm: (id: string, tourDate: string) => void;
   onSetStatus: (id: string, status: EnquiryStatus) => void;
+  onDelete: (id: string) => void;
 }) {
   // Tour date the admin will lock in — defaults to the guest's preferred date.
   const [date, setDate] = useState(e.tourDate ?? e.preferredDate ?? "");
@@ -350,6 +357,9 @@ function EnquiryCard({
             Reopen
           </button>
         )}
+        <button className="btn btn-ghost" onClick={() => onDelete(e.id)}>
+          Delete
+        </button>
       </div>
     </div>
   );

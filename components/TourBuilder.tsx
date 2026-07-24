@@ -1,16 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Price, { ChargedInAud } from "./Price";
+import Price from "./Price";
 import {
   chargeableAddOns,
   hasFixedPrice,
   payOnDayAddOns,
-  tourTotal,
   type Tour,
 } from "@/lib/tours";
-import Price from "./Price";
-import type { Tour } from "@/lib/tours";
 import { useReveal } from "./useReveal";
 import EnquiryModal, { type EnquiryDraft } from "./EnquiryModal";
 import { FAREHARBOR_ENABLED, tourItemId } from "@/lib/fareharbor";
@@ -71,12 +68,12 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
   const selectedAddOns = current.addOns.filter((a) => selected[a.id]);
   const charged = chargeableAddOns(selectedAddOns);
   const onTheDay = payOnDayAddOns(selectedAddOns);
-  const total = tourTotal(current.base, guests, selectedAddOns);
   // No tour has a computable total any more: Hunter Valley is priced per
   // age tier (this stepper only tracks one guest count) and every other
   // tour is quoted per itinerary by enquiry. This is provisional — the
   // builder is being converted to a non-interactive showcase shortly.
   const extrasTotal = selectedAddOns.reduce((sum, a) => sum + a.price * guests, 0);
+  const total = extrasTotal;
 
   // Handed on already split, so nothing downstream — the enquiry record, the
   // emails, FareHarbor — can fold a third party's ticket back into our total.
