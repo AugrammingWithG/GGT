@@ -676,6 +676,7 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
 }
 .dg-name{font-family:var(--font-display);font-weight:700;font-size:clamp(15px,1.6vw,19px);line-height:1.22;text-transform:uppercase;letter-spacing:.01em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6)}
 .dg-region{margin-top:4px;font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72);text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.dg-price{margin-top:6px;font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--gold);text-shadow:0 1px 6px rgba(0,0,0,.6)}
 /* Qualified by .dg-card (specificity (0,2,0)) rather than bare .dg-enquire
    (0,1,0): .btn-shine also sets `position` (to relative, for its own shine
    sweep) and, at equal specificity, source order would let it silently win

@@ -12,6 +12,7 @@ import {
 import { useReveal } from "./useReveal";
 import EnquiryModal, { type EnquiryDraft } from "./EnquiryModal";
 import { FAREHARBOR_ENABLED, tourItemId } from "@/lib/fareharbor";
+import { SHOWCASE_TOURS } from "@/lib/showcase";
 
 export default function TourBuilder({ tours }: { tours: Tour[] }) {
   const controls = useReveal<HTMLDivElement>("controls");
@@ -65,6 +66,16 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
   // wine tasting (plus the "Extra winery" add-on) — surface the age
   // requirement as soon as it's selected, not just in the terms page.
   const isWineTour = current.id === "hunter-valley";
+
+  // Launch-day adult rate for a tour whose tiered pricing isn't in the `Tour`
+  // schema yet (see lib/showcase.ts's `priceFromAdult`). Matched by name, not
+  // id — the carousel and builder datasets use different ids for the same
+  // tour (see the prefill listener above) — so this is nothing to keep in
+  // sync by hand: set the rate once in SHOWCASE_TOURS and both places pick
+  // it up.
+  const showcasePrice = SHOWCASE_TOURS.find(
+    (s) => s.name === current.name,
+  )?.priceFromAdult;
 
   const selectedAddOns = current.addOns.filter((a) => selected[a.id]);
   const charged = chargeableAddOns(selectedAddOns);
@@ -243,6 +254,18 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   above and not collected by us.
                 </p>
               </div>
+            )}
+            {/*
+              Launch-day anchor rate for a tour with real tiered pricing the
+              schema can't hold yet (see `showcasePrice` above): the adult
+              figure is firm, so say so, but seniors/children still go
+              through enquiry rather than a guessed concession number.
+            */}
+            {showcasePrice != null && (
+              <p className="muted" style={{ fontSize: 13, fontWeight: 600, marginTop: 8 }}>
+                <Price aud={showcasePrice} /> per adult. Concession rates for
+                seniors and children are available on enquiry.
+              </p>
             )}
             {/*
               Private tours are quoted per itinerary in FareHarbor, so this
