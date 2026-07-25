@@ -51,9 +51,9 @@ const SNAPS = [
 // Label/value rows on the record card. Mono and ruled, so the section reads
 // like a filed record of the man rather than marketing copy.
 const SPECS: [string, string][] = [
-  ["Host", "Jimmy — owner, driver & head cook"],
+  ["Host", "Jimmy, owner, driver & head cook"],
   ["On the road", "30 years"],
-  ["Vehicles", "Small — never a coach"],
+  ["Vehicles", "Small, never a coach"],
   ["Menus", "Written by hand"],
 ];
 
@@ -103,7 +103,7 @@ export default function JimmyStrip() {
                 <p className="jimmy-label mono">About</p>
                 <p className="jimmy-lead">
                   Thirty years cooking and guiding, in small vehicles, never a
-                  coach. Every tour is mine, start to finish — that&apos;s the
+                  coach. Every tour is mine, start to finish, that&apos;s the
                   whole point.
                 </p>
               </div>

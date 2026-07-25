@@ -58,7 +58,7 @@ export default function PolicyGate({
             <h3>Before you dive in</h3>
             <p className="sub">
               Give our cancellation policy and terms &amp; conditions a quick
-              read — just so there&apos;s no surprises later. Then we&apos;ll
+              read, just so there&apos;s no surprises later. Then we&apos;ll
               get you booked in.
             </p>
 

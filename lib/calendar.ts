@@ -40,7 +40,7 @@ function escapeIcs(text: string): string {
  */
 export function buildIcs(booking: CalendarBooking): string {
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-  const summary = escapeIcs(`Gourmet Getaway — ${booking.tourName}`);
+  const summary = escapeIcs(`Gourmet Getaway: ${booking.tourName}`);
   const description = escapeIcs(
     `Your ${booking.tourName} with Gourmet Getaway Tours for ${booking.guests} ` +
       `guest${booking.guests > 1 ? "s" : ""}. Jimmy will be in touch with pickup details.`,
@@ -74,7 +74,7 @@ export function googleCalendarUrl(booking: CalendarBooking): string {
   const dates = `${toIcsDate(booking.tourDate)}/${nextIcsDate(booking.tourDate)}`;
   const params = new URLSearchParams({
     action: "TEMPLATE",
-    text: `Gourmet Getaway — ${booking.tourName}`,
+    text: `Gourmet Getaway: ${booking.tourName}`,
     dates,
     details: `Your ${booking.tourName} with Gourmet Getaway Tours for ${booking.guests} guest${
       booking.guests > 1 ? "s" : ""

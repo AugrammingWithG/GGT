@@ -63,11 +63,6 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
 
   if (!current) return null;
 
-  // Hunter Valley is the only tour whose base price includes cellar-door
-  // wine tasting (plus the "Extra winery" add-on) — surface the age
-  // requirement as soon as it's selected, not just in the terms page.
-  const isWineTour = current.id === "hunter-valley";
-
   // Launch-day adult rate for a tour whose tiered pricing isn't in the `Tour`
   // schema yet (see lib/showcase.ts's `priceFromAdult`). Matched by name, not
   // id — the carousel and builder datasets use different ids for the same
@@ -127,10 +122,15 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   </option>
                 ))}
               </select>
-              {isWineTour && (
-                <p className="muted builder-notice divider">
-                  Guests must be 18 or older to taste wine.
-                </p>
+              {/* Age limits and other hard requirements, shown here right
+                  where a visitor picks the tour, so they see them before
+                  they ever reach the enquiry form or the terms page. */}
+              {current.restrictions && current.restrictions.length > 0 && (
+                <ul className="muted builder-notice builder-restrictions divider">
+                  {current.restrictions.map((r) => (
+                    <li key={r}>{r}</li>
+                  ))}
+                </ul>
               )}
             </div>
 
@@ -218,6 +218,18 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
           <div ref={bill.ref} className={`${bill.className} bill`}>
             <p className="t">Your day so far</p>
             <h4>{current.name}</h4>
+            {(current.days || current.duration || current.returnTime || current.min) && (
+              <ul className="bill-facts">
+                {current.days && <li>{current.days}</li>}
+                {current.duration && <li>{current.duration}</li>}
+                {current.min != null && (
+                  <li>
+                    {current.min}&ndash;{current.max} guests
+                  </li>
+                )}
+                {current.returnTime && <li>Return: {current.returnTime}</li>}
+              </ul>
+            )}
             <div className="bill-cpick">
               <CurrencyPicker />
             </div>
@@ -233,6 +245,16 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                 </div>
               ))}
             </div>
+            {current.inclusions && current.inclusions.length > 0 && (
+              <div className="bill-inclusions">
+                <p className="t">Included</p>
+                <ul>
+                  {current.inclusions.map((i) => (
+                    <li key={i}>{i}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {/*
               Third-party tickets and hire, kept outside the estimate above and
               below the total line so it reads as what it is: money the guest
@@ -256,8 +278,8 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   </div>
                 ))}
                 <p className="bill-onday-note">
-                  Approximate, and paid straight to the provider on the day — a
-                  ticket booth or hire counter. Not included in the estimate
+                  Approximate, and paid straight to the provider on the day (a
+                  ticket booth or hire counter). Not included in the estimate
                   above and not collected by us.
                 </p>
               </div>
@@ -283,7 +305,7 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
               enquiry. Pricing is confirmed once Jimmy has the details.
             */}
             <p className="muted builder-note">
-              Pricing is confirmed when you enquire — send us your day and
+              Pricing is confirmed when you enquire. Send us your day and
               we&rsquo;ll get back to you with the cost.
             </p>
             <button

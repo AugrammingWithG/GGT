@@ -130,7 +130,7 @@ export default function HunterHero() {
               <span className="hh-amt">
                 <Price aud={257} />
               </span>
-              <span className="hh-plabel">Child / student, 5&ndash;17</span>
+              <span className="hh-plabel">Child / student, 4&ndash;16</span>
             </div>
           </div>
 
@@ -140,6 +140,14 @@ export default function HunterHero() {
             <li>Pickup 6:35&ndash;7:10am, selected Sydney hotels</li>
             <li>Drop-off around 6:30pm</li>
           </ul>
+
+          {/* This CTA books straight through to FareHarbor without passing
+              through the builder, so the two age rules need to be readable
+              here too, not only in the builder's own notice. */}
+          <p className="hh-restrictions">
+            Ages 4+ only. Infants 0&ndash;3 can&rsquo;t be accommodated.
+            Guests under 18 can&rsquo;t be served alcohol.
+          </p>
 
           <a href={BOOKING_HREF} className="btn btn-primary hh-cta btn-shine">
             <span className="btn-badge" aria-hidden>

@@ -59,7 +59,7 @@ function prettyDate(ymd: string): string {
 }
 
 function addOnsLine(addOns: EnquiryFields["addOns"]): string {
-  return addOns.length ? addOns.map((a) => a.name).join(", ") : "—";
+  return addOns.length ? addOns.map((a) => a.name).join(", ") : "None";
 }
 
 function guestsLabel(n: number): string {
@@ -77,7 +77,7 @@ function payOnDayLines(addOns: EnquiryFields["payOnDayAddOns"]): string[] {
     `Paid on the day: ${addOns
       .map((a) => `${a.name} (${a.price > 0 ? `~${money(a.price)} pp` : "price varies"})`)
       .join(", ")}`,
-    `  Paid direct to the provider on the day — not included in the estimate.`,
+    `  Paid direct to the provider on the day, not included in the estimate.`,
   ];
 }
 
@@ -98,7 +98,7 @@ export async function sendEnquiryNotification(
       from: cfg.from,
       to,
       replyTo: data.email,
-      subject: `New tour enquiry — ${data.tourName} (${data.name})`,
+      subject: `New tour enquiry: ${data.tourName} (${data.name})`,
       text: [
         `New enquiry #${id}`,
         ``,
@@ -111,10 +111,10 @@ export async function sendEnquiryNotification(
         ``,
         `Name: ${data.name}`,
         `Email: ${data.email}`,
-        `Phone: ${data.phone || "—"}`,
+        `Phone: ${data.phone || "Not provided"}`,
         ``,
         `Message:`,
-        data.message || "—",
+        data.message || "No message provided",
       ].join("\n"),
     });
   } catch (err) {
@@ -131,7 +131,7 @@ export async function sendEnquiryAck(data: EnquiryFields): Promise<void> {
     await cfg.resend.emails.send({
       from: cfg.from,
       to: data.email,
-      subject: `We've got your enquiry — ${data.tourName}`,
+      subject: `We've got your enquiry: ${data.tourName}`,
       text: [
         `Hi ${data.name},`,
         ``,
@@ -145,7 +145,7 @@ export async function sendEnquiryAck(data: EnquiryFields): Promise<void> {
         ...payOnDayLines(data.payOnDayAddOns),
         ``,
         `Jimmy will be in touch shortly to lock in the details and confirm your`,
-        `booking. Nothing is booked just yet — this is only to say we've received`,
+        `booking. Nothing is booked just yet, this is only to say we've received`,
         `your enquiry.`,
         ``,
         `Talk soon,`,
@@ -175,11 +175,11 @@ export async function sendConfirmation(booking: BookingFields): Promise<boolean>
     await cfg.resend.emails.send({
       from: cfg.from,
       to: booking.email,
-      subject: `You're booked! ${booking.tourName} — ${dateLabel}`,
+      subject: `You're booked! ${booking.tourName} (${dateLabel})`,
       text: [
         `Hi ${booking.name},`,
         ``,
-        `Great news — your Gourmet Getaway is confirmed! 🎉`,
+        `Great news, your Gourmet Getaway is confirmed! 🎉`,
         ``,
         `Tour: ${booking.tourName}`,
         `Date: ${dateLabel}`,
@@ -217,7 +217,7 @@ export async function sendConfirmation(booking: BookingFields): Promise<boolean>
         from: cfg.from,
         to,
         replyTo: booking.email,
-        subject: `Booking confirmed — ${booking.tourName} for ${booking.name} (${dateLabel})`,
+        subject: `Booking confirmed: ${booking.tourName} for ${booking.name} (${dateLabel})`,
         text: [
           `Booking #${booking.id} confirmed.`,
           ``,
@@ -229,7 +229,7 @@ export async function sendConfirmation(booking: BookingFields): Promise<boolean>
           ``,
           `Guest: ${booking.name}`,
           `Email: ${booking.email}`,
-          `Phone: ${booking.phone || "—"}`,
+          `Phone: ${booking.phone || "Not provided"}`,
         ].join("\n"),
       });
     } catch (err) {

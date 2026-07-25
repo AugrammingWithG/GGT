@@ -213,12 +213,19 @@ select{width:100%;padding:14px 16px;font-family:var(--font);font-size:16px;borde
    when the callout follows other content in the same field. */
 .builder-notice{font-size:13px;font-weight:600;margin-top:8px}
 .builder-notice.divider{padding-top:8px;border-top:1px solid var(--glass-border)}
+.builder-restrictions{list-style:none;padding:0}
+.builder-restrictions li{margin-top:4px}
+.builder-restrictions li:first-child{margin-top:0}
 .builder-note{font-size:12px;margin-top:8px}
 .builder-cta{margin-top:20px;width:100%;justify-content:center}
 
 .bill{background:var(--olive-deep);color:var(--paper);border-radius:20px;padding:clamp(20px,2.6vw,28px);box-shadow:0 30px 60px -30px rgba(0,0,0,.5);position:sticky;top:calc(var(--nav-h) + 20px)}
 .bill .t{font-family:var(--font-mono),'IBM Plex Mono';font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
 .bill h4{font-size:21px;margin:6px 0 16px}
+.bill-facts{list-style:none;margin:-10px 0 16px;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px;opacity:.85}
+.bill-inclusions{margin-top:14px;padding-top:14px;border-top:1px solid rgba(246,242,233,.25)}
+.bill-inclusions ul{margin:8px 0 0;padding-left:18px;font-size:13px;line-height:1.55;opacity:.9}
+.bill-inclusions li{margin-bottom:3px}
 .line{display:flex;justify-content:space-between;gap:14px;font-family:var(--font-mono),'IBM Plex Mono';font-size:14px;padding:9px 0;border-bottom:1px dashed rgba(246,242,233,.25)}
 .line.add{opacity:.9}
 .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px}
@@ -768,6 +775,7 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
 .hh-amt{font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:clamp(20px,2.4vw,28px);font-weight:700;color:#fff}
 .hh-plabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65)}
 .hh-meta{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 20px;font-size:14px;color:rgba(255,255,255,.85);opacity:0;animation:fadeUp .8s ease both 1.35s}
+.hh-restrictions{max-width:44ch;font-size:12px;line-height:1.5;color:rgba(255,255,255,.6);margin:6px 0 0;opacity:0;animation:fadeUp .8s ease both 1.42s}
 .hh-cta{margin-top:clamp(6px,1vh,12px);align-self:flex-start;opacity:0;animation:fadeUp .8s ease both 1.5s}
 /* Below this there's no second column competing for room (there never was
    one here, unlike the old two-column carousel hero), so the 54% cap only
@@ -794,7 +802,7 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
 
 @media(prefers-reduced-motion:reduce){
   .hh-bg{animation:none;translate:none}
-  .hh-eyebrow,.hh-blurb,.hh-meta,.hh-cta,.hh-price,.hh-scroll-cue{opacity:1;animation:none}
+  .hh-eyebrow,.hh-blurb,.hh-meta,.hh-restrictions,.hh-cta,.hh-price,.hh-scroll-cue{opacity:1;animation:none}
   .hh-word-inner{animation:none}
   .hh-scroll-cue-rail::after{animation:none}
 }
