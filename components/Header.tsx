@@ -3,10 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import BookingCta from "./BookingCta";
 import {
   FAREHARBOR_ENABLED,
-  bookingHref,
-  flagshipBookingHref,
+  FAREHARBOR_FLAGSHIP_ITEM_ID,
   tourItemId,
 } from "@/lib/fareharbor";
 
@@ -61,28 +61,31 @@ export default function Header({ overlay = false }: { overlay?: boolean }) {
         </Link>
 
         <nav className={open ? "nav-links open" : "nav-links"}>
-          <a href={flagshipBookingHref()} onClick={closeMenu}>
+          <BookingCta itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined} onClick={closeMenu}>
             Hunter Valley Tour
-          </a>
-          <a href={bookingHref({ itemId: tourItemId() })} onClick={closeMenu}>
+          </BookingCta>
+          <BookingCta itemId={tourItemId()} onClick={closeMenu}>
             Private Tours
-          </a>
+          </BookingCta>
           {/* The bar's own CTA is hidden on narrow screens, where it would
               crowd the brand and the menu button — this one takes over inside
               the dropdown instead. */}
-          <a
-            href={flagshipBookingHref()}
+          <BookingCta
+            itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
             className="btn btn-primary nav-cta-m"
             onClick={closeMenu}
           >
             {cta}
-          </a>
+          </BookingCta>
         </nav>
 
         <div className="nav-actions">
-          <a href={flagshipBookingHref()} className="btn btn-primary nav-cta">
+          <BookingCta
+            itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
+            className="btn btn-primary nav-cta"
+          >
             {cta}
-          </a>
+          </BookingCta>
           <button
             className="menu-btn"
             aria-label="Menu"

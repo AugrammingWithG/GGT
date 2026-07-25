@@ -128,16 +128,7 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                 ))}
               </select>
               {isWineTour && (
-                <p
-                  className="muted"
-                  style={{
-                    fontSize: 13,
-                    fontWeight: 600,
-                    marginTop: 8,
-                    paddingTop: 8,
-                    borderTop: "1px solid rgba(255,255,255,0.15)",
-                  }}
-                >
+                <p className="muted builder-notice divider">
                   Guests must be 18 or older to taste wine.
                 </p>
               )}
@@ -278,7 +269,7 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
               through enquiry rather than a guessed concession number.
             */}
             {showcasePrice != null && (
-              <p className="muted" style={{ fontSize: 13, fontWeight: 600, marginTop: 8 }}>
+              <p className="muted builder-notice">
                 <Price aud={showcasePrice} /> per adult. Concession rates for
                 seniors and children are available on enquiry.
               </p>
@@ -291,14 +282,13 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
               represent, and every other tour is quoted per itinerary by
               enquiry. Pricing is confirmed once Jimmy has the details.
             */}
-            <p className="muted" style={{ fontSize: 12, marginTop: 8 }}>
+            <p className="muted builder-note">
               Pricing is confirmed when you enquire — send us your day and
               we&rsquo;ll get back to you with the cost.
             </p>
             <button
               type="button"
-              className="btn btn-primary"
-              style={{ marginTop: 20, width: "100%", justifyContent: "center" }}
+              className="btn btn-primary builder-cta"
               onClick={() => setModalOpen(true)}
             >
               {FAREHARBOR_ENABLED ? "Check availability →" : "Send enquiry →"}

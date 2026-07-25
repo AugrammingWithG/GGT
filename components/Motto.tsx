@@ -31,9 +31,6 @@ export default function Motto() {
           Wine is our <em>canvas</em>.<br />
           Food is our <em>paint</em>.
         </p>
-        <a href="#builder" className="btn btn-primary">
-          Build your tour →
-        </a>
       </div>
     </section>
   );
