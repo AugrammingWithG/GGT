@@ -49,7 +49,7 @@ export default async function Home() {
         <div className="nature-page">
           <Motto />
           <VoyageSlider />
-          <TourBuilder tours={tours} />
+          <TourBuilder tours={tours} privateTourRate={privateTourRate} />
           <JimmyStrip />
           <Testimonials />
           <SocialCTA />
