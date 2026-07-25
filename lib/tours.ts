@@ -34,12 +34,24 @@ export type AddOn = {
  */
 export const DEFAULT_MAX_GUESTS = 16;
 
+export type PrivateTourRate = {
+  base: number;
+  baseCoversMin: number;
+  baseCoversMax: number;
+  extraGuestPrice: number;
+  maxGuests: number;
+  includes: string[];
+};
+
 /**
  * Shared pricing model for every private tour (every tour except Hunter
- * Valley). Referenced directly by consumers rather than copied onto each
- * tour, so the client's rate can be updated in one place.
+ * Valley). Seed/fallback default — the live value is the `settings/pricing`
+ * Firestore doc (see lib/tours.server.ts's getPrivateTourRate), editable from
+ * the admin Pricing tab. Kept here as the same seed/fallback role SEED_TOURS
+ * plays for tours: what a fresh Firestore project starts from, and what's
+ * used if the settings doc is missing or unreachable.
  */
-export const PRIVATE_TOUR_RATE = {
+export const PRIVATE_TOUR_RATE: PrivateTourRate = {
   base: 2300,
   baseCoversMin: 2,
   baseCoversMax: 4,
@@ -47,6 +59,16 @@ export const PRIVATE_TOUR_RATE = {
   maxGuests: 16,
   includes: ["Guide", "Bus", "Lunch"],
 };
+
+/**
+ * The private-tour estimate shown in the booking widget: the base fare plus
+ * $extraGuestPrice for each guest beyond baseCoversMax. Guest counts at or
+ * under baseCoversMax pay the flat base regardless of party size.
+ */
+export function privateTourEstimate(rate: PrivateTourRate, guests: number): number {
+  const extra = Math.max(0, guests - rate.baseCoversMax);
+  return rate.base + extra * rate.extraGuestPrice;
+}
 
 export type Tour = {
   id: string;

@@ -19,6 +19,19 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Visitor pageview counters: written by /api/track, read by the admin
+    // Overview chart, both via the Admin SDK only.
+    match /analytics_daily/{day} {
+      allow read, write: if false;
+    }
+
+    // Site settings (e.g. the private-tour pricing doc, settings/pricing):
+    // read by the public booking widget and written by the admin Pricing
+    // tab, both via the Admin SDK only.
+    match /settings/{doc} {
+      allow read, write: if false;
+    }
+
     // Default deny.
     match /{document=**} {
       allow read, write: if false;

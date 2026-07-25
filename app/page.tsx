@@ -9,7 +9,7 @@ import SocialCTA from "@/components/SocialCTA";
 import Footer from "@/components/Footer";
 import NatureBackdrop from "@/components/NatureBackdrop";
 import CurrencyProvider from "@/components/CurrencyProvider";
-import { getTours } from "@/lib/tours.server";
+import { getPrivateTourRate, getTours } from "@/lib/tours.server";
 import { toursJsonLd } from "@/lib/seo";
 import { detectCountry } from "@/lib/geo.server";
 
@@ -18,6 +18,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const tours = await getTours();
+  const privateTourRate = await getPrivateTourRate();
   // A header read, not a network call: costs nothing, and the page is already
   // dynamic. Rates are fetched client-side so nothing here can delay a price.
   const country = await detectCountry();
@@ -48,7 +49,7 @@ export default async function Home() {
         <div className="nature-page">
           <Motto />
           <DestinationGallery />
-          <TourBuilder tours={tours} />
+          <TourBuilder tours={tours} privateTourRate={privateTourRate} />
           <JimmyStrip />
           <Testimonials />
           <SocialCTA />
