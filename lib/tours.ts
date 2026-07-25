@@ -55,7 +55,7 @@ export type Tour = {
   priceAdult?: number;
   /** Hunter Valley only: its own per-person senior rate. */
   priceSenior?: number;
-  /** Hunter Valley only: its own per-person child/student (5-17) rate. */
+  /** Hunter Valley only: its own per-person child/student (4-16) rate. */
   priceChild?: number;
   /** Absent where group size is negotiated per private tour rather than fixed. */
   min?: number;
@@ -77,6 +77,22 @@ export type Tour = {
   pickupLocation?: string;
   /** What's included on the day, shown as a list. */
   inclusions?: string[];
+  /** How long the day runs, e.g. "Up to 11 hours". */
+  duration?: string;
+  /** Days this tour operates, e.g. "Monday & Wednesday". */
+  days?: string;
+  /**
+   * Youngest age this tour can accommodate, if any. Kept separate from
+   * `restrictions`' wording so the number itself is available to code, not
+   * just to a sentence a visitor reads.
+   */
+  minAge?: number;
+  /**
+   * Hard requirements a visitor needs to see before they enquire, such as
+   * age limits or dietary/safety constraints, not just once they reach the
+   * terms page. Shown directly under the tour picker in the builder.
+   */
+  restrictions?: string[];
 };
 
 /** Extras we charge for — everything the guest doesn't pay direct on the day. */
@@ -161,6 +177,22 @@ export const SEED_TOURS: Tour[] = [
     max: 16,
     order: 2,
     fareharborItemId: "65971",
+    days: "Monday & Wednesday",
+    duration: "Up to 11 hours",
+    returnTime: "Sydney, around 6:30pm",
+    minAge: 4,
+    restrictions: [
+      "Ages 4+ only. Infants 0-3 cannot be accommodated.",
+      "Under 18s cannot be served alcohol.",
+    ],
+    inclusions: [
+      "Complimentary door-to-door pickup and drop-off",
+      "Progressive breakfast and lunch prepared by your chef-guide",
+      "Three wine tastings matched to a modern Australian menu",
+      "Special dietary requirements catered for",
+      "Air-conditioned transport",
+      "Small group",
+    ],
     addOns: [
       { id: "winery", name: "Extra winery" },
       { id: "cheese", name: "Cheese & charcuterie board", price: 0 },

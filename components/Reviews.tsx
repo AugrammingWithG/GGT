@@ -14,7 +14,7 @@ type Review = {
 const REVIEWS: Review[] = [
   {
     quote:
-      "The best day of our whole Australia trip. Jimmy cooked breakfast on a hilltop and matched every wine himself — we flew home and still talk about it.",
+      "The best day of our whole Australia trip. Jimmy cooked breakfast on a hilltop and matched every wine himself. We flew home and still talk about it.",
     name: "Priya & Anand",
     detail: "Singapore · Hunter Valley tour",
     source: "Google",

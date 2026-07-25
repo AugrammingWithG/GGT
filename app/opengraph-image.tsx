@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { SITE_NAME } from "@/lib/seo";
 
 // Static social-share card generated at build time — no design assets needed.
-export const alt = "Gourmet Getaway Tours — food, wine & adventure tours from Sydney";
+export const alt = "Gourmet Getaway Tours: food, wine & adventure tours from Sydney";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

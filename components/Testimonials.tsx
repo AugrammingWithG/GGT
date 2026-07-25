@@ -72,7 +72,7 @@ export default function Testimonials() {
           <p className="eyebrow">Postcards from the road</p>
           <h2 className="tmns-title">Guests on tour with Jimmy</h2>
           <p className="tmns-lead">
-            Don&apos;t just take our word for it — here&apos;s what guests wrote
+            Don&apos;t just take our word for it: here&apos;s what guests wrote
             after a day on the road with Jimmy, straight from their Tripadvisor
             reviews.
           </p>
@@ -145,7 +145,7 @@ function Postcard({
           {"★".repeat(rating)}
         </div>
         <blockquote>{quote}</blockquote>
-        <p className="tmn-sign">— {author}</p>
+        <p className="tmn-sign">{author}</p>
       </div>
 
       <div className="tmn-post">

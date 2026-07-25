@@ -198,7 +198,7 @@ export default function EnquiryModal({
                     </div>
                   ))}
                   <p className="summary-onday-note">
-                    Paid direct to the provider on the day — not part of the
+                    Paid direct to the provider on the day, not part of the
                     estimate and not charged by us.
                   </p>
                 </>

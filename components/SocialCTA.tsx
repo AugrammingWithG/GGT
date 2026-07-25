@@ -15,7 +15,7 @@ export default function SocialCTA() {
           </p>
           <h2>Come along for the ride</h2>
           <p>
-            Behind-the-scenes cooks, cellar doors and clifftop lunches — see
+            Behind-the-scenes cooks, cellar doors and clifftop lunches: see
             where the van heads next.
           </p>
         </div>
