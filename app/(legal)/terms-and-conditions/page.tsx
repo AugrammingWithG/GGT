@@ -5,7 +5,7 @@ import { ACCREDITATION_NUMBER, BUSINESS_ACN, SITE_NAME } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Terms and conditions",
   description:
-    "Terms and conditions for travelling with Gourmet Getaway Tours — liability, travel insurance, changes to tours and age requirements.",
+    "Terms and conditions for travelling with Gourmet Getaway Tours: liability, travel insurance, changes to tours and age requirements.",
   alternates: {
     canonical: "/terms-and-conditions",
   },
@@ -58,7 +58,7 @@ export default function TermsAndConditions() {
           <div>
             <span className="legal-label">Return time</span>
             <p>
-              The 6pm return time is a guide, not a guarantee — traffic and
+              The 6pm return time is a guide, not a guarantee: traffic and
               unforeseen circumstances apply.
             </p>
           </div>

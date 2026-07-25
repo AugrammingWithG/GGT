@@ -10,6 +10,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { useReveal } from "./useReveal";
+import { useParallax } from "./useParallax";
 import EnquiryModal from "./EnquiryModal";
 import Price from "./Price";
 import { tourItemId } from "@/lib/fareharbor";
@@ -69,6 +70,11 @@ export default function DestinationGallery() {
   );
   const head = useReveal<HTMLDivElement>();
   const viewport = useReveal<HTMLDivElement>("dg-viewport");
+  // Sets --py on the viewport as the section scrolls through the page; every
+  // .dg-photo reads it back (see globals.css) so the whole strip of photos
+  // drifts a little against their fixed card frames instead of sitting dead
+  // still while the rest of the page moves past them.
+  const photoDrift = useParallax<HTMLDivElement>(16);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Record<number, HTMLDivElement | null>>({});
@@ -215,7 +221,13 @@ export default function DestinationGallery() {
         <p className="eyebrow dg-kicker">Seven more ways to spend the day</p>
       </div>
 
-      <div ref={viewport.ref} className={viewport.className}>
+      <div
+        ref={(el) => {
+          viewport.ref.current = el;
+          photoDrift.current = el;
+        }}
+        className={viewport.className}
+      >
         <button
           type="button"
           className="tmns-btn dg-arrow dg-arrow-prev"
