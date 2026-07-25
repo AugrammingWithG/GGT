@@ -2,7 +2,7 @@
 
 Marketing site + interactive tour builder for Gourmet Getaway Tours, converted
 from the original HTML mockup to **Next.js (App Router) + TypeScript**, with a
-**Firebase** backend and deployment on **Netlify**.
+**Firebase** backend and deployment on **Vercel**.
 
 ## What's here
 
@@ -52,15 +52,18 @@ all writes go through the Admin SDK in API routes. Deploy with the Firebase CLI:
 firebase deploy --only firestore:rules
 ```
 
-## Deploy to Netlify
+## Deploy to Vercel
 
-1. Push this repo to GitHub and import it into Netlify ("Add new site → Import
-   an existing project"). Netlify auto-detects Next.js and installs
-   `@netlify/plugin-nextjs`; the build command is `next build`.
-2. Add every variable from `.env.local.example` to the Netlify site's
-   Environment Variables (Site configuration → Environment variables),
-   including `FIREBASE_SERVICE_ACCOUNT` as a single-line JSON string.
-3. Deploy. The app runs on Netlify; Firebase only provides Firestore + Auth.
+1. Push this repo to GitHub and import it into Vercel with the **Next.js**
+   framework preset. The default build command (`next build`) and output
+   settings are sufficient; no `vercel.json` is required.
+2. Add every variable from `.env.local.example` under **Project Settings →
+   Environment Variables**. Add them to Production and any Preview or
+   Development environments that need them. Set `FIREBASE_SERVICE_ACCOUNT` to
+   the complete service-account JSON value.
+3. Deploy, then add `gourmetgetawaytours.com.au` under **Project Settings →
+   Domains** and update its DNS records as directed by Vercel. Firebase remains
+   responsible for Firestore and Authentication.
 
 ## Notes
 
