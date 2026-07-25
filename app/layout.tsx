@@ -11,6 +11,7 @@ import {
 import "./globals.css";
 import TypeSwitcher from "@/components/TypeSwitcher";
 import CustomCursor from "@/components/CustomCursor";
+import VisitorBeacon from "@/components/VisitorBeacon";
 import { SITE_URL, SITE_NAME, HOME_DESCRIPTION, organizationJsonLd } from "@/lib/seo";
 import { FAREHARBOR_ENABLED } from "@/lib/fareharbor";
 
@@ -118,6 +119,7 @@ export default function RootLayout({
         />
         <TypeSwitcher />
         <CustomCursor />
+        <VisitorBeacon />
         {children}
 
         {/*

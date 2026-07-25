@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Site-wide replacement pointer: a dot that snaps straight to the cursor and
@@ -18,8 +19,14 @@ import { useEffect, useRef } from "react";
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  // The admin dashboard is a data-entry/drag-and-drop tool, not the immersive
+  // marketing site this cursor was designed for — a decorative replacement
+  // pointer just gets in the way of dragging kanban cards, so it's skipped
+  // there entirely rather than only visually hidden.
+  const isAdmin = usePathname()?.startsWith("/admin");
 
   useEffect(() => {
+    if (isAdmin) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (!window.matchMedia("(pointer: fine)").matches) return;
 
@@ -84,7 +91,9 @@ export default function CustomCursor() {
       document.removeEventListener("mouseenter", onEnter);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [isAdmin]);
+
+  if (isAdmin) return null;
 
   return (
     <>
