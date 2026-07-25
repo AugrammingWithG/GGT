@@ -4,9 +4,12 @@ export type AddOn = {
   /**
    * Per-person price in AUD. On a `payOnDay` extra this is the third party's
    * approximate gate price, shown as a guide only; `0` there means "price
-   * varies" and is displayed as words rather than as a number.
+   * varies" and is displayed as words rather than as a number. On a regular
+   * (non-`payOnDay`) extra, `0` means genuinely free/included, and `undefined`
+   * means no price has been confirmed yet — never invent a number for this
+   * case, leave the field out and it displays as "Price on request".
    */
-  price: number;
+  price?: number;
   /**
    * True for a third-party cost the guest pays direct on the day — a ticket
    * booth, a hire counter — rather than money we collect.
@@ -17,10 +20,14 @@ export type AddOn = {
    * total is worked out.
    */
   payOnDay?: boolean;
+  /** True when the extra can't always be delivered (e.g. seasonal/weather-dependent) and should be flagged as such. */
+  subjectToAvailability?: boolean;
+  /** Short qualifier shown under the name, e.g. "Includes shucking and tasting" or "Mornings only". */
+  note?: string;
 };
 
 /**
- * Guest cap for a tour with none set — the 16-seat bus, which every tour
+ * Guest cap for a tour with none set: the 16-seat bus, which every tour
  * currently runs on. Kept only as the fallback for tour records written
  * before `max` existed; the real limit lives on each tour, so a second,
  * smaller vehicle just means a lower `max` on the tours that use it.
@@ -44,15 +51,15 @@ export const PRIVATE_TOUR_RATE = {
 export type Tour = {
   id: string;
   name: string;
-  /** Hunter Valley only — its own per-person adult rate. */
+  /** Hunter Valley only: its own per-person adult rate. */
   priceAdult?: number;
-  /** Hunter Valley only — its own per-person senior rate. */
+  /** Hunter Valley only: its own per-person senior rate. */
   priceSenior?: number;
-  /** Hunter Valley only — its own per-person child/student (5-17) rate. */
+  /** Hunter Valley only: its own per-person child/student (5-17) rate. */
   priceChild?: number;
   /** Absent where group size is negotiated per private tour rather than fixed. */
   min?: number;
-  /** Most guests this tour can take — the capacity of the vehicle it runs on. */
+  /** Most guests this tour can take: the capacity of the vehicle it runs on. */
   max: number;
   addOns: AddOn[];
   /** Optional display order in the builder dropdown. */
@@ -84,7 +91,10 @@ export const payOnDayAddOns = (addOns: AddOn[]): AddOn[] =>
  * False when a pay-on-the-day extra has no set price — bike hire billed by the
  * hour, say. Displayed as "price varies" instead of a figure.
  */
-export const hasFixedPrice = (a: AddOn): boolean => a.price > 0;
+export const hasFixedPrice = (a: AddOn): boolean => (a.price ?? 0) > 0;
+
+/** False until a real price has been confirmed for a regular (non-`payOnDay`) extra. */
+export const isPriceConfirmed = (a: AddOn): boolean => a.price !== undefined;
 
 /**
  * The quoted estimate: base fare plus chargeable extras, per guest.
@@ -94,7 +104,10 @@ export const hasFixedPrice = (a: AddOn): boolean => a.price > 0;
  * Pass the full selected list — filtering is this function's job.
  */
 export function tourTotal(base: number, guests: number, selected: AddOn[]): number {
-  const extras = chargeableAddOns(selected).reduce((sum, a) => sum + a.price, 0);
+  const extras = chargeableAddOns(selected).reduce(
+    (sum, a) => sum + (a.price ?? 0),
+    0,
+  );
   return (base + extras) * guests;
 }
 
@@ -121,15 +134,21 @@ export const SEED_TOURS: Tour[] = [
       "Light cooked breakfast",
       "Cider tasting and hot apple pie",
       "Progressive lunch from local produce",
+      "Gourmet picnic lunch at Hanging Rock",
       "Circle loop across the mountains",
     ],
     addOns: [
-      { id: "picnic", name: "Gourmet picnic upgrade", price: 30 },
       // Bought at the venue's own booth / hire counter, so the guest pays
       // these direct — we only flag that they're coming.
       { id: "scenic", name: "Scenic World pass", price: 65, payOnDay: true },
       { id: "bike", name: "Bike hire at Hanging Rock", price: 0, payOnDay: true },
-      { id: "truffle", name: "Truffle hunt (seasonal)", price: 65 },
+      {
+        id: "truffle",
+        name: "Truffle hunt (seasonal)",
+        price: 220,
+        subjectToAvailability: true,
+      },
+      { id: "zigzag", name: "Zig Zag Railway", price: 46.5 },
     ],
   },
   {
@@ -143,9 +162,14 @@ export const SEED_TOURS: Tour[] = [
     order: 2,
     fareharborItemId: "65971",
     addOns: [
-      { id: "winery", name: "Extra winery", price: 35 },
-      { id: "cheese", name: "Cheese & charcuterie board", price: 25 },
-      { id: "truffle2", name: "Truffle hunt (seasonal)", price: 65 },
+      { id: "winery", name: "Extra winery" },
+      { id: "cheese", name: "Cheese & charcuterie board", price: 0 },
+      {
+        id: "truffle2",
+        name: "Truffle hunt (seasonal)",
+        price: 220,
+        subjectToAvailability: true,
+      },
     ],
   },
   {
@@ -157,8 +181,10 @@ export const SEED_TOURS: Tour[] = [
     pickupLocation: "Arranged with you when you book",
     returnTime: "After 5pm, Circular Quay",
     addOns: [
-      { id: "paddle", name: "Brewery tasting paddle", price: 30 },
-      { id: "surf", name: "Surf lesson", price: 70 },
+      { id: "paddle", name: "Brewery tasting paddle" },
+      { id: "surf", name: "Surf lesson" },
+      { id: "oyster", name: "Oyster cruise", price: 93, note: "Includes shucking and tasting" },
+      { id: "campfire", name: "Campfire dinner" },
     ],
   },
   {
@@ -177,7 +203,7 @@ export const SEED_TOURS: Tour[] = [
       "Pie",
     ],
     addOns: [
-      { id: "fish", name: "Fish market tasting", price: 25 },
+      { id: "fish", name: "Fish market tasting", price: 0, note: "Mornings only" },
       { id: "choc", name: "Chocolate & cheese flight", price: 25 },
     ],
   },

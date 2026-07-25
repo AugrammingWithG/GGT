@@ -2,15 +2,18 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Price from "./Price";
+import CurrencyPicker from "./CurrencyPicker";
 import {
   chargeableAddOns,
   hasFixedPrice,
   payOnDayAddOns,
+  tourTotal,
   type Tour,
 } from "@/lib/tours";
 import { useReveal } from "./useReveal";
 import EnquiryModal, { type EnquiryDraft } from "./EnquiryModal";
 import { FAREHARBOR_ENABLED, tourItemId } from "@/lib/fareharbor";
+import { SHOWCASE_TOURS } from "@/lib/showcase";
 
 export default function TourBuilder({ tours }: { tours: Tour[] }) {
   const controls = useReveal<HTMLDivElement>("controls");
@@ -65,15 +68,26 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
   // requirement as soon as it's selected, not just in the terms page.
   const isWineTour = current.id === "hunter-valley";
 
+  // Launch-day adult rate for a tour whose tiered pricing isn't in the `Tour`
+  // schema yet (see lib/showcase.ts's `priceFromAdult`). Matched by name, not
+  // id — the carousel and builder datasets use different ids for the same
+  // tour (see the prefill listener above) — so this is nothing to keep in
+  // sync by hand: set the rate once in SHOWCASE_TOURS and both places pick
+  // it up.
+  const showcasePrice = SHOWCASE_TOURS.find(
+    (s) => s.name === current.name,
+  )?.priceFromAdult;
+
   const selectedAddOns = current.addOns.filter((a) => selected[a.id]);
   const charged = chargeableAddOns(selectedAddOns);
   const onTheDay = payOnDayAddOns(selectedAddOns);
-  // No tour has a computable total any more: Hunter Valley is priced per
-  // age tier (this stepper only tracks one guest count) and every other
-  // tour is quoted per itinerary by enquiry. This is provisional — the
-  // builder is being converted to a non-interactive showcase shortly.
-  const extrasTotal = selectedAddOns.reduce((sum, a) => sum + a.price * guests, 0);
-  const total = extrasTotal;
+  // No tour has a computable base fare any more: Hunter Valley is priced per
+  // age tier (this stepper only tracks one guest count) and every other tour
+  // is quoted per itinerary by enquiry. `total` is chargeable extras only
+  // (base 0, and pay-on-day extras excluded via tourTotal's own filtering) —
+  // enough for EnquiryModal to know whether there's anything to show an
+  // estimate for, not a real quote.
+  const total = tourTotal(0, guests, selectedAddOns);
 
   // Handed on already split, so nothing downstream — the enquiry record, the
   // emails, FareHarbor — can fold a third party's ticket back into our total.
@@ -174,17 +188,29 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                               Paid direct on the day
                             </small>
                           )}
+                          {a.subjectToAvailability && (
+                            <small className="addon-note">
+                              Subject to availability
+                            </small>
+                          )}
+                          {a.note && (
+                            <small className="addon-note">{a.note}</small>
+                          )}
                         </span>
                       </span>
                       <span className="price">
                         {a.payOnDay ? (
                           hasFixedPrice(a) ? (
                             <>
-                              ~<Price aud={a.price} /> pp
+                              ~<Price aud={a.price ?? 0} /> pp
                             </>
                           ) : (
                             "Price varies"
                           )
+                        ) : a.price === undefined ? (
+                          "Price on request"
+                        ) : a.price === 0 ? (
+                          "Free"
                         ) : (
                           <>
                             +<Price aud={a.price} /> pp
@@ -201,6 +227,9 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
           <div ref={bill.ref} className={`${bill.className} bill`}>
             <p className="t">Your day so far</p>
             <h4>{current.name}</h4>
+            <div className="bill-cpick">
+              <CurrencyPicker />
+            </div>
             <div>
               <div className="line">
                 <span>
@@ -227,7 +256,7 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                     <span>
                       {hasFixedPrice(a) ? (
                         <>
-                          ~<Price aud={a.price * guests} />
+                          ~<Price aud={(a.price ?? 0) * guests} />
                         </>
                       ) : (
                         "Varies"
@@ -241,6 +270,18 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                   above and not collected by us.
                 </p>
               </div>
+            )}
+            {/*
+              Launch-day anchor rate for a tour with real tiered pricing the
+              schema can't hold yet (see `showcasePrice` above): the adult
+              figure is firm, so say so, but seniors/children still go
+              through enquiry rather than a guessed concession number.
+            */}
+            {showcasePrice != null && (
+              <p className="muted" style={{ fontSize: 13, fontWeight: 600, marginTop: 8 }}>
+                <Price aud={showcasePrice} /> per adult. Concession rates for
+                seniors and children are available on enquiry.
+              </p>
             )}
             {/*
               Private tours are quoted per itinerary in FareHarbor, so this
