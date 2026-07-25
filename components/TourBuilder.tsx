@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Price from "./Price";
+import CurrencyPicker from "./CurrencyPicker";
 import {
   chargeableAddOns,
   hasFixedPrice,
@@ -187,17 +188,29 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                               Paid direct on the day
                             </small>
                           )}
+                          {a.subjectToAvailability && (
+                            <small className="addon-note">
+                              Subject to availability
+                            </small>
+                          )}
+                          {a.note && (
+                            <small className="addon-note">{a.note}</small>
+                          )}
                         </span>
                       </span>
                       <span className="price">
                         {a.payOnDay ? (
                           hasFixedPrice(a) ? (
                             <>
-                              ~<Price aud={a.price} /> pp
+                              ~<Price aud={a.price ?? 0} /> pp
                             </>
                           ) : (
                             "Price varies"
                           )
+                        ) : a.price === undefined ? (
+                          "Price on request"
+                        ) : a.price === 0 ? (
+                          "Free"
                         ) : (
                           <>
                             +<Price aud={a.price} /> pp
@@ -214,6 +227,9 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
           <div ref={bill.ref} className={`${bill.className} bill`}>
             <p className="t">Your day so far</p>
             <h4>{current.name}</h4>
+            <div className="bill-cpick">
+              <CurrencyPicker />
+            </div>
             <div>
               <div className="line">
                 <span>
@@ -240,7 +256,7 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                     <span>
                       {hasFixedPrice(a) ? (
                         <>
-                          ~<Price aud={a.price * guests} />
+                          ~<Price aud={(a.price ?? 0) * guests} />
                         </>
                       ) : (
                         "Varies"

@@ -406,9 +406,13 @@ function TourEditor({
           />
           <input
             type="number"
-            value={a.price}
-            onChange={(e) => updateAddon(i, { price: Number(e.target.value) })}
-            placeholder={a.payOnDay ? "Approx (0 = varies)" : "Price"}
+            value={a.price ?? ""}
+            onChange={(e) =>
+              updateAddon(i, {
+                price: e.target.value === "" ? undefined : Number(e.target.value),
+              })
+            }
+            placeholder={a.payOnDay ? "Approx (0 = varies)" : "Price (blank = TBC)"}
           />
           <label className="addon-flag">
             <input
@@ -418,6 +422,23 @@ function TourEditor({
             />
             Paid on the day
           </label>
+          <label className="addon-flag">
+            <input
+              type="checkbox"
+              checked={!!a.subjectToAvailability}
+              onChange={(e) =>
+                updateAddon(i, { subjectToAvailability: e.target.checked })
+              }
+            />
+            Subject to availability
+          </label>
+          <input
+            value={a.note ?? ""}
+            onChange={(e) =>
+              updateAddon(i, { note: e.target.value || undefined })
+            }
+            placeholder="Note (optional)"
+          />
           <button
             className="btn btn-ghost"
             onClick={() =>
