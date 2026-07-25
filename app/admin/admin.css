@@ -1,0 +1,144 @@
+/*
+  Tailwind + shadcn/ui, scoped to /admin only: imported solely by
+  app/admin/(dashboard)/layout.tsx, so Next's per-layout CSS bundling keeps
+  this out of every public route. The public site keeps using ../globals.css
+  untouched — but its :root tokens (--glass, --on-glass, --marmalade, etc.)
+  are already loaded everywhere via the root layout, so this file draws its
+  whole palette from them rather than redefining brand hex a second time.
+*/
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 1rem;
+
+  /* Same frosted-glass system as the public "nature" pages
+     (app/globals.css's --glass/--on-glass family), applied here to every
+     admin surface instead of just the .bill/.social panels. */
+  --background: transparent;
+  --foreground: var(--on-glass);
+  --card: var(--glass);
+  --card-foreground: var(--on-glass);
+  --popover: rgba(19, 30, 20, 0.7);
+  --popover-foreground: var(--on-glass);
+  /*
+     The public site retires marmalade on every dark-glass surface — see
+     globals.css's "De-orange" block (.nature-page .btn-primary etc.):
+     CTAs become translucent white glass, gold carries accent text instead.
+     The admin is glass throughout now, so it follows the same rule rather
+     than reintroducing the orange the rest of the glass UI deliberately
+     dropped. --primary is gold (rings, chart line, emphasis numbers); the
+     Button component's "default" variant is the white-glass CTA directly.
+  */
+  --primary: var(--gold);
+  --primary-foreground: #211c24;
+  --secondary: var(--glass-strong);
+  --secondary-foreground: var(--on-glass);
+  --muted: var(--glass-strong);
+  --muted-foreground: var(--on-glass-dim);
+  --accent: var(--gold);
+  --accent-foreground: #211c24;
+  --destructive: #ff6a52;
+  --border: var(--glass-border);
+  --input: var(--glass-border);
+  --ring: var(--gold);
+
+  --sidebar: rgba(15, 26, 17, 0.22);
+  --sidebar-foreground: var(--on-glass);
+  --sidebar-primary: rgba(244, 180, 0, 0.2);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(255, 255, 255, 0.1);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: var(--glass-border);
+  --sidebar-ring: var(--marmalade);
+
+  --status-new: var(--sea);
+  --status-confirmed: var(--gold);
+  --status-handled: var(--olive);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Verdana, matching the public site's --font exactly (app/globals.css). */
+  --font-sans: Verdana, Geneva, Tahoma, sans-serif;
+  --font-mono: var(--font-mono), "IBM Plex Mono", monospace;
+}
+
+@layer base {
+  .admin-root {
+    background: transparent;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+  .admin-root * {
+    border-color: var(--border);
+    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+  }
+  .admin-root h1,
+  .admin-root h2,
+  .admin-root h3 {
+    color: #fff;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+  }
+}
+
+@layer utilities {
+  /* The one recipe every glass pane in this dashboard shares: fill, edge and
+     blur, straight from the public site's tokens — but NOT the public site's
+     --glass-shadow. That shadow (60px blur) is tuned for a few big, widely
+     spaced panels (.bill, testimonials); reused on small cards packed into a
+     tight grid (stat tiles, kanban cards) its blur radius is wider than the
+     gap between cards, so it visibly bleeds across the gap and reads as
+     panels overlapping. This is a much tighter shadow sized for that. */
+  .glass-pane {
+    background: var(--card);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.55);
+  }
+
+  /* The lighter alternative for grouped stats: one outlined strip with
+     internal divider lines, not N separate boxes — used where several
+     related numbers sit side by side (stat tiles, pipeline-by-stage). */
+  .glass-outline {
+    border: 1px solid var(--glass-border);
+    background: color-mix(in oklab, var(--glass) 35%, transparent);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+  }
+}

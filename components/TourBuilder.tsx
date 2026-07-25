@@ -7,7 +7,9 @@ import {
   chargeableAddOns,
   hasFixedPrice,
   payOnDayAddOns,
+  privateTourEstimate,
   tourTotal,
+  type PrivateTourRate,
   type Tour,
 } from "@/lib/tours";
 import { useReveal } from "./useReveal";
@@ -15,7 +17,13 @@ import EnquiryModal, { type EnquiryDraft } from "./EnquiryModal";
 import { FAREHARBOR_ENABLED, tourItemId } from "@/lib/fareharbor";
 import { SHOWCASE_TOURS } from "@/lib/showcase";
 
-export default function TourBuilder({ tours }: { tours: Tour[] }) {
+export default function TourBuilder({
+  tours,
+  privateTourRate,
+}: {
+  tours: Tour[];
+  privateTourRate: PrivateTourRate;
+}) {
   const controls = useReveal<HTMLDivElement>("controls");
   const bill = useReveal<HTMLDivElement>("bill");
 
@@ -76,13 +84,19 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
   const selectedAddOns = current.addOns.filter((a) => selected[a.id]);
   const charged = chargeableAddOns(selectedAddOns);
   const onTheDay = payOnDayAddOns(selectedAddOns);
-  // No tour has a computable base fare any more: Hunter Valley is priced per
-  // age tier (this stepper only tracks one guest count) and every other tour
-  // is quoted per itinerary by enquiry. `total` is chargeable extras only
-  // (base 0, and pay-on-day extras excluded via tourTotal's own filtering) —
-  // enough for EnquiryModal to know whether there's anything to show an
-  // estimate for, not a real quote.
-  const total = tourTotal(0, guests, selectedAddOns);
+  // Hunter Valley is priced per age tier (this stepper only tracks one guest
+  // count), and showcase tours only anchor an adult rate — neither has a
+  // computable total here, so they keep the enquiry-only "confirmed when you
+  // enquire" copy below. Every other tour is a private tour, priced from
+  // privateTourRate: a flat base covering baseCoversMax guests plus
+  // extraGuestPrice per guest beyond that, so it *is* computable from this
+  // single guest-count stepper — shown as an estimate, still confirmed once
+  // Jimmy has the full itinerary.
+  const isPrivateTour = current.priceAdult == null && showcasePrice == null;
+  const addonPerGuest = charged.reduce((sum, a) => sum + (a.price ?? 0), 0);
+  const total = isPrivateTour
+    ? privateTourEstimate(privateTourRate, guests) + addonPerGuest * guests
+    : tourTotal(0, guests, selectedAddOns);
 
   // Handed on already split, so nothing downstream — the enquiry record, the
   // emails, FareHarbor — can fold a third party's ticket back into our total.
@@ -296,18 +310,33 @@ export default function TourBuilder({ tours }: { tours: Tour[] }) {
                 seniors and children are available on enquiry.
               </p>
             )}
-            {/*
-              Private tours are quoted per itinerary in FareHarbor, so this
-              figure is a guide, not the price charged at checkout.
-              No live total: Hunter Valley is priced per age tier (adult /
-              senior / child), which this single guest-count stepper can't
-              represent, and every other tour is quoted per itinerary by
-              enquiry. Pricing is confirmed once Jimmy has the details.
-            */}
-            <p className="muted builder-note">
-              Pricing is confirmed when you enquire. Send us your day and
-              we&rsquo;ll get back to you with the cost.
-            </p>
+            {isPrivateTour ? (
+              <>
+                <div className="total">
+                  <span className="mono">Estimated total</span>
+                  <b>
+                    <Price aud={total} />
+                  </b>
+                </div>
+                <p className="muted builder-note">
+                  From <Price aud={privateTourRate.base} /> for{" "}
+                  {privateTourRate.baseCoversMin}&ndash;
+                  {privateTourRate.baseCoversMax} guests, +
+                  <Price aud={privateTourRate.extraGuestPrice} /> per extra
+                  guest. A guide, confirmed once Jimmy has your full
+                  itinerary.
+                </p>
+              </>
+            ) : (
+              // Hunter Valley is priced per age tier (adult / senior /
+              // child), which this single guest-count stepper can't
+              // represent, so it has no live total here either — pricing is
+              // confirmed once Jimmy has the details.
+              <p className="muted builder-note">
+                Pricing is confirmed when you enquire. Send us your day and
+                we&rsquo;ll get back to you with the cost.
+              </p>
+            )}
             <button
               type="button"
               className="btn btn-primary builder-cta"

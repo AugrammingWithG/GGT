@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Dev-only type-theme switcher.
@@ -32,6 +33,7 @@ function apply(id: ThemeId) {
 
 export default function TypeSwitcher() {
   const [active, setActive] = useState<ThemeId>("a");
+  const pathname = usePathname();
 
   // Restore the last pick on mount. Body already carries the SSR default class,
   // so this only overrides it client-side — no hydration mismatch.
@@ -48,6 +50,8 @@ export default function TypeSwitcher() {
   }, []);
 
   if (process.env.NODE_ENV === "production") return null;
+  // The admin dashboard doesn't use the marketing site's type experiment.
+  if (pathname?.startsWith("/admin")) return null;
 
   const pick = (id: ThemeId) => {
     setActive(id);
