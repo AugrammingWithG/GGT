@@ -4,7 +4,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import Price, { ChargedInAud } from "./Price";
 import PolicyGate from "./PolicyGate";
-import { FAREHARBOR_ENABLED, type FareHarborPrefill } from "@/lib/fareharbor";
+import { FAREHARBOR_ENABLED } from "@/lib/fareharbor";
 import { openFareHarbor } from "@/lib/fareharbor.client";
 
 type DraftAddOn = { id: string; name: string; price?: number };
@@ -38,41 +38,9 @@ export default function EnquiryModal({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [preferredDate, setPreferredDate] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
-  // Guests only see the policy "gate" step when there's a real booking ahead
-  // (FareHarbor enabled) — a plain enquiry with FareHarbor off never reaches
-  // checkout, so there's no policy to flag before they've even typed anything.
-  const [step, setStep] = useState<"gate" | "form">(
-    FAREHARBOR_ENABLED ? "gate" : "form",
-  );
-
-  /**
-   * Everything the guest has told us so far, mapped onto FareHarbor's booking
-   * flow. Selections FareHarbor has no field for (extras, our estimate) ride
-   * along as tracking params so they show up on the booking in the dashboard.
-   */
-  function prefill(): FareHarborPrefill {
-    return {
-      itemId: draft.fareharborItemId || undefined,
-      guests: draft.guests,
-      date: preferredDate || undefined,
-      name,
-      email,
-      phone,
-      note: message,
-      context: {
-        tour: draft.tourName,
-        extras: draft.addOns.map((a) => a.name).join(", "),
-        // Separate param, so the booking record never reads these as ours to
-        // charge. `estimate` stays the amount we quote.
-        extrasPaidOnDay: draft.payOnDayAddOns.map((a) => a.name).join(", "),
-        estimate: draft.total,
-      },
-    };
-  }
 
   function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -104,18 +72,37 @@ export default function EnquiryModal({
         throw new Error(data.error ?? "Something went wrong. Please try again.");
       }
       setStatus("ok");
-      // Lead is safely saved; hand the guest straight to FareHarbor to
-      // actually book, carrying everything they just typed.
-      openFareHarbor(prefill());
     } catch (err) {
       setStatus("err");
       setError(err instanceof Error ? err.message : "Something went wrong.");
     }
   }
 
-  if (step === "gate") {
+  // With FareHarbor configured, its own checkout collects name/email/date —
+  // asking again on-site is the redundant double-entry step we're removing.
+  // Guests just clear the policy gate and go straight to booking; the plain
+  // enquiry form (and its /api/enquiries lead record) only exists as the
+  // fallback for when there's no FareHarbor checkout to hand off to.
+  if (FAREHARBOR_ENABLED) {
     return (
-      <PolicyGate onAgree={() => setStep("form")} onClose={onClose} />
+      <PolicyGate
+        onClose={onClose}
+        onAgree={() => {
+          openFareHarbor({
+            itemId: draft.fareharborItemId || undefined,
+            guests: draft.guests,
+            context: {
+              tour: draft.tourName,
+              extras: draft.addOns.map((a) => a.name).join(", "),
+              extrasPaidOnDay: draft.payOnDayAddOns
+                .map((a) => a.name)
+                .join(", "),
+              estimate: draft.total,
+            },
+          });
+          onClose();
+        }}
+      />
     );
   }
 
@@ -134,19 +121,10 @@ export default function EnquiryModal({
           <>
             <h3>Thanks, {name || "friend"}! 🎉</h3>
             <p className="sub">
-              {FAREHARBOR_ENABLED
-                ? "Your details are saved and the booking window is opening: pick your date and confirm. Jimmy will be in touch either way."
-                : "Your enquiry is in. Jimmy will be in touch shortly to lock in the details."}
+              Your enquiry is in. Jimmy will be in touch shortly to lock in
+              the details.
             </p>
             <div className="modal-actions">
-              {FAREHARBOR_ENABLED && (
-                <button
-                  className="btn btn-primary"
-                  onClick={() => openFareHarbor(prefill())}
-                >
-                  Open booking →
-                </button>
-              )}
               <button className="btn btn-ghost" onClick={onClose}>
                 Done
               </button>
@@ -154,11 +132,9 @@ export default function EnquiryModal({
           </>
         ) : (
           <form onSubmit={handleFormSubmit}>
-            <h3>{FAREHARBOR_ENABLED ? "Almost there" : "Send your enquiry"}</h3>
+            <h3>Send your enquiry</h3>
             <p className="sub">
-              {FAREHARBOR_ENABLED
-                ? "A few details and we'll take you to checkout with everything filled in."
-                : "We'll get back to you about your tailored day out."}
+              We&apos;ll get back to you about your tailored day out.
             </p>
 
             <div className="summary">
@@ -267,17 +243,6 @@ export default function EnquiryModal({
               />
             </div>
             <div className="field">
-              <label className="flabel" htmlFor="enq-date">
-                Preferred date (optional)
-              </label>
-              <input
-                id="enq-date"
-                type="date"
-                value={preferredDate}
-                onChange={(e) => setPreferredDate(e.target.value)}
-              />
-            </div>
-            <div className="field">
               <label className="flabel" htmlFor="enq-message">
                 Anything else? (optional)
               </label>
@@ -295,11 +260,7 @@ export default function EnquiryModal({
                 disabled={status === "sending"}
                 style={{ flex: 1, justifyContent: "center" }}
               >
-                {status === "sending"
-                  ? "Sending…"
-                  : FAREHARBOR_ENABLED
-                    ? "Continue to booking →"
-                    : "Send enquiry →"}
+                {status === "sending" ? "Sending…" : "Send enquiry →"}
               </button>
             </div>
           </form>
