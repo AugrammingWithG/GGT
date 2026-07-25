@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CANCELLATION_CLAUSES } from "@/lib/cancellationPolicy";
 
 export const metadata: Metadata = {
   title: "Cancellation policy",
@@ -22,28 +23,14 @@ export default function CancellationPolicy() {
       <h1 className="legal-title">Cancellation policy</h1>
 
       <ol className="legal-list">
-        <li className="legal-item">
-          <div>
-            <span className="legal-label">Securing a date</span>
-            <p>
-              Private tours require full payment to secure a specific date.
-            </p>
-          </div>
-        </li>
-        <li className="legal-item">
-          <div>
-            <span className="legal-label">Full refund</span>
-            <p>
-              Full refund if cancelled more than 5 days before the tour date.
-            </p>
-          </div>
-        </li>
-        <li className="legal-item">
-          <div>
-            <span className="legal-label">No refund</span>
-            <p>No refund if cancelled within 5 days of the tour date.</p>
-          </div>
-        </li>
+        {CANCELLATION_CLAUSES.map((c) => (
+          <li className="legal-item" key={c.label}>
+            <div>
+              <span className="legal-label">{c.label}</span>
+              <p>{c.text}</p>
+            </div>
+          </li>
+        ))}
       </ol>
 
       <p className="legal-more">

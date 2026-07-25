@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
+import Link from "next/link";
 import Price, { ChargedInAud } from "./Price";
 import { FAREHARBOR_ENABLED, type FareHarborPrefill } from "@/lib/fareharbor";
 import { openFareHarbor } from "@/lib/fareharbor.client";
+import { CANCELLATION_CLAUSES } from "@/lib/cancellationPolicy";
 
 type DraftAddOn = { id: string; name: string; price?: number };
 
@@ -40,6 +43,10 @@ export default function EnquiryModal({
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  // Guests only see the "policy" step when there's a real booking ahead
+  // (FareHarbor enabled) — a plain enquiry with FareHarbor off never reaches
+  // checkout, so there's nothing to gate yet.
+  const [step, setStep] = useState<"form" | "policy">("form");
 
   /**
    * Everything the guest has told us so far, mapped onto FareHarbor's booking
@@ -66,8 +73,22 @@ export default function EnquiryModal({
     };
   }
 
-  async function submit(e: React.FormEvent) {
+  /**
+   * The form's first submit only gets past browser validation and, when
+   * there's a real booking ahead, into the cancellation-policy gate — never
+   * straight to FareHarbor. Only "Agree & continue" from that gate (or a
+   * plain enquiry with no FareHarbor) actually calls `submit`.
+   */
+  function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (FAREHARBOR_ENABLED) {
+      setStep("policy");
+      return;
+    }
+    submit();
+  }
+
+  async function submit() {
     setStatus("sending");
     setError("");
     try {
@@ -101,7 +122,11 @@ export default function EnquiryModal({
     }
   }
 
-  return (
+  // Portaled straight to <body>: rendered from inside .nature-page, whose
+  // `isolation:isolate` traps this modal's z-index under its own stacking
+  // context — below the fixed header's — so without the portal the header
+  // paints over the top of the dimmed overlay and the dialog underneath it.
+  return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" aria-label="Close" onClick={onClose}>
@@ -130,8 +155,53 @@ export default function EnquiryModal({
               </button>
             </div>
           </>
+        ) : step === "policy" ? (
+          <div>
+            <h3>Cancellation policy</h3>
+            <p className="sub">
+              This applies once you continue — please read it before you head
+              to checkout.
+            </p>
+
+            {status === "err" && (
+              <div className="form-msg err">{error}</div>
+            )}
+
+            <ul className="policy-clauses">
+              {CANCELLATION_CLAUSES.map((c) => (
+                <li key={c.label}>
+                  <strong>{c.label}.</strong> {c.text}
+                </li>
+              ))}
+            </ul>
+            <p className="policy-clauses-more">
+              <Link href="/cancellation-policy" target="_blank">
+                Read the full cancellation policy →
+              </Link>
+            </p>
+
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => setStep("form")}
+                disabled={status === "sending"}
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                disabled={status === "sending"}
+                style={{ flex: 1, justifyContent: "center" }}
+                onClick={submit}
+              >
+                {status === "sending" ? "Sending…" : "Agree & continue →"}
+              </button>
+            </div>
+          </div>
         ) : (
-          <form onSubmit={submit}>
+          <form onSubmit={handleFormSubmit}>
             <h3>{FAREHARBOR_ENABLED ? "Almost there" : "Send your enquiry"}</h3>
             <p className="sub">
               {FAREHARBOR_ENABLED
@@ -283,6 +353,7 @@ export default function EnquiryModal({
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

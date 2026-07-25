@@ -28,7 +28,7 @@ export default function PrivacyPolicy() {
   return (
     <>
       <div className="draft-banner">
-        <strong>DRAFT — not approved, not live.</strong> This describes what
+        <strong>DRAFT. Not approved, not live.</strong> This describes what
         the site's enquiry form actually does today. It has not been reviewed
         by {SITE_NAME} or a lawyer. Do not link this page from the site or
         treat it as binding until it's been approved.
@@ -39,7 +39,7 @@ export default function PrivacyPolicy() {
 
       <div className="legal-prose">
         <p>
-          This policy covers the enquiry form on this website — the only
+          This policy covers the enquiry form on this website, the only
           place {SITE_NAME} collects personal information through the site
           itself. It explains what's collected, why, where it's kept, who can
           see it, how long it's kept, and how to ask for it to be deleted.
@@ -66,8 +66,8 @@ export default function PrivacyPolicy() {
           <li>A preferred tour date, if you choose to give one (optional)</li>
           <li>Any message you type in the "anything else?" field (optional)</li>
           <li>
-            The tour, guest count, add-ons and estimated price you selected —
-            this isn't personal information on its own, but it's stored and
+            The tour, guest count, add-ons and estimated price you selected.
+            This isn't personal information on its own, but it's stored and
             emailed alongside your details above
           </li>
         </ul>
@@ -91,7 +91,7 @@ export default function PrivacyPolicy() {
         <h2>Where it's stored</h2>
         <p>
           Enquiries are stored in a Google Cloud Firestore database. Direct
-          access from a web browser is switched off entirely — the database
+          access from a web browser is switched off entirely. The database
           only accepts reads and writes from our own server code, which checks
           who's allowed to see or change anything before it does.
         </p>
@@ -99,40 +99,40 @@ export default function PrivacyPolicy() {
         <h2>Who can see it</h2>
         <ul>
           <li>
-            <strong>Jimmy / the business inbox</strong> — every enquiry is
+            <strong>Jimmy / the business inbox.</strong> Every enquiry is
             emailed to our booking inbox as soon as it's submitted, and again
             when a booking is confirmed.
           </li>
           <li>
-            <strong>You</strong> — we email you back a copy of what you
+            <strong>You.</strong> We email you back a copy of what you
             submitted.
           </li>
           <li>
-            <strong>Resend</strong>, our email delivery provider — it
+            <strong>Resend</strong>, our email delivery provider. It
             processes every email above on our behalf in order to send it.
           </li>
           <li>
-            <strong>Staff with admin access</strong> — a short allow-list of
+            <strong>Staff with admin access.</strong> A short allow-list of
             staff email addresses can log in to view, update and manage
             enquiries. Login is protected by Firebase Authentication.
           </li>
           <li>
-            <strong>FareHarbor</strong>, our booking platform — if you
+            <strong>FareHarbor</strong>, our booking platform. If you
             continue from an enquiry through to checkout, your name, email,
             phone and message are passed to FareHarbor to pre-fill the
             booking form. This only happens if you proceed to that step.
           </li>
         </ul>
         <p>
-          Nobody else — there is no analytics or advertising tracking on this
+          Nobody else. There is no analytics or advertising tracking on this
           site that receives your enquiry details.
         </p>
 
         <h2>How long we keep it</h2>
         <p>
           <em>
-            [Client to confirm: currently there is no automatic deletion —
-            enquiries are kept indefinitely unless a staff member manually
+            [Client to confirm: currently there is no automatic deletion.
+            Enquiries are kept indefinitely unless a staff member manually
             deletes one. We should agree a retention period here (e.g.
             "for 24 months after your enquiry, or until you ask us to delete
             it") before this goes live.]

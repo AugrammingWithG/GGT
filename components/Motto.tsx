@@ -1,13 +1,21 @@
 "use client";
 
 import { useReveal } from "./useReveal";
+import { useParallax } from "./useParallax";
 
 export default function Motto() {
   const r = useReveal<HTMLDivElement>();
+  const drift = useParallax<HTMLDivElement>(12);
 
   return (
     <section className="wrap">
-      <div ref={r.ref} className={`motto ${r.className}`}>
+      <div
+        ref={(el) => {
+          r.ref.current = el;
+          drift.current = el;
+        }}
+        className={`motto ${r.className}`}
+      >
         {/* The page's heading root. The hero above it is a carousel — every
             line in it changes per slide — so the H1/H2 that say who this is
             and what is sold live in the first fixed block instead. The H1

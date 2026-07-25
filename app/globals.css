@@ -100,7 +100,11 @@ header.overlay .wrap{max-width:min(1520px,94vw)}
    the content underneath. */
 .brand{display:inline-flex;align-items:center;gap:clamp(8px,1vw,12px);justify-self:start;margin-left:clamp(6px,1.8vw,24px)}
 .brand-logo{display:block;height:clamp(40px,4.6vw,52px);width:auto;transition:height .3s ease}
-header.overlay:not(.scrolled) .brand-logo{height:clamp(52px,6.6vw,72px)}
+/* Capped 8px inside --nav-h (not its own independent clamp) so the mark can
+   never grow taller than the bar itself: it used to outgrow --nav-h between
+   roughly 880-1129px wide, spilling out the bottom of the fixed-height header
+   and overlapping the hero copy underneath it. */
+header.overlay:not(.scrolled) .brand-logo{height:clamp(46px,calc(var(--nav-h) - 8px),64px)}
 /* Text wordmark beside the mark. Inherits the header's colour (white over the
    hero, ink once scrolled) via currentColor; the mark carries the green. */
 .brand-word{display:inline-flex;align-items:baseline;line-height:1;color:currentColor;white-space:nowrap}
@@ -271,7 +275,7 @@ select{width:100%;padding:14px 16px;font-family:var(--font);font-size:16px;borde
   transform:translateY(-6px) scale(1.05);
   filter:drop-shadow(0 8px 22px rgba(0,0,0,.62)) drop-shadow(0 0 16px rgba(244,180,0,.38));
 }
-.trust-tile img{width:100%;height:auto;max-width:clamp(150px,15.5vw,210px)}
+.trust-tile img{width:100%;height:auto;max-width:clamp(170px,18vw,250px)}
 /* Tripadvisor and Destination NSW are near-black artwork and sink into the
    backdrop, so they're flattened to solid white; their inner detail (the owl's
    eyes, the gaps in the NSW sails) is transparent, so it survives as counters.
@@ -400,7 +404,9 @@ select{width:100%;padding:14px 16px;font-family:var(--font);font-size:16px;borde
 
 /* --- the strip of prints. Capped so it never grows into a billboard, and
    nudged past the right margin so it runs off the edge of the spread. --- */
-.jimmy-stack{width:min(100%,392px);margin-left:auto;margin-right:calc(-1 * clamp(0px,1.6vw,22px));display:flex;flex-direction:column}
+/* --py set by useParallax (see JimmyStrip.tsx): a slow drift against the
+   dossier card beside it, so the two columns don't read as one flat plane. */
+.jimmy-stack{width:min(100%,392px);margin-left:auto;margin-right:calc(-1 * clamp(0px,1.6vw,22px));display:flex;flex-direction:column;translate:0 var(--py,0px)}
 .jimmy-shot,.jimmy-print{
   margin:0;background:var(--paper);border-radius:2px;
   padding:clamp(7px,.8vw,10px) clamp(7px,.8vw,10px) 0;
@@ -564,14 +570,6 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
 .review-source{font-family:var(--font-mono),'IBM Plex Mono';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--olive);margin-top:4px}
 .stars{color:var(--gold);font-size:16px;letter-spacing:2px}
 
-/* trust / accreditation strip */
-.trust{border:1.5px solid rgba(33,28,36,.12);border-radius:20px;padding:26px 30px;margin:0 0 84px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:22px}
-.trust-lead{font-size:16px;font-weight:bold;max-width:22ch}
-.trust-badges{list-style:none;display:flex;flex-wrap:wrap;gap:14px}
-.trust-badge{display:flex;align-items:center;gap:10px;background:var(--oat);border-radius:12px;padding:10px 14px}
-.trust-badge-mark{font-family:var(--font-mono),'IBM Plex Mono';font-weight:500;font-size:15px;color:var(--olive-deep);letter-spacing:.02em}
-.trust-badge-detail{font-size:12px;line-height:1.3;color:#5a564f;max-width:16ch}
-
 /* whatsapp floating button */
 .wa-fab{position:fixed;right:20px;bottom:20px;z-index:90;display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:12px 18px;border-radius:999px;box-shadow:0 14px 30px -10px rgba(0,0,0,.4);font-size:15px;font-weight:bold;transition:transform .15s ease,box-shadow .15s ease}
 .wa-fab:hover{transform:translateY(-2px);box-shadow:0 18px 34px -10px rgba(0,0,0,.5);color:#fff}
@@ -580,7 +578,6 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
 
 @media(max-width:760px){
   .review-grid{grid-template-columns:1fr}
-  .trust{flex-direction:column;align-items:flex-start}
   .wa-fab-text{display:none}
   .wa-fab{padding:14px;right:16px;bottom:16px}
 }
@@ -600,13 +597,15 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
    padding-top/bottom only (not the shorthand): this sits on the same element
    as .wrap, whose left/right padding must survive. */
 .dg{padding-top:var(--section);padding-bottom:clamp(60px,8vw,90px);--dg-card:clamp(210px,26vw,300px);--dg-gap:clamp(16px,2vw,26px)}
-.dg-head{max-width:56ch;margin-bottom:clamp(24px,3.2vw,36px)}
+.dg-head{max-width:64ch;margin:0 auto clamp(24px,3.2vw,36px);text-align:center}
 .dg-title{font-size:clamp(26px,3.6vw,40px);margin:6px 0 0}
 /* The "build a private tour" pitch, folded into the gallery's own header
    (it used to be a separate boxed door below the cards) so the CTA leads
    straight into the inspiration it's a shortcut past. Plain text, no panel:
-   this section already floats directly on the nature backdrop. */
-.dg-lead{margin-top:14px;font-size:15px;line-height:1.6;max-width:46ch;opacity:.88}
+   this section already floats directly on the nature backdrop. Centred as
+   the section's title block; widened to 60ch (was 46ch) so the sentence
+   settles into two lines instead of three. */
+.dg-lead{margin:14px auto 0;font-size:15px;line-height:1.6;max-width:60ch;opacity:.88}
 .dg-head-cta{margin-top:20px}
 /* Demoted from its old standalone h2 to a second eyebrow, since the CTA
    above it already carries the section's main heading. */
@@ -662,7 +661,10 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
   mix-blend-mode:overlay;
 }
 .dg-card:hover::before{opacity:1}
-.dg-photo{position:absolute;inset:0;width:100%;height:100%;border:none;padding:0;cursor:pointer;background-size:cover;background-position:center}
+/* --py (set by useParallax on .dg-viewport, see DestinationGallery.tsx)
+   inherits down to every card; oversized -inset so the drift never uncovers
+   a bare edge inside the card's rounded, overflow-hidden frame. */
+.dg-photo{position:absolute;inset:-6%;width:112%;height:112%;border:none;padding:0;cursor:pointer;background-size:cover;background-position:center;translate:0 var(--py,0px)}
 /* Top-down scrim rather than bottom: the name/region sit at the top of the
    card here, not the bottom. Backdrop-blurred (masked so the blur itself
    fades out with the tint, not just the colour) so the band reads as a
@@ -843,6 +845,12 @@ header.scrolled{box-shadow:0 10px 30px -20px rgba(33,28,36,.5)}
 .form-msg.ok{background:rgba(95,115,33,.12);color:var(--olive-deep)}
 .form-msg.err{background:rgba(255,94,26,.12);color:#b5300a}
 
+.policy-clauses{list-style:none;display:flex;flex-direction:column;gap:12px;background:var(--oat);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.policy-clauses li{font-size:14px;line-height:1.55}
+.policy-clauses-more{font-size:13px;margin-bottom:20px}
+.policy-clauses-more a{color:var(--olive);border-bottom:1.5px solid rgba(95,115,33,.35);padding-bottom:1px}
+.policy-clauses-more a:hover{color:var(--marmalade);border-bottom-color:var(--marmalade)}
+
 /* --- admin: landscape-backed frosted glass --- */
 .admin{
   min-height:100vh;padding:40px 0;color:var(--on-glass);
@@ -952,41 +960,73 @@ header.scrolled{box-shadow:0 10px 30px -20px rgba(33,28,36,.5)}
   .tmn{transition:none}
 }
 
-/* --- legal pages (cancellation policy, terms and conditions) --- */
-/* Narrower than the site-wide .wrap: these are read line by line, and a 1180px
-   measure is too wide to track comfortably. One clause per card so the page
-   scans as a list of obligations rather than a slab of prose. */
+/* --- legal pages (cancellation policy, terms and conditions, privacy) ---
+   Always inside `.nature-page` (see the (legal) layout) — a genuinely glassy
+   sheet over the photo, tuned for dense body copy rather than a caption over
+   a hero: low-opacity fill + heavy blur so type stays legible without ever
+   reading as a solid white card. Narrower than the site-wide .wrap: these are
+   read line by line, and a 1180px measure is too wide to track comfortably. */
 .legal-shell{display:flex;flex-direction:column;min-height:100vh}
+.legal-glass-wrap{display:flex;flex-direction:column;flex:1}
 .legal{flex:1;padding:54px 0 90px}
-.legal-inner{max-width:800px}
-.legal-title{font-size:clamp(30px,4.6vw,50px);margin:10px 0 0}
+
+.legal-inner{
+  position:relative;max-width:800px;
+  font-family:Verdana,Geneva,sans-serif;
+  background:rgba(255,251,242,.07);
+  border:1px solid rgba(255,255,255,.30);
+  border-radius:24px;
+  -webkit-backdrop-filter:blur(36px) saturate(170%);backdrop-filter:blur(36px) saturate(170%);
+  box-shadow:var(--glass-shadow),var(--glass-hi);
+  padding:clamp(28px,4vw,52px);
+  /* Light type, like every other glass panel on the site (jimmy-card, bill,
+     footer) — the backdrop is a dark, blurred photo, so dark ink text was
+     unreadable against it despite the keyline/shadow tricks. */
+  color:var(--on-glass);
+  text-shadow:0 1px 10px rgba(0,0,0,.45);
+}
+/* Inset keyline reads as the pane's edge catching light — the same trick as
+   .jimmy-card. */
+.legal-inner::before{content:"";position:absolute;inset:8px;border:1px solid rgba(255,255,255,.20);border-radius:17px;pointer-events:none}
+
+.legal-inner .legal-title{font-family:Verdana,Geneva,sans-serif;font-size:clamp(30px,4.6vw,50px);font-weight:800;margin:10px 0 0;color:#fff}
+.legal-inner .legal-prose h2{font-family:Verdana,Geneva,sans-serif;font-size:20px;font-weight:700;margin:34px 0 10px;color:#fff}
+
 .legal-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:34px;counter-reset:clause}
-.legal-item{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;background:#fff;border:1.5px solid rgba(33,28,36,.12);border-radius:16px;padding:22px 26px}
-.legal-item::before{counter-increment:clause;content:counter(clause,decimal-leading-zero);font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.06em;color:var(--olive);padding-top:2px}
-.legal-label{display:block;font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--stone);margin-bottom:7px}
-.legal-item p{font-size:16px;line-height:1.6;color:#33302c}
+.legal-item{
+  display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:16px;padding:22px 26px;
+  -webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);
+}
+/* Kickers (numeral + label) get the gold accent used for eyebrows everywhere
+   else on the glass pages. */
+.legal-item::before{counter-increment:clause;content:counter(clause,decimal-leading-zero);font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--gold);padding-top:2px}
+.legal-label{display:block;font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.legal-item p{font-size:16px;line-height:1.6;color:var(--on-glass)}
 
 .legal-ids{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
-.legal-ids>div{display:flex;align-items:baseline;gap:9px;padding:9px 15px;border:1px solid rgba(33,28,36,.16);border-radius:999px;background:var(--oat)}
-.legal-ids dt{font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--stone)}
-.legal-ids dd{font-weight:bold;font-size:14px}
+.legal-ids>div{display:flex;align-items:baseline;gap:9px;padding:9px 15px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(255,255,255,.10)}
+.legal-ids dt{font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.legal-ids dd{font-weight:bold;font-size:14px;color:#fff}
 
 .legal-more{margin-top:34px;font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.04em}
-.legal-more a{color:var(--olive);border-bottom:1.5px solid rgba(95,115,33,.35);padding-bottom:2px}
+.legal-more a{color:var(--gold);border-bottom:1.5px solid rgba(244,180,0,.45);padding-bottom:2px}
 .legal-more a:hover{color:var(--marmalade);border-bottom-color:var(--marmalade)}
 
-.draft-banner{background:var(--oat);border:1.5px solid var(--marmalade);border-radius:12px;padding:16px 20px;font-size:14px;line-height:1.55;color:#33302c}
-.draft-banner strong{color:var(--marmalade)}
+.draft-banner{background:rgba(255,94,26,.14);border:1.5px solid var(--marmalade);border-radius:12px;padding:16px 20px;font-size:14px;line-height:1.55;color:var(--on-glass)}
+.draft-banner strong{color:#ffb385}
 
-.legal-prose{margin-top:34px;font-size:16px;line-height:1.7;color:#33302c}
-.legal-prose h2{font-size:20px;margin:34px 0 10px;color:var(--ink)}
+.legal-prose{margin-top:34px;font-size:16px;line-height:1.7;color:var(--on-glass)}
 .legal-prose h2:first-child{margin-top:0}
 .legal-prose p{margin:0 0 14px}
 .legal-prose ul{margin:0 0 14px;padding-left:22px;display:flex;flex-direction:column;gap:6px}
-.legal-prose em{color:var(--olive);font-style:italic}
+.legal-prose em{color:var(--gold);font-style:italic}
 
 @media(max-width:560px){
   .legal{padding:36px 0 64px}
+  .legal-inner{border-radius:18px}
   .legal-item{gap:14px;padding:20px}
   .legal-item p{font-size:15px}
 }
@@ -1148,6 +1188,16 @@ header.overlay .btn-primary:hover{
   background:rgba(255,255,255,.27);
   box-shadow:0 18px 38px -16px rgba(0,0,0,.62),var(--glass-hi);
 }
+/* The enquiry modal always sits on its own solid paper background, never
+   directly over a photo, however deep in `.nature-page` it's opened from — so
+   it needs putting back, the same way `.tmn-title` is above. */
+.nature-page .modal h3{color:var(--ink)}
+.nature-page .modal .btn-primary{
+  background:var(--marmalade);color:#fff;border-color:transparent;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+  box-shadow:0 8px 18px -8px rgba(255,94,26,.7);
+}
+.nature-page .modal .btn-primary:hover{background:var(--marmalade);box-shadow:0 12px 24px -8px rgba(255,94,26,.8)}
 /* The mobile menu opens as a cream panel, where a glass button would vanish:
    that one CTA gets a solid olive fill instead. Higher specificity so it wins
    over the glass rule above. */
@@ -1188,4 +1238,44 @@ header.overlay.scrolled{
   .nature-page .bill,.nature-page footer,header.overlay.scrolled{
     background:rgba(16,22,16,.85);
   }
+}
+
+/* Older engines without backdrop-filter: the legal sheet's fill is deliberately
+   near-transparent (it leans on blur, not tint, to stay glassy), so without
+   blur it needs a much more opaque fallback to keep the type readable. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .legal-inner{background:rgba(255,251,242,.94)}
+  .legal-item,.legal-ids>div{background:rgba(255,255,255,.9)}
+}
+
+@media(max-width:560px){
+  .nature-page .legal-inner{border-radius:18px}
+}
+
+/* Custom cursor (components/CustomCursor.tsx). Only mounted/classed on
+   pointer:fine + no prefers-reduced-motion, so the native cursor is only
+   ever hidden once the replacement is actually running. */
+html.has-custom-cursor,html.has-custom-cursor *{cursor:none}
+.cursor-dot,.cursor-ring{
+  position:fixed;top:0;left:0;pointer-events:none;z-index:9999;
+  border-radius:50%;mix-blend-mode:difference;
+  /* The -50%/-50% centring lives on `translate` (a separate property from
+     `transform`) so CustomCursor's rAF loop can drive `transform` every
+     frame with a plain translate(x,y) instead of re-deriving the offset. */
+  translate:-50% -50%;
+  will-change:transform;
+}
+.cursor-dot{
+  width:8px;height:8px;background:#fff;
+  transition:opacity .2s ease;
+}
+.cursor-ring{
+  width:34px;height:34px;background:transparent;
+  border:1.5px solid #fff;
+  transition:width .25s cubic-bezier(.2,.7,.2,1),height .25s cubic-bezier(.2,.7,.2,1),background .25s ease,opacity .2s ease;
+}
+.cursor-ring.is-hover{width:60px;height:60px;background:rgba(255,255,255,.2)}
+.cursor-ring.is-down{width:24px;height:24px}
+@media(pointer:coarse),(prefers-reduced-motion:reduce){
+  .cursor-dot,.cursor-ring{display:none}
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useReveal } from "./useReveal";
+import { useParallax } from "./useParallax";
 import { mediaBg } from "@/lib/media";
 import TrustBadges from "./TrustBadges";
 
@@ -58,6 +59,10 @@ const SPECS: [string, string][] = [
 
 export default function JimmyStrip() {
   const strip = useReveal<HTMLDivElement>("jimmy");
+  // The print stack drifts a little against the dossier card beside it as
+  // the section scrolls by, so the two columns read as sitting at slightly
+  // different depths rather than one flat plane.
+  const stackDrift = useParallax<HTMLDivElement>(22);
 
   return (
     <section className="wrap">
@@ -122,7 +127,7 @@ export default function JimmyStrip() {
               then the table he sets. Jimmy's print is the widest and sits
               between the two, so it stays the subject however many snaps
               surround it. */}
-          <div className="jimmy-stack">
+          <div className="jimmy-stack" ref={stackDrift}>
             <div className="jimmy-pair">
               {SHOTS.map((shot, i) => (
                 <figure
