@@ -5,7 +5,7 @@ import Price, { ChargedInAud } from "./Price";
 import { FAREHARBOR_ENABLED, type FareHarborPrefill } from "@/lib/fareharbor";
 import { openFareHarbor } from "@/lib/fareharbor.client";
 
-type DraftAddOn = { id: string; name: string; price: number };
+type DraftAddOn = { id: string; name: string; price?: number };
 
 export type EnquiryDraft = {
   tourId: string;
@@ -150,7 +150,13 @@ export default function EnquiryModal({
                 <div className="row" key={a.id}>
                   <span>+ {a.name}</span>
                   <span>
-                    <Price aud={a.price * draft.guests} />
+                    {a.price === undefined ? (
+                      "Price on request"
+                    ) : a.price === 0 ? (
+                      "Free"
+                    ) : (
+                      <Price aud={a.price * draft.guests} />
+                    )}
                   </span>
                 </div>
               ))}
@@ -183,9 +189,9 @@ export default function EnquiryModal({
                     <div className="row onday" key={a.id}>
                       <span>{a.name}</span>
                       <span>
-                        {a.price > 0 ? (
+                        {(a.price ?? 0) > 0 ? (
                           <>
-                            ~<Price aud={a.price * draft.guests} />
+                            ~<Price aud={(a.price ?? 0) * draft.guests} />
                           </>
                         ) : (
                           "Varies"

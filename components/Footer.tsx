@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useReveal } from "./useReveal";
-import CurrencyPicker from "./CurrencyPicker";
 import {
   ACCREDITATION_NUMBER,
   BUSINESS_ACN,
@@ -76,7 +75,6 @@ export default function Footer() {
               {s.name}
             </a>
           ))}
-          <CurrencyPicker />
         </div>
       </div>
       <div className="wrap">

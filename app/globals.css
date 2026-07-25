@@ -544,6 +544,8 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
 
 /* currency picker */
 .cpick{margin-top:18px;max-width:240px}
+.bill-cpick{margin-bottom:18px}
+.bill-cpick .cpick{margin-top:0}
 .cpick-label{display:block;font-family:var(--font-mono),'IBM Plex Mono';font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);margin-bottom:6px}
 .cpick select{width:100%;background:rgba(255,255,255,.06);color:var(--oat);border:1px solid rgba(243,236,216,.28);border-radius:10px;padding:8px 10px;font-size:14px;font-family:inherit;cursor:pointer}
 .cpick select:focus-visible{outline:2px solid var(--marmalade);outline-offset:2px}
