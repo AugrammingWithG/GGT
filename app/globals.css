@@ -807,6 +807,160 @@ footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
   .hh-scroll-cue-rail::after{animation:none}
 }
 
+/* Voyage slider (components/voyage/VoyageSlider.tsx): a second full-screen
+   hero, directly below HunterHero, cycling the seven enquiry-only showcase
+   destinations. The active side card zooms into the full-bleed background
+   (see useCardMorph.ts), a masked line-reveal headline, a synced side card
+   rail doubling as navigation, and a giant parallax word for depth. */
+.vs{
+  position:relative;
+  height:100svh;
+  min-height:600px;
+  overflow:hidden;background:var(--ink);color:#fff;isolation:isolate;
+}
+@supports not (height:100svh){.vs{height:100vh;min-height:600px}}
+/* Bridges the frosted Motto section above into this section's own solid
+   photo: same near-black green .nature-page::before uses for the seam above
+   HunterHero, so the hand-off reads as one continuous dissolve rather than a
+   hard rectangle edge. Sits above vs-bg/vs-scrim (z-index:0) but below the
+   copy/cards (z-index:1, and later in source order, so it still wins ties). */
+.vs::before{
+  content:"";position:absolute;top:0;left:0;right:0;z-index:1;
+  height:clamp(120px,18vh,220px);pointer-events:none;
+  background:linear-gradient(180deg,rgba(9,14,10,.9),rgba(9,14,10,0));
+}
+/* Scroll-reveal stagger (.reveal/.reveal.in themselves are the shared
+   site-wide pattern, see useReveal.ts): background photo first, the top
+   kicker and giant word close behind it, then copy, cards last, so the
+   section arrives as one small cascade instead of popping in flat the
+   moment it's scrolled to. */
+.vs-bg.reveal{transition-delay:0s}
+.vs-top-kicker.reveal{transition-delay:.06s}
+.vs-word.reveal{transition-delay:.1s}
+.vs-copy.reveal{transition-delay:.22s}
+.vs-cards-wrap.reveal{transition-delay:.38s}
+
+/* Prominent section marker anchoring the Motto -> destinations hand-off: a
+   large, clearly-labelled banner centred at the very top of the section (well
+   above the copy/cards row), so scrolling down here reads as arriving
+   somewhere named rather than just hitting a wall of photo. */
+.vs-top-kicker{
+  position:absolute;top:calc(var(--nav-h) + clamp(18px,3.4vh,34px));left:50%;z-index:1;
+  transform:translateX(-50%);
+  display:flex;align-items:center;gap:clamp(12px,1.6vw,18px);
+  font-family:var(--font-mono),'IBM Plex Mono',monospace;
+  font-size:clamp(13px,1.5vw,17px);font-weight:700;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);white-space:nowrap;text-shadow:0 2px 14px rgba(0,0,0,.55);
+}
+.vs-top-kicker::before,.vs-top-kicker::after{
+  content:"";width:clamp(28px,4vw,52px);height:1px;background:currentColor;opacity:.65;
+}
+@media(max-width:560px){
+  .vs-top-kicker{font-size:11px;letter-spacing:.18em;gap:8px}
+  .vs-top-kicker::before,.vs-top-kicker::after{width:18px}
+}
+
+/* Giant faint brand word behind everything. Centred via `transform`, drifted
+   for parallax via the standalone `translate` property (set by VoyageSlider's
+   pointermove handler) so the two compose instead of fighting one property. */
+.vs-word{
+  position:absolute;top:50%;left:50%;z-index:0;
+  transform:translate(-50%,-50%);
+  translate:var(--vs-word-px,0px) var(--vs-word-py,0px);
+  transition:translate .5s ease-out;
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(90px,19vw,280px);line-height:1;letter-spacing:.02em;
+  color:rgba(255,255,255,.09);white-space:nowrap;pointer-events:none;
+  user-select:none;
+}
+
+/* Oversized (like .hh-bg) so the parallax translate never uncovers a bare
+   edge; the canvas and its CSS fallback both fill it completely. */
+.vs-bg{position:absolute;inset:-4%;z-index:0;background-size:cover;background-position:center;translate:var(--vs-bg-px,0px) var(--vs-bg-py,0px);transition:translate .4s ease-out}
+/* The card-zoom ghost (see useCardMorph.ts): starts sized/positioned exactly
+   over the clicked card, then tweens transform-only up to the vs-bg box so
+   the small card visually becomes the new backdrop. Hidden (opacity 0) when
+   idle; JS drives it directly, no React re-render per frame. */
+.vs-morph-ghost{position:absolute;top:0;left:0;z-index:0;background-size:cover;background-position:center;opacity:0;pointer-events:none;will-change:transform}
+.vs-scrim{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(20,16,22,.6),rgba(20,16,22,.18) 30%,rgba(20,16,22,.35) 60%,rgba(20,16,22,.82)),linear-gradient(90deg,rgba(20,16,22,.5),rgba(20,16,22,.1) 55%)}
+
+.vs-inner{
+  position:relative;z-index:1;height:100%;max-width:min(1520px,94vw);margin:0 auto;
+  padding:var(--nav-h) clamp(18px,3vw,28px) clamp(70px,9vh,96px);
+  display:flex;align-items:center;justify-content:space-between;gap:clamp(24px,4vw,64px);
+}
+.vs-copy{display:flex;flex-direction:column;gap:clamp(10px,1.6vh,14px);max-width:min(600px,54%)}
+.vs-eyebrow{color:var(--gold)}
+
+.vs-headline{position:relative}
+.vs-head-leaving{position:absolute;inset:0 auto auto 0;width:100%;pointer-events:none}
+.vs-title{
+  font-family:var(--font-display);font-weight:bold;
+  font-size:clamp(30px,5vw,58px);line-height:1.06;text-transform:uppercase;letter-spacing:-.02em;
+  color:#fff;text-shadow:0 8px 30px rgba(0,0,0,.45);
+}
+.vs-caption{
+  display:block;margin-top:6px;
+  font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:clamp(11px,1vw,13px);
+  font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.75);
+}
+/* The wipe itself: each line clips open left-to-right on entry and, for the
+   outgoing headline, clips shut in the same direction rather than reversing,
+   so the hand-off reads as one continuous sweep. */
+.vs-line{display:block;clip-path:inset(0 100% 0 0);animation-duration:.85s;animation-timing-function:cubic-bezier(.65,0,.35,1);animation-fill-mode:both}
+.vs-line-in{animation-name:vsLineIn}
+.vs-line-out{animation-name:vsLineOut}
+@keyframes vsLineIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0% 0 0)}}
+@keyframes vsLineOut{from{clip-path:inset(0 0% 0 0)}to{clip-path:inset(0 0% 0 100%)}}
+
+.vs-blurb{max-width:46ch;font-size:clamp(14px,1.1vw,16px);line-height:1.55;color:rgba(255,255,255,.85)}
+.vs-cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:4px}
+.vs-cta-secondary{font-size:13px;padding:clamp(12px,1.4vw,14px) clamp(15px,2vw,20px)}
+.vs-price{font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:13px;font-weight:700;color:var(--gold)}
+
+/* Side card rail: a fixed-width window onto SideCardTrack's single moving
+   strip (see that component for the shared-track animation). */
+/* Sizing lives on the wrapper (the scroll-reveal target) so SideCardTrack's
+   own root, .vs-cards, can stay a plain 100%-filling overflow window. */
+.vs-cards-wrap{flex:none;align-self:flex-end;width:clamp(280px,32vw,460px)}
+.vs-cards{position:relative;overflow:hidden;width:100%}
+.vs-track{display:flex;gap:16px;will-change:transform}
+.vs-card{
+  position:relative;flex:none;width:clamp(150px,16vw,210px);aspect-ratio:4/3;
+  border-radius:16px;overflow:hidden;background-size:cover;background-position:center;
+  border:1px solid var(--glass-border);box-shadow:0 14px 30px -14px rgba(0,0,0,.5);
+  cursor:pointer;padding:0;appearance:none;transition:transform .2s ease,box-shadow .2s ease;
+}
+.vs-card:hover{transform:translateY(-3px);box-shadow:0 20px 38px -16px rgba(0,0,0,.6)}
+.vs-card-overlay{
+  position:absolute;inset:auto 0 0 0;padding:8px 10px 10px;text-align:left;display:flex;flex-direction:column;
+  background:linear-gradient(0deg,rgba(10,14,10,.68),transparent 80%);
+}
+.vs-card-name{font-family:var(--font-display);font-weight:700;font-size:12px;line-height:1.2;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.vs-card-region{margin-top:2px;font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+
+.vs-footer{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:0 clamp(18px,3vw,28px) clamp(18px,2.4vh,26px);display:flex;align-items:center;gap:16px}
+.vs-progress{flex:1;height:3px;border-radius:999px;background:rgba(255,255,255,.22);overflow:hidden}
+.vs-progress-fill{height:100%;width:0;background:var(--gold);border-radius:inherit;animation:vsProgressFill 5s linear forwards}
+@keyframes vsProgressFill{from{width:0}to{width:100%}}
+.vs-counter{font-size:12px;letter-spacing:.14em;color:rgba(255,255,255,.75);white-space:nowrap}
+
+@media(max-width:900px){
+  .vs-inner{flex-direction:column;align-items:flex-start;justify-content:center;gap:clamp(20px,4vh,32px)}
+  .vs-copy{max-width:100%}
+  .vs-cards-wrap{width:100%}
+  .vs-word{font-size:clamp(70px,22vw,160px)}
+}
+@media(max-width:560px){
+  .vs-card{width:clamp(130px,36vw,170px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .vs-word,.vs-bg{translate:none;transition:none}
+  .vs-line{animation:none;clip-path:inset(0 0 0 0)}
+  .vs-head-leaving{display:none}
+  .vs-progress-fill{animation:none;width:100%}
+}
+
 /* animations */
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}

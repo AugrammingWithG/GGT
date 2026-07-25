@@ -2,16 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import Price from "./Price";
+import BookingCta from "./BookingCta";
 import { mediaBg } from "@/lib/media";
-
-/**
- * The literal FareHarbor calendar link for Hunter Valley (item 65971), not
- * built through lib/fareharbor.ts's helpers, which append tracking params for
- * the builder's prefill flow. This CTA has nothing to prefill; it's a plain
- * link straight to the calendar the client asked for.
- */
-const BOOKING_HREF =
-  "https://fareharbor.com/embeds/book/gourmetgetawaytours/items/65971/calendar/";
+import { FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
 
 /**
  * Shared with NatureBackdrop, so the ambient colour behind the frosted-glass
@@ -149,12 +142,15 @@ export default function HunterHero() {
             Guests under 18 can&rsquo;t be served alcohol.
           </p>
 
-          <a href={BOOKING_HREF} className="btn btn-primary hh-cta btn-shine">
+          <BookingCta
+            itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
+            className="btn btn-primary hh-cta btn-shine"
+          >
             <span className="btn-badge" aria-hidden>
               →
             </span>
             Book now
-          </a>
+          </BookingCta>
         </div>
       </div>
 

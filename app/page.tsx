@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import HunterHero from "@/components/HunterHero";
-import DestinationGallery from "@/components/DestinationGallery";
+import VoyageSlider from "@/components/voyage/VoyageSlider";
 import Motto from "@/components/Motto";
 import TourBuilder from "@/components/TourBuilder";
 import JimmyStrip from "@/components/JimmyStrip";
@@ -48,8 +48,8 @@ export default async function Home() {
             to this wrapper so the legal and admin pages keep their cream look. */}
         <div className="nature-page">
           <Motto />
-          <DestinationGallery />
-          <TourBuilder tours={tours} privateTourRate={privateTourRate} />
+          <VoyageSlider />
+          <TourBuilder tours={tours} />
           <JimmyStrip />
           <Testimonials />
           <SocialCTA />
