@@ -6,7 +6,30 @@
   are already loaded everywhere via the root layout, so this file draws its
   whole palette from them rather than redefining brand hex a second time.
 */
-@import "tailwindcss";
+/*
+  Tailwind's utilities are imported UNLAYERED on purpose — do not collapse
+  this back into a plain `@import "tailwindcss"`.
+
+  app/globals.css belongs to the ROOT layout, so it loads on /admin as well,
+  and it is ~1300 lines of plain CSS with no @layer anywhere. Its very first
+  rule is `*{box-sizing:border-box;margin:0;padding:0}`. Cascade layers lose
+  to unlayered styles no matter the specificity, so the default import — which
+  puts every utility in `@layer utilities` — let that single `*` silently zero
+  out every padding and margin utility in the whole dashboard: main's p-8,
+  StatTile's px-5 py-4, CardHeader's p-5, the sidebar's px-4 py-7. The result
+  looked like a cramped, overflowing layout rather than a missing-CSS bug,
+  because the gap utilities (neither margin nor padding) kept working.
+
+  Splitting the import and leaving utilities out of a layer puts them back on
+  ordinary specificity terms with globals.css: `.p-6` (0,1,0) beats `*` (0,0,0)
+  and `h1`/`a` (0,0,1), and this file loads after globals.css so it also wins
+  any tie. Preflight stays in @layer base, which is fine — globals.css's `*`
+  reset does the same job preflight would.
+*/
+@layer theme, base, components;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -116,29 +139,50 @@
   }
 }
 
-@layer utilities {
-  /* The one recipe every glass pane in this dashboard shares: fill, edge and
-     blur, straight from the public site's tokens — but NOT the public site's
-     --glass-shadow. That shadow (60px blur) is tuned for a few big, widely
-     spaced panels (.bill, testimonials); reused on small cards packed into a
-     tight grid (stat tiles, kanban cards) its blur radius is wider than the
-     gap between cards, so it visibly bleeds across the gap and reads as
-     panels overlapping. This is a much tighter shadow sized for that. */
-  .glass-pane {
-    background: var(--card);
-    border: 1px solid var(--glass-border);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.55);
-  }
+/*
+  The same globals.css leak, for the one rule that survives the fix above:
+  `h1,h2,h3,h4{font-family:var(--font-display);letter-spacing:-.02em}` is
+  unlayered at (0,0,1), so no *layered* admin rule can reach it — it would
+  re-skin every admin heading in the public site's display face. Deliberately
+  unlayered and matched to that exact specificity (`:where()` contributes
+  none): admin.css loads after globals.css, so it wins the tie, while still
+  losing to any (0,1,0) utility a component sets (font-*, tracking-*).
+*/
+:where(.admin-root) h1,
+:where(.admin-root) h2,
+:where(.admin-root) h3,
+:where(.admin-root) h4 {
+  font-family: var(--font-sans);
+  letter-spacing: normal;
+}
 
-  /* The lighter alternative for grouped stats: one outlined strip with
-     internal divider lines, not N separate boxes — used where several
-     related numbers sit side by side (stat tiles, pipeline-by-stage). */
-  .glass-outline {
-    border: 1px solid var(--glass-border);
-    background: color-mix(in oklab, var(--glass) 35%, transparent);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-  }
+/* These two are `@utility`, not `@layer utilities {}`, so they land in the
+   same unlayered utilities output as Tailwind's own (see the import block at
+   the top). Left in a real `utilities` cascade layer they would sit *below*
+   every Tailwind utility and below all of globals.css, which is the opposite
+   of how a base surface recipe should cascade. */
+
+/* The one recipe every glass pane in this dashboard shares: fill, edge and
+   blur, straight from the public site's tokens — but NOT the public site's
+   --glass-shadow. That shadow (60px blur) is tuned for a few big, widely
+   spaced panels (.bill, testimonials); reused on small cards packed into a
+   tight grid (stat tiles, kanban cards) its blur radius is wider than the
+   gap between cards, so it visibly bleeds across the gap and reads as
+   panels overlapping. This is a much tighter shadow sized for that. */
+@utility glass-pane {
+  background: var(--card);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.55);
+}
+
+/* The lighter alternative for grouped stats: one outlined strip with
+   internal divider lines, not N separate boxes — used where several
+   related numbers sit side by side (stat tiles, pipeline-by-stage). */
+@utility glass-outline {
+  border: 1px solid var(--glass-border);
+  background: color-mix(in oklab, var(--glass) 35%, transparent);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
