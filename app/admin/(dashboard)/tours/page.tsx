@@ -72,13 +72,12 @@ export default function ToursPage() {
       ) : (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
           {tours.map((t, i) => (
-            <div
+            <TourCard
               key={t.id}
-              className="animate-in fade-in slide-in-from-bottom-1 fill-mode-both duration-400"
+              tour={t}
+              onOpen={() => setEditing(t)}
               style={{ animationDelay: `${i * 50}ms` }}
-            >
-              <TourCard tour={t} onOpen={() => setEditing(t)} />
-            </div>
+            />
           ))}
           <Card
             onClick={() => setCreating(true)}

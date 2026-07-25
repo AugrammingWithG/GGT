@@ -40,30 +40,61 @@ export default function KanbanColumn({
           {enquiries.length}
         </span>
       </div>
+      {/*
+        `transform` is set only while a card is over this column. It used to be
+        `scale(1)` on every render — an identity transform still counts, and any
+        non-`none` transform makes the element a *backdrop root* for everything
+        inside it, so the glass cards' backdrop-filter had nothing behind it to
+        blur and the whole column rendered flat (this is why Enquiries lost the
+        frost Overview and Pricing have).
+      */}
       <div
         ref={setNodeRef}
-        className="flex min-h-[60vh] flex-col gap-3 rounded-xl p-3.5 transition-all duration-200"
-        style={{
-          border: `2px solid color-mix(in oklab, ${color} ${isOver ? 75 : 45}%, transparent)`,
-          backgroundColor: `color-mix(in oklab, ${color} ${isOver ? 12 : 6}%, transparent)`,
-          boxShadow: isOver ? `0 0 0 3px color-mix(in oklab, ${color} 25%, transparent)` : "none",
-          transform: isOver ? "scale(1.01)" : "scale(1)",
-        }}
+        className="relative flex min-h-[60vh] flex-col rounded-xl transition-transform duration-200"
+        style={{ transform: isOver ? "scale(1.01)" : undefined }}
       >
-        {enquiries.length === 0 && (
-          <p className="animate-in fade-in px-1.5 py-4 text-center text-xs text-muted-foreground">
-            No enquiries here.
-          </p>
-        )}
-        {enquiries.map((e, i) => (
-          <div
-            key={e.id}
-            className="animate-in fade-in slide-in-from-bottom-1 fill-mode-both duration-300"
-            style={{ animationDelay: `${i * 40}ms` }}
-          >
-            <KanbanCard enquiry={e} onDelete={onDelete} />
-          </div>
-        ))}
+        {/*
+          The frosted tray, as its own layer *behind* the cards rather than a
+          backdrop-filter on the column itself — for the same backdrop-root
+          reason. Blurring the column would frost the tray but leave the cards
+          sampling the column instead of the photo. As a sibling they each frost
+          the backdrop independently: tray over the photo, cards over the tray.
+          Fill is the shared --glass white tinted with the column's status
+          colour, so it reads as glass first and status second (the old 6% pure
+          colour wash was a tint with no glass in it).
+        */}
+        <div
+          aria-hidden
+          className="absolute inset-0 rounded-xl transition-all duration-200"
+          style={{
+            background: `color-mix(in oklab, ${color} ${isOver ? 14 : 8}%, var(--glass))`,
+            border: `2px solid color-mix(in oklab, ${color} ${isOver ? 75 : 45}%, transparent)`,
+            WebkitBackdropFilter: "var(--glass-blur)",
+            backdropFilter: "var(--glass-blur)",
+            boxShadow: isOver
+              ? `0 0 0 3px color-mix(in oklab, ${color} 25%, transparent), 0 6px 16px -10px rgba(0, 0, 0, 0.55)`
+              : "0 6px 16px -10px rgba(0, 0, 0, 0.55)",
+          }}
+        />
+        <div className="relative flex flex-1 flex-col gap-3 p-3.5">
+          {enquiries.length === 0 && (
+            <p className="animate-in fade-in px-1.5 py-4 text-center text-xs text-muted-foreground">
+              No enquiries here.
+            </p>
+          )}
+          {/* Stagger goes on the card itself, not a wrapper div: an entrance
+              animation held by `fill-mode-both` keeps a transform on whatever
+              element carries it, and on a wrapper that transform would break
+              the card's frost exactly like the column's used to. */}
+          {enquiries.map((e, i) => (
+            <KanbanCard
+              key={e.id}
+              enquiry={e}
+              onDelete={onDelete}
+              style={{ animationDelay: `${i * 40}ms` }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

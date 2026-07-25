@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { Map, Users, Ticket, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,9 +9,17 @@ import type { Tour } from "@/lib/tours";
 export default function TourCard({
   tour,
   onOpen,
+  style,
 }: {
   tour: Tour;
   onOpen: () => void;
+  /** Entrance stagger from ToursPage. It has to land on this Card — the glass
+   *  element — and not on a wrapper: an animation held by `fill-mode-both`
+   *  keeps a transform on its element, and any transformed ancestor becomes a
+   *  backdrop root, leaving this card's backdrop-filter with nothing behind it
+   *  to blur. That wrapper is why Tours rendered flat while Overview and
+   *  Pricing (whose glass panels carry their own animation) stayed frosted. */
+  style?: CSSProperties;
 }) {
   return (
     <Card
@@ -18,7 +27,8 @@ export default function TourCard({
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && onOpen()}
-      className="flex h-full w-full min-w-0 cursor-pointer flex-col gap-0 py-0 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
+      style={style}
+      className="animate-in fade-in slide-in-from-bottom-1 fill-mode-both flex h-full w-full min-w-0 cursor-pointer flex-col gap-0 py-0 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl"
     >
       <CardContent className="flex min-w-0 flex-1 flex-col p-5">
         <div className="flex items-start justify-between gap-2">

@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { Mail, Phone, Trash2, Users } from "lucide-react";
@@ -11,9 +12,13 @@ import type { Enquiry } from "./types";
 export default function KanbanCard({
   enquiry: e,
   onDelete,
+  style,
 }: {
   enquiry: Enquiry;
   onDelete: (id: string) => void;
+  /** Entrance stagger from KanbanColumn — lands on the glass element itself so
+   *  no wrapper transform can flatten this card's backdrop-filter. */
+  style?: CSSProperties;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: e.id,
@@ -22,8 +27,8 @@ export default function KanbanCard({
   return (
     <Card
       ref={setNodeRef}
-      style={{ transform: CSS.Translate.toString(transform) }}
-      className={`animate-in fade-in zoom-in-95 cursor-grab touch-none py-0 transition-all duration-200 active:cursor-grabbing ${isDragging ? "scale-105 opacity-70 shadow-2xl" : "hover:-translate-y-0.5 hover:shadow-lg"}`}
+      style={{ ...style, transform: CSS.Translate.toString(transform) }}
+      className={`animate-in fade-in zoom-in-95 fill-mode-both cursor-grab touch-none py-0 transition-all duration-200 active:cursor-grabbing ${isDragging ? "scale-105 opacity-70 shadow-2xl" : "hover:-translate-y-0.5 hover:shadow-lg"}`}
       {...listeners}
       {...attributes}
     >
