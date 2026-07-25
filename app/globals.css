@@ -975,6 +975,16 @@ header.scrolled{box-shadow:0 10px 30px -20px rgba(33,28,36,.5)}
 .legal-more a{color:var(--olive);border-bottom:1.5px solid rgba(95,115,33,.35);padding-bottom:2px}
 .legal-more a:hover{color:var(--marmalade);border-bottom-color:var(--marmalade)}
 
+.draft-banner{background:var(--oat);border:1.5px solid var(--marmalade);border-radius:12px;padding:16px 20px;font-size:14px;line-height:1.55;color:#33302c}
+.draft-banner strong{color:var(--marmalade)}
+
+.legal-prose{margin-top:34px;font-size:16px;line-height:1.7;color:#33302c}
+.legal-prose h2{font-size:20px;margin:34px 0 10px;color:var(--ink)}
+.legal-prose h2:first-child{margin-top:0}
+.legal-prose p{margin:0 0 14px}
+.legal-prose ul{margin:0 0 14px;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+.legal-prose em{color:var(--olive);font-style:italic}
+
 @media(max-width:560px){
   .legal{padding:36px 0 64px}
   .legal-item{gap:14px;padding:20px}
