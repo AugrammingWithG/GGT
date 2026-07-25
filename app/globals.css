@@ -76,6 +76,7 @@ a{color:inherit;text-decoration:none}
 .btn-primary:hover{box-shadow:0 12px 24px -8px rgba(255,94,26,.8)}
 .btn-ghost{border-color:var(--ink);color:var(--ink)}
 .btn-ghost:hover{background:var(--ink);color:var(--paper)}
+.btn:disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
 .btn-light{border-color:rgba(255,255,255,.6);color:#fff}
 .btn-light:hover{background:#fff;color:var(--ink)}
 
@@ -116,11 +117,15 @@ header.overlay:not(.scrolled) .brand-name{font-size:clamp(19px,2.4vw,26px)}
 @media(max-width:420px){.brand-word{display:none}}
 /* Micro-type links, matching the mono kickers used through the carousel. */
 .nav-links{display:flex;gap:26px;align-items:center;justify-self:end;font-family:var(--font-mono),'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
-.nav-links a:not(.btn){position:relative;padding:8px 0;opacity:.75;transition:opacity .15s ease}
-.nav-links a:not(.btn):hover{opacity:1}
+/* The flagship/private-tours links render as <button> (via BookingCta) once
+   they need to open the policy gate instead of navigating, so every rule
+   below has to match both — same look either way. */
+.nav-links a:not(.btn),.nav-links button:not(.btn){position:relative;padding:8px 0;opacity:.75;transition:opacity .15s ease}
+.nav-links button:not(.btn){background:none;border:none;margin:0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;cursor:pointer}
+.nav-links a:not(.btn):hover,.nav-links button:not(.btn):hover{opacity:1}
 /* Marker dot under the link, riding up on hover. */
-.nav-links a:not(.btn)::after{content:"";position:absolute;left:50%;bottom:0;width:4px;height:4px;margin-left:-2px;border-radius:999px;background:var(--marmalade);opacity:0;transform:translateY(3px);transition:opacity .15s ease,transform .15s ease}
-.nav-links a:not(.btn):hover::after,.nav-links a[aria-current]::after{opacity:1;transform:none}
+.nav-links a:not(.btn)::after,.nav-links button:not(.btn)::after{content:"";position:absolute;left:50%;bottom:0;width:4px;height:4px;margin-left:-2px;border-radius:999px;background:var(--marmalade);opacity:0;transform:translateY(3px);transition:opacity .15s ease,transform .15s ease}
+.nav-links a:not(.btn):hover::after,.nav-links button:not(.btn):hover::after,.nav-links a[aria-current]::after{opacity:1;transform:none}
 .nav-actions{display:flex;align-items:center;gap:10px;justify-self:end}
 .nav .btn{padding:10px 18px;font-size:13px}
 .nav-cta-m{display:none}
@@ -134,8 +139,8 @@ header.overlay:not(.scrolled) .brand-name{font-size:clamp(19px,2.4vw,26px)}
      has to be overridden back to ink inside it. */
   .nav-links,header.overlay:not(.scrolled) .nav-links{position:absolute;top:var(--nav-h);left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--paper);color:var(--ink);border-bottom:1px solid rgba(33,28,36,.1);padding:8px 28px 18px;display:none;font-size:12px}
   .nav-links.open,header.overlay:not(.scrolled) .nav-links.open{display:flex}
-  .nav-links a:not(.btn){padding:14px 0;opacity:1;border-bottom:1px solid rgba(33,28,36,.08)}
-  .nav-links a:not(.btn)::after{display:none}
+  .nav-links a:not(.btn),.nav-links button:not(.btn){padding:14px 0;opacity:1;border-bottom:1px solid rgba(33,28,36,.08);width:100%;text-align:left}
+  .nav-links a:not(.btn)::after,.nav-links button:not(.btn)::after{display:none}
   .nav-links .btn{margin-top:14px;justify-content:center}
 }
 
@@ -202,6 +207,14 @@ select{width:100%;padding:14px 16px;font-family:var(--font);font-size:16px;borde
    with the "paid on the day" caption always visible — not only once ticked. */
 .addon-note{display:block;font-size:12px;color:var(--stone);margin-top:2px}
 .addon.onday .price{color:var(--stone)}
+/* Bold callouts under a field (wine-tour age notice, the launch-day adult
+   rate) vs. the quieter one-liner under the bill's CTA — same `.muted` base,
+   two weights of emphasis. `.divider` adds the rule above it, only needed
+   when the callout follows other content in the same field. */
+.builder-notice{font-size:13px;font-weight:600;margin-top:8px}
+.builder-notice.divider{padding-top:8px;border-top:1px solid var(--glass-border)}
+.builder-note{font-size:12px;margin-top:8px}
+.builder-cta{margin-top:20px;width:100%;justify-content:center}
 
 .bill{background:var(--olive-deep);color:var(--paper);border-radius:20px;padding:clamp(20px,2.6vw,28px);box-shadow:0 30px 60px -30px rgba(0,0,0,.5);position:sticky;top:calc(var(--nav-h) + 20px)}
 .bill .t{font-family:var(--font-mono),'IBM Plex Mono';font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
@@ -531,8 +544,12 @@ select{width:100%;padding:14px 16px;font-family:var(--font);font-size:16px;borde
 
 footer{background:var(--ink);color:var(--oat);padding:clamp(38px,5.6vw,54px) 0}
 .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:clamp(18px,2.4vw,24px)}
-.foot a{opacity:.8;font-size:14px;display:block;padding:4px 0}
-.foot a:hover{opacity:1;color:var(--marmalade)}
+.foot a,.foot button{opacity:.8;font-size:14px;display:block;padding:4px 0}
+/* The Tours column's flagship/private-tours links render as <button> (via
+   BookingCta) once they need to open the policy gate first — same look as
+   the plain <a> links either side of them. */
+.foot button{width:100%;text-align:left;background:none;border:none;margin:0;font-family:inherit;font-weight:inherit;letter-spacing:inherit;color:inherit;cursor:pointer}
+.foot a:hover,.foot button:hover{opacity:1;color:var(--marmalade)}
 .foot h5{font-family:var(--font-mono),'IBM Plex Mono';font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;color:var(--stone)}
 .foot-address{font-size:14px;font-style:normal;opacity:.8;padding:4px 0;line-height:1.45}
 
@@ -822,34 +839,82 @@ header.scrolled{box-shadow:0 10px 30px -20px rgba(33,28,36,.5)}
   .btn:hover .btn-arrow{transform:none}
 }
 
-/* --- enquiry modal (new) --- */
-.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(33,28,36,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeUp .25s ease both}
-.modal{background:var(--paper);color:var(--ink);border-radius:20px;max-width:520px;width:100%;max-height:90vh;overflow:auto;padding:32px;box-shadow:0 40px 80px -30px rgba(0,0,0,.6)}
-.modal h3{font-size:24px;margin-bottom:6px}
-.modal .sub{font-size:14px;color:#5a564f;margin-bottom:20px}
+/* --- enquiry modal ---
+   Portaled straight to <body> (see EnquiryModal.tsx), so it's never actually
+   a DOM descendant of .nature-page even when opened from the homepage — every
+   step is styled as frosted glass unconditionally, the same --glass tokens
+   .nature-page itself uses, rather than switching back to solid paper. */
+.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(20,20,16,.42);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeUp .25s ease both}
+/* iOS-style "Clear" glass, not a frosted/tinted pane: low-opacity fill so the
+   blurred scene behind actually shows through in colour (saturate boost keeps
+   it from reading as flat gray), plus a bright top-edge highlight for the
+   glossy specular rim real glass catches. */
+.modal{
+  background:linear-gradient(160deg,rgba(255,255,255,.24) 0%,rgba(255,255,255,.05) 40%,rgba(255,255,255,.1) 100%);
+  color:var(--on-glass);
+  border:1px solid rgba(255,255,255,.4);
+  border-radius:20px;max-width:520px;width:100%;max-height:90vh;overflow:auto;padding:32px;
+  -webkit-backdrop-filter:blur(26px) saturate(220%);backdrop-filter:blur(26px) saturate(220%);
+  box-shadow:0 30px 70px -25px rgba(0,0,0,.65),inset 0 1.5px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(255,255,255,.08);
+}
+.modal h3{font-size:24px;margin-bottom:6px;color:#fff}
+.modal .sub{font-size:14px;color:var(--on-glass);line-height:1.6;margin-bottom:20px}
 .modal .field{margin-bottom:16px}
-.modal label.flabel{margin-bottom:6px}
-.modal input,.modal textarea{width:100%;padding:12px 14px;font-family:var(--font);font-size:15px;border:1.5px solid rgba(33,28,36,.2);border-radius:12px;background:#fff}
+.modal label.flabel{margin-bottom:6px;color:var(--gold)}
+.modal input,.modal textarea{
+  width:100%;padding:12px 14px;font-family:var(--font);font-size:15px;border-radius:12px;
+  border:1.5px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff;
+  -webkit-backdrop-filter:blur(10px) saturate(180%);backdrop-filter:blur(10px) saturate(180%);
+}
+.modal input::placeholder,.modal textarea::placeholder{color:rgba(255,255,255,.55)}
+/* The native date-picker glyph renders dark by default and disappears against
+   this glass; Chromium/Safari let it be recoloured, Firefox doesn't expose an
+   equivalent so its (light-on-light) icon is the one input this can't fix. */
+.modal input::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.8}
 .modal textarea{resize:vertical;min-height:80px}
-.modal .summary{background:var(--oat);border-radius:12px;padding:14px 16px;font-family:var(--font-mono),'IBM Plex Mono';font-size:13px;margin-bottom:20px}
+.modal .summary{
+  background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:14px 16px;
+  font-family:var(--font-mono),'IBM Plex Mono';font-size:13px;margin-bottom:20px;color:var(--on-glass);
+}
 .modal .summary .row{display:flex;justify-content:space-between;padding:3px 0}
-.summary-charged{display:block;text-align:right;padding:2px 0 0;font-size:12px;opacity:.72}
-.modal .summary .row.onday{color:var(--stone)}
+.summary-charged{display:block;text-align:right;padding:2px 0 0;font-size:12px;opacity:.8}
+.modal .summary .row.onday{color:var(--on-glass-dim)}
 /* The first pay-on-the-day row always follows the charged-in-AUD line, so this
    rules off the estimate from the guest's own costs below it. */
-.summary-charged + .row.onday{margin-top:8px;padding-top:8px;border-top:1px solid rgba(33,28,36,.14)}
-.summary-onday-note{font-size:12px;line-height:1.45;color:var(--stone);padding-top:4px}
+.summary-charged + .row.onday{margin-top:8px;padding-top:8px;border-top:1px solid var(--glass-border)}
+.summary-onday-note{font-size:12px;line-height:1.45;color:var(--on-glass-dim);padding-top:4px}
 .modal-actions{display:flex;gap:12px;margin-top:8px}
-.modal-close{background:none;border:none;font-size:26px;cursor:pointer;color:var(--stone);float:right;line-height:1}
+.modal-close{background:none;border:none;font-size:26px;cursor:pointer;color:var(--on-glass);float:right;line-height:1}
+.modal-close:hover{color:#fff}
 .form-msg{padding:12px 14px;border-radius:12px;font-size:14px;margin-bottom:16px}
 .form-msg.ok{background:rgba(95,115,33,.12);color:var(--olive-deep)}
 .form-msg.err{background:rgba(255,94,26,.12);color:#b5300a}
-
-.policy-clauses{list-style:none;display:flex;flex-direction:column;gap:12px;background:var(--oat);border-radius:12px;padding:16px 18px;margin-bottom:14px}
-.policy-clauses li{font-size:14px;line-height:1.55}
-.policy-clauses-more{font-size:13px;margin-bottom:20px}
-.policy-clauses-more a{color:var(--olive);border-bottom:1.5px solid rgba(95,115,33,.35);padding-bottom:1px}
-.policy-clauses-more a:hover{color:var(--marmalade);border-bottom-color:var(--marmalade)}
+/* Admin/login share `.form-msg` on their own paper-ish surfaces; the modal's
+   copy sits on dark glass instead, so it needs lighter text of its own. */
+.modal .form-msg.ok{background:rgba(140,170,60,.22);border:1px solid rgba(140,170,60,.45);color:#fff}
+.modal .form-msg.err{background:rgba(255,94,26,.2);border:1px solid rgba(255,94,26,.5);color:#fff}
+.modal .btn-ghost{
+  border-color:rgba(255,255,255,.4);color:#fff;
+  background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.04));
+  -webkit-backdrop-filter:blur(14px) saturate(180%);backdrop-filter:blur(14px) saturate(180%);
+}
+.modal .btn-ghost:hover{background:linear-gradient(160deg,rgba(255,255,255,.28),rgba(255,255,255,.1))}
+.modal .btn-primary{
+  background:linear-gradient(160deg,rgba(255,255,255,.34),rgba(255,255,255,.12));
+  border:1px solid rgba(255,255,255,.5);
+  -webkit-backdrop-filter:blur(14px) saturate(180%);backdrop-filter:blur(14px) saturate(180%);
+  box-shadow:0 14px 32px -16px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.5);color:#fff;
+}
+.modal .btn-primary:hover{background:linear-gradient(160deg,rgba(255,255,255,.44),rgba(255,255,255,.18))}
+/* The cancellation-policy / terms clauses, read in place rather than on a
+   separate page — a translucent white-on-glass card so the wording stays
+   legible over whatever photo is behind the dimmed overlay. */
+.clause-list{list-style:none;display:flex;flex-direction:column;gap:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:16px 18px;margin-bottom:16px;max-height:44vh;overflow-y:auto}
+.clause-list li{font-size:14px;line-height:1.55;color:var(--on-glass)}
+.clause-list li strong{color:#fff}
+.policy-agree{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:1.5;color:var(--on-glass);margin:16px 0;cursor:pointer}
+.policy-agree input{margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--gold)}
 
 /* --- admin: landscape-backed frosted glass --- */
 .admin{
@@ -1129,11 +1194,21 @@ header.scrolled{box-shadow:0 10px 30px -20px rgba(33,28,36,.5)}
 .nature-page .stepper{overflow:hidden}
 .nature-page .stepper button:hover{background:var(--glass-strong)}
 .nature-page .stepper output{border-color:var(--glass-border)}
-.nature-page .addon{border-color:var(--glass-border);color:var(--on-glass)}
+.nature-page .addon{
+  background:var(--glass);border-color:var(--glass-border);color:var(--on-glass);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
 .nature-page .addon:hover{border-color:rgba(140,170,60,.7)}
-.nature-page .addon.on{background:rgba(95,115,33,.26);border-color:rgba(140,170,60,.7)}
+.nature-page .addon.on{background:rgba(95,115,33,.34);border-color:rgba(140,170,60,.7)}
 .nature-page .addon .price{color:var(--on-glass)}
 .nature-page .addon .box{border-color:rgba(255,255,255,.5)}
+.nature-page .addon-note{color:var(--on-glass-dim)}
+/* Wine-tour notice and the bill's confirmation/rate copy: the site-wide
+   `.muted` is tuned for the light paper background (var(--stone)), which
+   goes flat and low-contrast against this theme's dark glass/photo — every
+   other secondary-text spot in .nature-page already gets its own override,
+   this was the one left on the light-mode default. */
+.nature-page .muted{color:var(--on-glass-dim)}
 
 /* The bill reads as a deeper, olive-tinted pane so it still anchors the column
    the way the solid olive-deep block used to. Its inner type is already light. */
@@ -1188,16 +1263,6 @@ header.overlay .btn-primary:hover{
   background:rgba(255,255,255,.27);
   box-shadow:0 18px 38px -16px rgba(0,0,0,.62),var(--glass-hi);
 }
-/* The enquiry modal always sits on its own solid paper background, never
-   directly over a photo, however deep in `.nature-page` it's opened from — so
-   it needs putting back, the same way `.tmn-title` is above. */
-.nature-page .modal h3{color:var(--ink)}
-.nature-page .modal .btn-primary{
-  background:var(--marmalade);color:#fff;border-color:transparent;
-  -webkit-backdrop-filter:none;backdrop-filter:none;
-  box-shadow:0 8px 18px -8px rgba(255,94,26,.7);
-}
-.nature-page .modal .btn-primary:hover{background:var(--marmalade);box-shadow:0 12px 24px -8px rgba(255,94,26,.8)}
 /* The mobile menu opens as a cream panel, where a glass button would vanish:
    that one CTA gets a solid olive fill instead. Higher specificity so it wins
    over the glass rule above. */
@@ -1216,8 +1281,10 @@ header.overlay .btn-primary:hover{
 /* Accents that were marmalade now use the UI's gold (the same tone as the
    kickers, stars and progress bar): a warm highlight without the orange. */
 .nature-page .total b{color:var(--gold)}
-header.overlay .nav-links a:not(.btn)::after{background:var(--gold)}
+header.overlay .nav-links a:not(.btn)::after,
+header.overlay .nav-links button:not(.btn)::after{background:var(--gold)}
 .nature-page .foot a:hover,
+.nature-page .foot button:hover,
 .nature-page .foot-legal a:hover{color:var(--gold)}
 
 /* Header, scrolled: over an immersive page the cream glass bar would break the

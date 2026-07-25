@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ACCREDITATION_NUMBER, BUSINESS_ACN, SITE_NAME } from "@/lib/seo";
+import { ACCREDITATION_NUMBER, BUSINESS_ACN } from "@/lib/seo";
+import { TERMS_CLAUSES } from "@/lib/termsAndConditions";
 
 export const metadata: Metadata = {
   title: "Terms and conditions",
@@ -23,46 +24,14 @@ export default function TermsAndConditions() {
       <h1 className="legal-title">Terms and conditions</h1>
 
       <ol className="legal-list">
-        <li className="legal-item">
-          <div>
-            <span className="legal-label">Liability</span>
-            <p>
-              {SITE_NAME} is not liable for illness, injury, damages, loss,
-              delay or failure to join the tour due to factors beyond its
-              control.
-            </p>
-          </div>
-        </li>
-        <li className="legal-item">
-          <div>
-            <span className="legal-label">Travel insurance</span>
-            <p>Travel insurance is strongly recommended for all passengers.</p>
-          </div>
-        </li>
-        <li className="legal-item">
-          <div>
-            <span className="legal-label">Changes to tours</span>
-            <p>
-              The company may alter routes, itineraries, fares, inclusions, days
-              of operation, or cancel tours if unforeseen circumstances occur.
-            </p>
-          </div>
-        </li>
-        <li className="legal-item">
-          <div>
-            <span className="legal-label">Wine tasting</span>
-            <p>Guests must be 18 or older to taste wine.</p>
-          </div>
-        </li>
-        <li className="legal-item">
-          <div>
-            <span className="legal-label">Return time</span>
-            <p>
-              The 6pm return time is a guide, not a guarantee: traffic and
-              unforeseen circumstances apply.
-            </p>
-          </div>
-        </li>
+        {TERMS_CLAUSES.map((c) => (
+          <li className="legal-item" key={c.label}>
+            <div>
+              <span className="legal-label">{c.label}</span>
+              <p>{c.text}</p>
+            </div>
+          </li>
+        ))}
       </ol>
 
       {/* Registered identifiers, kept out of the numbered clauses — they say

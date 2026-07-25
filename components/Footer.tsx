@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useReveal } from "./useReveal";
+import BookingCta from "./BookingCta";
 import {
   ACCREDITATION_NUMBER,
   BUSINESS_ACN,
@@ -12,8 +13,7 @@ import {
   SOCIAL_LINKS,
 } from "@/lib/seo";
 import {
-  bookingHref,
-  flagshipBookingHref,
+  FAREHARBOR_FLAGSHIP_ITEM_ID,
   giftBookingHref,
   tourItemId,
 } from "@/lib/fareharbor";
@@ -49,8 +49,10 @@ export default function Footer() {
         </div>
         <div ref={c2.ref} className={c2.className}>
           <h5>Tours</h5>
-          <a href={flagshipBookingHref()}>Wednesday Hunter Valley</a>
-          <a href={bookingHref({ itemId: tourItemId() })}>Private tours</a>
+          <BookingCta itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}>
+            Wednesday Hunter Valley
+          </BookingCta>
+          <BookingCta itemId={tourItemId()}>Private tours</BookingCta>
           {/* Root-relative: the footer also renders on the policy pages, where
               a bare #builder would have nothing to scroll to. */}
           <Link href="/#builder">Build your tour</Link>
