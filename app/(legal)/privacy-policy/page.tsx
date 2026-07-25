@@ -29,9 +29,9 @@ export default function PrivacyPolicy() {
     <>
       <div className="draft-banner">
         <strong>DRAFT. Not approved, not live.</strong> This describes what
-        the site's enquiry form actually does today. It has not been reviewed
+        the site&apos;s enquiry form actually does today. It has not been reviewed
         by {SITE_NAME} or a lawyer. Do not link this page from the site or
-        treat it as binding until it's been approved.
+        treat it as binding until it&apos;s been approved.
       </div>
 
       <p className="eyebrow">Legal</p>
@@ -41,8 +41,8 @@ export default function PrivacyPolicy() {
         <p>
           This policy covers the enquiry form on this website, the only
           place {SITE_NAME} collects personal information through the site
-          itself. It explains what's collected, why, where it's kept, who can
-          see it, how long it's kept, and how to ask for it to be deleted.
+          itself. It explains what&apos;s collected, why, where it&apos;s kept, who can
+          see it, how long it&apos;s kept, and how to ask for it to be deleted.
         </p>
 
         <h2>Who we are</h2>
@@ -64,10 +64,10 @@ export default function PrivacyPolicy() {
           <li>Your email address</li>
           <li>Your phone number, if you choose to give it (optional)</li>
           <li>A preferred tour date, if you choose to give one (optional)</li>
-          <li>Any message you type in the "anything else?" field (optional)</li>
+          <li>Any message you type in the &quot;anything else?&quot; field (optional)</li>
           <li>
             The tour, guest count, add-ons and estimated price you selected.
-            This isn't personal information on its own, but it's stored and
+            This isn&apos;t personal information on its own, but it&apos;s stored and
             emailed alongside your details above
           </li>
         </ul>
@@ -83,24 +83,24 @@ export default function PrivacyPolicy() {
           </li>
           <li>
             Fill in your details automatically if you continue through to the
-            booking checkout, so you don't have to retype them
+            booking checkout, so you don&apos;t have to retype them
           </li>
         </ul>
-        <p>We don't use your details for marketing, and we don't sell it.</p>
+        <p>We don&apos;t use your details for marketing, and we don&apos;t sell it.</p>
 
-        <h2>Where it's stored</h2>
+        <h2>Where it&apos;s stored</h2>
         <p>
           Enquiries are stored in a Google Cloud Firestore database. Direct
           access from a web browser is switched off entirely. The database
           only accepts reads and writes from our own server code, which checks
-          who's allowed to see or change anything before it does.
+          who&apos;s allowed to see or change anything before it does.
         </p>
 
         <h2>Who can see it</h2>
         <ul>
           <li>
             <strong>Jimmy / the business inbox.</strong> Every enquiry is
-            emailed to our booking inbox as soon as it's submitted, and again
+            emailed to our booking inbox as soon as it&apos;s submitted, and again
             when a booking is confirmed.
           </li>
           <li>
@@ -134,8 +134,8 @@ export default function PrivacyPolicy() {
             [Client to confirm: currently there is no automatic deletion.
             Enquiries are kept indefinitely unless a staff member manually
             deletes one. We should agree a retention period here (e.g.
-            "for 24 months after your enquiry, or until you ask us to delete
-            it") before this goes live.]
+            &quot;for 24 months after your enquiry, or until you ask us to delete
+            it&quot;) before this goes live.]
           </em>
         </p>
 
@@ -148,7 +148,7 @@ export default function PrivacyPolicy() {
 
         <h2>Changes to this policy</h2>
         <p>
-          If how we collect or use your details changes, we'll update this
+          If how we collect or use your details changes, we&apos;ll update this
           page.
         </p>
 
