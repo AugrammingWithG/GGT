@@ -17,13 +17,30 @@ export const metadata: Metadata = {
   alternates: { canonical: "/hunter-valley-tour" },
 };
 
-const PHOTO_STRIP = [
-  { src: "/images/SYDNEY080118_0048-2.jpg", caption: "Kangaroos in the vines" },
-  { src: "/images/SYDNEY080118_0034.jpg", caption: "Vineyard views" },
-  { src: "/images/SYDNEY080118_0037-1.jpg", caption: "Cheese & tastings" },
-  { src: "/images/SYDNEY080118_0210-1.jpg", caption: "Fresh produce" },
-  { src: "/images/SYDNEY080118_0106.jpg", caption: "A long lunch" },
-  { src: "/images/SYDNEY080118_0110.jpg", caption: "The pour" },
+// Exact photo set & order from the old site's gallery slider (alt text
+// preserved from the live HTML at gourmetgetawaytours.com.au).
+const OLD_PAGE_GALLERY = [
+  { src: "/images/AdobeStock_280928026.webp", alt: "Kangaroos in a vineyard" },
+  { src: "/images/Hunter-Valley-Tour-image-2.jpg", alt: "A group in a garden" },
+  { src: "/images/Hunter-Valley-Tour-image-1.jpg", alt: "People holding wine glasses" },
+  { src: "/images/Hunter-Valley-Tour-image-4.jpg", alt: "A guide in the grass" },
+  { src: "/images/Hunter-Valley-Tour-image-5.jpg", alt: "A plate of food" },
+];
+
+// Word-for-word from the old site's "What to Expect:" bullet list.
+const OLD_PAGE_EXPECT = [
+  "Complimentary pickup and dropoff",
+  "Small tour group of 2-16 passengers only",
+  "Flexible and friendly experience",
+  "Door to door service",
+  "Progressive breakfast & lunch prepared by your very own chef/guide",
+  "Three wine tastings matched with our modern Australian menu",
+  "Special dietary requirements catered for",
+  "Passionate local guides",
+  "Professional service",
+  "Comfortable air-conditioned transport",
+  "Owner operated tours",
+  "Over 30 years of experience in catering and tour guiding",
 ];
 
 const TIMELINE = [
@@ -51,7 +68,10 @@ export default async function HunterValleyTourPage() {
     <>
       <section
         className="page-hero"
-        style={{ backgroundImage: "url(/images/Hunter-Valley-Tour-image-1.jpg)" }}
+        style={{
+          backgroundImage: "url(/images/Hunter-Valley-Tour-image-1.jpg)",
+          backgroundPosition: "center 20%",
+        }}
       >
         <div className="wrap">
           <span className="eyebrow">Book online · Mon &amp; Wed</span>
@@ -60,18 +80,6 @@ export default async function HunterValleyTourPage() {
             Our flagship day from Sydney — cellar doors, meals cooked by
             your guide, and wines matched to every course.
           </p>
-        </div>
-      </section>
-
-      <section style={{ padding: "26px 0 0" }}>
-        <div className="wrap">
-          <div className="hv-strip">
-            {PHOTO_STRIP.map((p) => (
-              <div key={p.src} className="gph" style={{ backgroundImage: `url(${p.src})` }}>
-                <em>{p.caption}</em>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -116,35 +124,127 @@ export default async function HunterValleyTourPage() {
         </section>
       )}
 
+      {/* Reproduces gourmetgetawaytours.com.au/hunter-valley-food-wine-tour/
+          content and order exactly, restyled to match the new site. */}
       <section className="pad">
         <div className="wrap">
+          <div className="op-gallery">
+            {OLD_PAGE_GALLERY.map((p) => (
+              <div key={p.src} className="gph" style={{ backgroundImage: `url(${p.src})` }}>
+                <em>{p.alt}</em>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: "center", margin: "30px 0 44px" }}>
+            <BookingCta
+              itemId={tour?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
+              className="btn btn-gold"
+            >
+              Book Now
+            </BookingCta>
+          </div>
+
+          {tour && (
+            <div className="price-card" style={{ maxWidth: 420, margin: "0 auto 44px" }}>
+              <div className="price-row">
+                <div><b>Adult</b><br /><small>Ages 17+</small></div>
+                <div className="amt"><Price aud={tour.priceAdult!} /></div>
+              </div>
+              <div className="price-row">
+                <div><b>Child / Student</b><br /><small>(4–16 years old)</small></div>
+                <div className="amt"><Price aud={tour.priceChild!} /></div>
+              </div>
+              <div className="price-row">
+                <div><b>Senior</b></div>
+                <div className="amt"><Price aud={tour.priceSenior!} /></div>
+              </div>
+            </div>
+          )}
+
+          <div className="sec-head" style={{ marginBottom: 8 }}>
+            <span className="eyebrow">Quick Details</span>
+          </div>
+          <div className="sig-facts" style={{ justifyContent: "center", maxWidth: 760, margin: "0 auto" }}>
+            <div className="fact"><b>4+ years old</b><span>Ages</span></div>
+            <div className="fact"><b>Up to 11 Hours</b><span>Duration</span></div>
+            <div className="fact"><b>2 – 16 Passengers</b><span>Capacity</span></div>
+            <div className="fact"><b>Monday and Wednesday</b><span>Schedule</span></div>
+          </div>
+          <p style={{ textAlign: "center", color: "var(--ink-soft)", margin: "14px 0 44px" }}>
+            We aim to have you back in Sydney around 6.30 pm
+          </p>
+
+          {tour && (
+            <div className="price-card" style={{ maxWidth: 420, margin: "0 auto 48px" }}>
+              <div className="price-row">
+                <div><b>Adult</b><br /><small>Ages 17+</small></div>
+                <div className="amt"><Price aud={tour.priceAdult!} /></div>
+              </div>
+              <div className="price-row">
+                <div><b>Child / Student</b><br /><small>(4–16 years old)</small></div>
+                <div className="amt"><Price aud={tour.priceChild!} /></div>
+              </div>
+              <div className="price-row">
+                <div><b>Senior</b></div>
+                <div className="amt"><Price aud={tour.priceSenior!} /></div>
+              </div>
+            </div>
+          )}
+
           <div className="delight">
-            <span className="eyebrow">From the vine to the glass</span>
             <h2 style={{ fontSize: "clamp(1.8rem,4vw,2.5rem)", margin: ".3em 0 .5em" }}>
-              Delight in our food &amp; wine tours from Sydney
+              Delight in our Food &amp; Wine Tours from Sydney!
             </h2>
-            <p className="lead">
-              There&apos;s a reason people flock from all over NSW to the
-              quiet, rolling hills of the Hunter Valley — and we&apos;ve
+            <p>
+              There is a reason that people flock from all over NSW to the
+              quiet, rolling hills of the Hunter Valley, and we have
               discovered the secret.
             </p>
             <p>
-              The Hunter is famous for its wineries and its cuisine cooked
-              from fresh local produce. Our tours take you on a journey from
-              the vine to the glass, with Australian-made wines matched to
-              menus designed to complement every drop.
-            </p>
-            <p className="motto">
-              &ldquo;Our wine is our canvas, and our food is our
-              paint.&rdquo;
+              The Hunter is famous for its wineries and variety of cuisines
+              cooked from fresh local produce. Our food and wine tours take
+              you on a journey from the vine to the glass as you enjoy
+              delicious, Australian made wines coupled with menus designed
+              to complement every drop.
             </p>
             <p>
-              Let us help you appreciate the art of perfectly matched wine
-              and food at the region&apos;s most renowned wineries. Our
-              mission is to make your day not just an outing, but an
-              expedition — exploring vineyards and experiencing
-              first-class cooking in idyllic surrounds.
+              We have a motto when it comes to our Hunter Valley food and
+              wine tours, <em className="motto">&ldquo;our wine is our canvas, and our
+              food is our paint&rdquo;</em>. Let us help you appreciate the art of
+              perfectly matched wine and food at the regions most renowned
+              wineries.
             </p>
+            <p>
+              Our mission is to make your day not just an outing, but an
+              expedition, exploring vineyards, and experiencing first class
+              cooking in idyllic surrounds.
+            </p>
+          </div>
+
+          <div className="sec-head" style={{ marginTop: 48 }}>
+            <h2>What to Expect:</h2>
+            <p>
+              Our mission is to make your day not just an outing, but an
+              expedition, exploring vineyards, and experiencing first class
+              cooking in idyllic surrounds.
+            </p>
+          </div>
+          <ul className="expect-grid">
+            {OLD_PAGE_EXPECT.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+
+          <div className="restrict">
+            <h4>Restrictions</h4>
+            <ul>
+              <li>We cannot accommodate infants 0-3 years</li>
+              <li>
+                Guests under the age of 18 cannot be served alcohol due to
+                Australian licensing laws.
+              </li>
+            </ul>
           </div>
         </div>
       </section>
@@ -176,41 +276,6 @@ export default async function HunterValleyTourPage() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="pad">
-        <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">What to expect</span>
-            <h2>Everything that&apos;s included</h2>
-          </div>
-          <ul className="expect-grid">
-            {(tour?.inclusions ?? [
-              "Complimentary pickup and drop-off",
-              "Small tour group of 2–16 only",
-              "Door to door service",
-              "Progressive breakfast & lunch cooked by your chef/guide",
-              "Three wine tastings matched to a modern Australian menu",
-              "Special dietary requirements catered for",
-              "Passionate local guides",
-              "Comfortable air-conditioned transport",
-              "Owner-operated tours",
-            ]).map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <div className="restrict">
-            <h4>Restrictions</h4>
-            <ul>
-              {(tour?.restrictions ?? [
-                "We cannot accommodate infants aged 0–3 years.",
-                "Guests under 18 cannot be served alcohol under Australian licensing laws.",
-              ]).map((r) => (
-                <li key={r}>{r}</li>
-              ))}
-            </ul>
           </div>
         </div>
       </section>

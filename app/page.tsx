@@ -124,6 +124,83 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Hunter Valley teaser, right after the compass */}
+      <section
+        className="page-hero"
+        style={{ backgroundImage: "url(/images/AdobeStock_280928026.webp)" }}
+      >
+        <div className="wrap">
+          <span className="eyebrow">Our flagship day</span>
+          <h2>Hunter Valley Food &amp; Wine Tour</h2>
+          {hunterValley && (
+            <p style={{ fontWeight: 700, fontSize: "1.15rem", marginBottom: 6 }}>
+              From <Price aud={hunterValley.priceAdult!} />
+            </p>
+          )}
+          <p>
+            The Hunter is famous for its wineries and variety of cuisines
+            cooked from fresh local produce. Our food and wine tours take
+            you on a journey from the vine to the glass as you enjoy
+            delicious, Australian made wines coupled with menus designed to
+            complement every drop.
+          </p>
+          <div className="hero-actions" style={{ justifyContent: "center", position: "relative", zIndex: 2 }}>
+            <BookingCta
+              itemId={hunterValley?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
+              className="btn btn-gold"
+            >
+              Book Now
+            </BookingCta>
+            <a href="/hunter-valley-tour" className="btn btn-outline-light">
+              Learn More
+            </a>
+          </div>
+          <div className="hero-quickfacts">
+            <span>4+ years old</span>
+            <span>Up to 11 hours</span>
+            <span>2 – 16 passengers</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Tour Highlights */}
+      <section className="pad">
+        <div className="wrap sig-grid">
+          <div className="sig-left">
+            <h2 style={{ fontSize: "2.2rem", margin: "0 0 .5em" }}>Tour Highlights</h2>
+            <p style={{ color: "var(--ink-soft)" }}>
+              Our mission is to make your day, not just an outing, but an
+              expedition, exploring vineyards, and experiencing first-class
+              cooking in idyllic surrounds.
+            </p>
+            <BookingCta
+              itemId={hunterValley?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
+              className="btn btn-wine"
+            >
+              Book Now
+            </BookingCta>
+          </div>
+          <div className="highlight-list">
+            <div className="contact-item">
+              <div className="ci-ic">🐟</div>
+              <div>See the Sydney Fish Markets and visit Hunter Valley boutique wineries.</div>
+            </div>
+            <div className="contact-item">
+              <div className="ci-ic">🍽</div>
+              <div>Enjoy delicious food, cooked on the spot by your guide and chef.</div>
+            </div>
+            <div className="contact-item">
+              <div className="ci-ic">⭐</div>
+              <div>Includes breakfast, lunch, wine tastings, and other chef-prepared foods.</div>
+            </div>
+            <div className="contact-item">
+              <div className="ci-ic">🚐</div>
+              <div>Hassle-free round-trip transportation from select Sydney hotels.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* All tours, visible at once */}
       <section className="pad" style={{ background: "var(--paper-2)" }} id="tours">
         <div className="wrap">
