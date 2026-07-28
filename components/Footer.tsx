@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useReveal } from "./useReveal";
+import Image from "next/image";
 import BookingCta from "./BookingCta";
 import {
   ACCREDITATION_NUMBER,
@@ -10,7 +10,6 @@ import {
   BUSINESS_EMAIL,
   BUSINESS_PHONE,
   SITE_NAME,
-  SOCIAL_LINKS,
 } from "@/lib/seo";
 import {
   FAREHARBOR_FLAGSHIP_ITEM_ID,
@@ -19,72 +18,81 @@ import {
 } from "@/lib/fareharbor";
 
 export default function Footer() {
-  const c1 = useReveal<HTMLDivElement>();
-  const c2 = useReveal<HTMLDivElement>();
-  const c3 = useReveal<HTMLDivElement>();
-  const c4 = useReveal<HTMLDivElement>();
-  const legal = useReveal<HTMLDivElement>("foot-legal");
-
   return (
     <footer>
-      <div className="wrap foot">
-        <div ref={c1.ref} className={c1.className}>
-          <div className="brand" style={{ color: "var(--oat)" }}>
-            Gourmet<span>.</span>Getaway
-          </div>
-          <p
-            style={{
-              opacity: 0.7,
-              marginTop: 10,
-              fontSize: 14,
-              maxWidth: "30ch",
-            }}
-          >
+      <div className="wrap foot-grid">
+        <div className="foot-brand">
+          <Image
+            src="/images/Untitled-design-19.png"
+            alt=""
+            className="foot-logo"
+            width={415}
+            height={240}
+          />
+          <b>{SITE_NAME}</b>
+          <p>
             Food, wine &amp; adventure tours from Sydney, New South Wales.
+            Small groups, door to door.
           </p>
-          <p className="accred">
-            <span className="accred-label">Accredited tour operator</span>
-            <span className="accred-no">No. {ACCREDITATION_NUMBER}</span>
-          </p>
+          <span className="foot-accred">
+            Accredited operator · No. {ACCREDITATION_NUMBER}
+          </span>
         </div>
-        <div ref={c2.ref} className={c2.className}>
-          <h5>Tours</h5>
-          <BookingCta itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}>
-            Wednesday Hunter Valley
-          </BookingCta>
-          <BookingCta itemId={tourItemId()}>Private tours</BookingCta>
-          {/* Root-relative: the footer also renders on the policy pages, where
-              a bare #builder would have nothing to scroll to. */}
-          <Link href="/#builder">Build your tour</Link>
+        <div>
+          <h4>Tours</h4>
+          <ul>
+            <li>
+              <BookingCta itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}>
+                Hunter Valley Tour
+              </BookingCta>
+            </li>
+            <li>
+              <BookingCta itemId={tourItemId()}>Private Tours</BookingCta>
+            </li>
+            <li>
+              <a href={giftBookingHref()}>Gift cards</a>
+            </li>
+          </ul>
         </div>
-        <div ref={c3.ref} className={c3.className}>
-          <h5>Company</h5>
-          <a href={giftBookingHref()}>Gift cards</a>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li>
+              <Link href="/about">About Jimmy</Link>
+            </li>
+            <li>
+              <Link href="/contact">Contact</Link>
+            </li>
+            <li>
+              <Link href="/faq">FAQ</Link>
+            </li>
+          </ul>
         </div>
-        <div ref={c4.ref} className={c4.className}>
-          <h5>Get in touch</h5>
-          <a href={`tel:${BUSINESS_PHONE}`}>+61 416 139 567</a>
-          <a href={`mailto:${BUSINESS_EMAIL}`}>{BUSINESS_EMAIL}</a>
-          <address className="foot-address">
-            {BUSINESS_ADDRESS.street}
-            <br />
-            {BUSINESS_ADDRESS.suburb} {BUSINESS_ADDRESS.stateCode}{" "}
-            {BUSINESS_ADDRESS.postcode}
-          </address>
-          {SOCIAL_LINKS.map((s) => (
-            <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer">
-              {s.name}
-            </a>
-          ))}
+        <div>
+          <h4>Get in touch</h4>
+          <ul>
+            <li>
+              <a href={`tel:${BUSINESS_PHONE}`}>0416 139 567</a>
+            </li>
+            <li>
+              <a href={`mailto:${BUSINESS_EMAIL}`}>{BUSINESS_EMAIL}</a>
+            </li>
+            <li>
+              {BUSINESS_ADDRESS.street}, {BUSINESS_ADDRESS.suburb}{" "}
+              {BUSINESS_ADDRESS.stateCode} {BUSINESS_ADDRESS.postcode}
+            </li>
+          </ul>
         </div>
       </div>
       <div className="wrap">
-        <div ref={legal.ref} className={legal.className}>
-          <span>ACN {BUSINESS_ACN}</span>
-          <Link href="/cancellation-policy">Cancellation policy</Link>
-          <Link href="/terms-and-conditions">Terms and conditions</Link>
+        <div className="foot-bottom">
           <span>
-            &copy; {new Date().getFullYear()} {SITE_NAME}
+            &copy; {new Date().getFullYear()} {SITE_NAME} · ACN {BUSINESS_ACN}
+          </span>
+          <span>
+            <Link href="/cancellation-policy">Cancellation policy</Link>
+            {" · "}
+            <Link href="/terms-and-conditions">Terms &amp; conditions</Link>
           </span>
         </div>
       </div>

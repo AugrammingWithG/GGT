@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gourmet Getaway Tours — Hunter Valley Food & Wine Tours from Sydney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F3;
+    --paper-2:#F3EDE2;
+    --ink:#2B2622;
+    --ink-soft:#6A6157;
+    --wine:#6E1E2E;
+    --wine-deep:#551520;
+    --green:#4A5D3A;
+    --gold:#C0902B;
+    --gold-soft:#E7C878;
+    --line:#E4DDD1;
+    --white:#ffffff;
+    --shadow:0 14px 40px rgba(43,38,34,.12);
+    --shadow-sm:0 6px 18px rgba(43,38,34,.08);
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans',system-ui,sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.12;color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--wine);font-weight:600}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;gap:.5em;font-family:'Work Sans';font-weight:600;
+    font-size:.95rem;padding:.85em 1.5em;border-radius:100px;cursor:pointer;border:1.5px solid transparent;
+    transition:transform .15s ease, background .15s ease, color .15s ease;white-space:nowrap}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-wine{background:var(--wine);color:#fff}
+  .btn-wine:hover{background:var(--wine-deep)}
+  .btn-ghost{background:transparent;border-color:var(--ink);color:var(--ink)}
+  .btn-ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn-gold{background:var(--gold);color:#2b2210}
+  .btn-gold:hover{background:var(--gold-soft)}
+  .btn-outline-light{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.7);color:#fff;backdrop-filter:blur(4px)}
+  .btn-outline-light:hover{background:#fff;color:var(--wine);border-color:#fff}
+
+  /* Promo bar */
+  .promo{background:var(--wine);color:#fff;text-align:center;font-size:.76rem;padding:.4em 24px;letter-spacing:.02em}
+  .promo strong{color:var(--gold-soft);font-weight:600}
+
+  /* Header */
+  header{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .brand{display:flex;flex-direction:column;line-height:1}
+  .brand b{font-family:'Fraunces';font-size:1.28rem;font-weight:600;color:var(--wine);letter-spacing:.01em}
+  .brand span{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-soft);margin-top:4px}
+  .nav-links{display:flex;align-items:center;gap:30px}
+  .nav-links a{font-size:.94rem;font-weight:500;color:var(--ink);position:relative}
+  .nav-links a:not(.btn):hover{color:var(--wine)}
+  .nav-links a:not(.btn)::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--wine);transition:width .2s}
+  .nav-links a:not(.btn):hover::after{width:100%}
+  .phone{font-weight:600;color:var(--wine)}
+  .burger{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:8px}
+  .burger span{width:24px;height:2px;background:var(--ink);display:block}
+
+  /* Hero video */
+  .hero{position:relative}
+  .video-frame{position:relative;height:78vh;min-height:520px;max-height:760px;overflow:hidden;
+    background:linear-gradient(120deg,#2f3a24 0%,#5a4a2c 45%,#6E1E2E 100%)}
+  .video-frame::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(20,15,12,.15) 0%,rgba(20,15,12,.05) 40%,rgba(20,15,12,.45) 100%)}
+  /* faux moving vineyard imagery */
+  .video-bg{position:absolute;inset:0;opacity:.9;
+    background:
+      radial-gradient(circle at 20% 80%, rgba(74,93,58,.55), transparent 45%),
+      radial-gradient(circle at 80% 25%, rgba(199,146,46,.35), transparent 40%),
+      repeating-linear-gradient(115deg, rgba(255,255,255,.04) 0 3px, transparent 3px 26px),
+      linear-gradient(120deg,#3a4a2a,#7a5a2e 55%,#6E1E2E);
+    animation:kb 22s ease-in-out infinite alternate}
+  @keyframes kb{from{transform:scale(1.05) translateX(0)}to{transform:scale(1.14) translateX(-2%)}}
+  .video-note{position:absolute;top:18px;left:50%;transform:translateX(-50%);z-index:3;
+    background:rgba(0,0,0,.45);color:#fff;font-size:.72rem;letter-spacing:.05em;padding:.4em 1em;border-radius:100px}
+  .play{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);z-index:3;
+    width:78px;height:78px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;
+    cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .2s}
+  .play:hover{transform:translate(-50%,-50%) scale(1.08)}
+  .play::after{content:"";border-left:22px solid var(--wine);border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:6px}
+  .hero-copy{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 24px 52px}
+  .hero-copy .inner{max-width:1180px;margin:0 auto;color:#fff}
+  .hero-copy .eyebrow{color:var(--gold-soft)}
+  .hero-copy h1{color:#fff;font-size:clamp(2.4rem,6vw,4.2rem);font-weight:600;margin:.25em 0 .35em;max-width:16ch;
+    text-shadow:0 2px 24px rgba(0,0,0,.4)}
+  .hero-copy p{font-size:1.1rem;max-width:46ch;color:rgba(255,255,255,.92);margin-bottom:1.6em}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+  .scroll-cue{position:absolute;right:24px;bottom:32px;z-index:4;color:#fff;font-size:.82rem;font-weight:500;
+    display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;max-width:150px;line-height:1.3;
+    background:rgba(0,0,0,.3);padding:12px 16px;border-radius:14px;backdrop-filter:blur(4px);transition:transform .2s}
+  .scroll-cue:hover{transform:translateY(-3px)}
+  .scroll-cue .arrow{font-size:1.35rem;animation:bounce 1.6s ease-in-out infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+  .ph-faq{background:linear-gradient(135deg,#4A5D3A,#6E1E2E)}
+
+  /* Signature strip */
+  .signature{background:var(--white);border-bottom:1px solid var(--line)}
+  .sig-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;padding:56px 0;align-items:center}
+  .sig-left h2{font-size:2rem;margin-bottom:.4em}
+  .sig-facts{display:flex;flex-wrap:wrap;gap:26px;margin-top:22px}
+  .fact{display:flex;flex-direction:column;gap:2px}
+  .fact b{font-family:'Fraunces';font-size:1.15rem;color:var(--wine)}
+  .fact span{font-size:.82rem;color:var(--ink-soft)}
+  .price-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow-sm)}
+  .price-card h3{font-size:1.1rem;margin-bottom:18px}
+  .price-row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px dashed var(--line)}
+  .price-row:last-of-type{border-bottom:0}
+  .price-row .amt{font-family:'Fraunces';font-size:1.35rem;color:var(--ink);font-weight:600}
+  .price-row small{color:var(--ink-soft);font-size:.8rem}
+  .price-card .btn{width:100%;justify-content:center;margin-top:18px}
+
+  /* Section shell */
+  section.pad{padding:78px 0}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 46px}
+  .sec-head h2{font-size:clamp(1.9rem,4vw,2.7rem);margin:.3em 0}
+  .sec-head p{color:var(--ink-soft)}
+
+  /* Tours grid — everything visible, no rotation */
+  .tours{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .tour-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+    box-shadow:var(--shadow-sm);transition:transform .18s ease, box-shadow .18s ease;display:flex;flex-direction:column}
+  .tour-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .tour-photo{height:186px;position:relative;display:grid;place-items:end start;padding:14px}
+  .tour-photo span{position:relative;z-index:2;color:#fff;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    background:rgba(0,0,0,.35);padding:.3em .8em;border-radius:100px}
+  .tour-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.4),transparent 60%)}
+  .p1{background:linear-gradient(135deg,#6E1E2E,#9a4a2a)}
+  .p2{background:linear-gradient(135deg,#3f5a2e,#7a8a3a)}
+  .p3{background:linear-gradient(135deg,#8a6d2a,#c0902b)}
+  .p4{background:linear-gradient(135deg,#2e5a5a,#4a8a8a)}
+  .p5{background:linear-gradient(135deg,#5a2e4a,#8a4a6a)}
+  .p6{background:linear-gradient(135deg,#3a4a6a,#6a7a9a)}
+  .p7{background:linear-gradient(135deg,#6a4a2a,#a07a3a)}
+  .p8{background:linear-gradient(135deg,#2e4a3a,#4a7a5a)}
+  .tour-body{padding:20px;display:flex;flex-direction:column;flex:1}
+  .tour-body h3{font-size:1.22rem;margin-bottom:6px}
+  .tour-body .line{color:var(--ink-soft);font-size:.92rem;margin-bottom:16px;flex:1}
+  .tour-foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .from{font-size:.8rem;color:var(--ink-soft)}
+  .from b{display:block;font-family:'Fraunces';font-size:1.15rem;color:var(--wine)}
+  .tag-online{display:inline-block;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--green);background:#eef3e6;padding:.3em .7em;border-radius:100px;margin-bottom:10px}
+
+  /* Why / what to expect */
+  .why{background:var(--paper-2)}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .expect{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px 26px;margin-top:8px}
+  .expect li{position:relative;padding-left:30px;font-size:.96rem;color:var(--ink)}
+  .expect li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:50%;
+    background:var(--green);
+    -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") center/70% no-repeat;
+            mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") center/70% no-repeat}
+  .why-photo{border-radius:var(--r);height:420px;background:linear-gradient(140deg,#4A5D3A,#6E1E2E);box-shadow:var(--shadow);position:relative}
+  .why-photo span{position:absolute;bottom:16px;left:16px;color:#fff;font-size:.72rem;letter-spacing:.06em;
+    background:rgba(0,0,0,.35);padding:.4em .9em;border-radius:100px}
+
+  /* Story of the day — editorial chapters */
+  .story{background:var(--paper);overflow:hidden}
+  .story .sec-head{margin-bottom:20px}
+  .chapters{position:relative;max-width:1000px;margin:0 auto}
+  /* centre journey line on desktop */
+  .chapters::before{content:"";position:absolute;left:50%;top:40px;bottom:40px;width:2px;
+    background:repeating-linear-gradient(to bottom,var(--gold) 0 8px,transparent 8px 18px);transform:translateX(-50%);opacity:.5}
+  .chapter{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center;padding:44px 0;position:relative}
+  .chapter:nth-child(even) .ch-media{order:2}
+  .ch-media{height:340px;border-radius:var(--r);position:relative;box-shadow:var(--shadow);overflow:hidden}
+  .ch-media span{position:absolute;bottom:14px;left:14px;color:#fff;font-size:.7rem;letter-spacing:.06em;
+    background:rgba(0,0,0,.4);padding:.4em .9em;border-radius:100px;z-index:2}
+  .ch-media::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.35),transparent 55%)}
+  .m1{background:linear-gradient(140deg,#6E1E2E,#a85a2a)}
+  .m2{background:linear-gradient(140deg,#3f5a2e,#8a9a4a)}
+  .m3{background:linear-gradient(140deg,#551520,#8a2a3a)}
+  .m4{background:linear-gradient(140deg,#8a6d2a,#d0a84b)}
+  .ch-num{font-family:'Fraunces';font-size:3.4rem;font-weight:600;color:var(--gold);line-height:1;opacity:.55;display:block;margin-bottom:6px}
+  .ch-text .eyebrow{color:var(--green)}
+  .ch-text h3{font-size:1.9rem;margin:.15em 0 .5em}
+  .ch-text p{color:var(--ink-soft);font-size:1rem}
+  /* dot on the journey line */
+  .chapter::after{content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;
+    background:var(--gold);border:3px solid var(--paper);transform:translate(-50%,-50%);z-index:2}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* Reviews — static, no drag */
+  .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .review{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow-sm)}
+  .stars{color:var(--gold);letter-spacing:2px;margin-bottom:12px}
+  .review p{font-size:.95rem;color:var(--ink);margin-bottom:16px}
+  .review .who{font-weight:600;font-size:.9rem}
+  .review .via{font-size:.78rem;color:var(--ink-soft)}
+
+  /* Mission band */
+  .mission{background:linear-gradient(135deg,var(--green),#37472a);color:#fff;text-align:center}
+  .mission-inner{max-width:840px;margin:0 auto;padding:72px 0}
+  .mission .eyebrow{color:var(--gold-soft)}
+  .mission-lead{font-size:1.05rem;color:rgba(255,255,255,.86);max-width:58ch;margin:14px auto 24px}
+  .mission-statement{color:#fff;font-size:clamp(1.6rem,3.6vw,2.5rem);font-weight:500;line-height:1.24}
+  .mission-statement em{color:var(--gold-soft);font-style:italic}
+
+  /* What to expect grid */
+  .expect-grid{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:16px 34px;max-width:980px;margin:0 auto}
+  .expect-grid li{position:relative;padding-left:34px;font-size:.98rem;color:var(--ink);line-height:1.45}
+  .expect-grid li::before{content:"";position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;
+    background:var(--gold);
+    -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") center/68% no-repeat;
+            mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") center/68% no-repeat}
+
+  /* About-Jimmy stat tiles */
+  .stats{display:flex;flex-wrap:wrap;gap:16px;margin-top:24px}
+  .stat{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px 20px;min-width:132px}
+  .stat b{font-family:'Fraunces';font-size:1.3rem;color:var(--wine);display:block;line-height:1.1}
+  .stat span{font-size:.8rem;color:var(--ink-soft)}
+
+  /* Multi-page */
+  .page{display:none}
+  .page.active{display:block;animation:fadeIn .35s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .nav-links a.current{color:var(--wine)}
+  .nav-links a.current::after{width:100%}
+
+  /* Sub-page hero */
+  .page-hero{position:relative;padding:88px 0 74px;text-align:center;color:#fff;overflow:hidden}
+  .page-hero .eyebrow{position:relative;z-index:2}
+  .page-hero h1{color:#fff;font-size:clamp(2.1rem,5vw,3.3rem);margin:.25em 0 .3em}
+  .page-hero p{color:rgba(255,255,255,.9);max-width:54ch;margin:0 auto;font-size:1.05rem}
+  .ph-bg{position:absolute;inset:0;opacity:.9;
+    background:radial-gradient(circle at 78% 20%,rgba(255,255,255,.12),transparent 45%),
+      repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 3px,transparent 3px 24px)}
+  .ph-hunter{background:linear-gradient(135deg,#6E1E2E,#9a4a2a)}
+  .ph-private{background:linear-gradient(135deg,#3f5a2e,#7a8a3a)}
+  .ph-about{background:linear-gradient(135deg,#551520,#8a2a3a)}
+  .ph-contact{background:linear-gradient(135deg,#37472a,#5a6d3a)}
+
+  /* CTA band */
+  .cta-band{background:var(--wine);color:#fff;text-align:center;padding:60px 0}
+  .cta-band h2{color:#fff;font-size:clamp(1.6rem,3.6vw,2.3rem);margin-bottom:.25em}
+  .cta-band p{color:rgba(255,255,255,.85);margin-bottom:1.4em}
+
+  /* Timeline */
+  .timeline{max-width:760px;margin:0 auto;position:relative;padding-left:8px}
+  .timeline::before{content:"";position:absolute;left:92px;top:8px;bottom:8px;width:2px;background:var(--line)}
+  .tl-item{display:grid;grid-template-columns:84px 1fr;gap:26px;position:relative;padding:16px 0}
+  .tl-time{font-family:'Fraunces';font-weight:600;color:var(--wine);font-size:.95rem;text-align:right;padding-top:2px}
+  .tl-body{position:relative;padding-left:24px}
+  .tl-body::before{content:"";position:absolute;left:-4px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--gold);border:3px solid var(--paper-2)}
+  .tl-body h3{font-size:1.15rem;margin-bottom:2px}
+  .tl-body p{color:var(--ink-soft);font-size:.93rem}
+
+  /* Steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;max-width:960px;margin:0 auto}
+  .step{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px 26px;box-shadow:var(--shadow-sm);text-align:center}
+  .step-n{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--wine);color:#fff;font-family:'Fraunces';font-size:1.3rem;font-weight:600;margin-bottom:14px}
+  .step h3{font-size:1.2rem;margin-bottom:6px}
+  .step p{color:var(--ink-soft);font-size:.93rem}
+
+  /* Contact */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px}
+  .contact-item{display:flex;gap:14px;margin-bottom:18px;align-items:flex-start}
+  .ci-ic{width:40px;height:40px;flex:none;border-radius:50%;background:var(--paper-2);display:grid;place-items:center;font-size:1.1rem}
+  .contact-item b{font-size:.95rem}
+  .contact-item a{color:var(--wine);font-weight:500}
+  .contact-map{height:220px;border-radius:var(--r);margin-top:14px;background:linear-gradient(135deg,#4A5D3A,#6E1E2E);position:relative;box-shadow:var(--shadow-sm)}
+  .contact-map span{position:absolute;bottom:14px;left:14px;color:#fff;font-size:.72rem;background:rgba(0,0,0,.4);padding:.4em .9em;border-radius:100px}
+  .contact-form{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:32px;box-shadow:var(--shadow-sm)}
+  .form-field{margin-bottom:16px}
+  .form-field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px}
+  .form-field input,.form-field textarea,.form-field select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-family:inherit;font-size:.95rem;background:var(--paper);color:var(--ink)}
+  .form-field textarea{min-height:118px;resize:vertical}
+  .form-field input:focus,.form-field textarea:focus,.form-field select:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+
+  /* Next-departure pill */
+  .depart-pill{display:inline-flex;align-items:center;gap:9px;background:#eef3e6;color:var(--green);
+    font-size:.85rem;font-weight:600;padding:.5em 1em;border-radius:100px;margin-bottom:16px}
+  .depart-pill .dot{width:8px;height:8px;border-radius:50%;background:var(--green);position:relative}
+  .depart-pill .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--green);opacity:.5;animation:pulse 1.9s ease-out infinite}
+  @keyframes pulse{from{transform:scale(1);opacity:.5}to{transform:scale(2.4);opacity:0}}
+
+  /* Direct-booking savings counter */
+  .save-band{background:var(--paper-2)}
+  .save-card{max-width:540px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:20px;padding:40px 36px;text-align:center;box-shadow:var(--shadow)}
+  .save-card h3{font-size:1.5rem;margin-bottom:6px}
+  .save-card .sub{color:var(--ink-soft);font-size:.95rem;margin-bottom:8px}
+  .stepper{display:inline-flex;align-items:center;gap:22px;margin:16px 0 8px}
+  .stepper button{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--wine);background:#fff;color:var(--wine);font-size:1.5rem;cursor:pointer;line-height:1;transition:all .15s}
+  .stepper button:hover{background:var(--wine);color:#fff}
+  .stepper .count{font-family:'Fraunces';font-size:2rem;min-width:52px}
+  .stepper .count small{display:block;font-family:'Work Sans';font-size:.7rem;color:var(--ink-soft);font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+  .save-amount{font-family:'Fraunces';font-size:3.4rem;color:var(--gold);font-weight:700;line-height:1;margin-top:14px}
+  .save-amount small{display:block;font-family:'Work Sans';font-size:.85rem;color:var(--ink-soft);font-weight:500;letter-spacing:.03em;margin-top:6px}
+
+  /* Wine & food pairing */
+  .pair-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:36px;max-width:940px;margin:0 auto;align-items:center}
+  .pair-list{display:flex;flex-direction:column;gap:10px}
+  .pair-opt{text-align:left;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:15px 18px;cursor:pointer;transition:all .18s;font-family:inherit;width:100%}
+  .pair-opt b{font-family:'Fraunces';font-size:1.1rem;display:block;color:var(--ink);line-height:1.2}
+  .pair-opt span{font-size:.82rem;color:var(--ink-soft)}
+  .pair-opt:hover{border-color:var(--wine)}
+  .pair-opt.active{border-color:var(--wine);background:#fbf1f2;box-shadow:var(--shadow-sm)}
+  .pair-opt.active b{color:var(--wine)}
+  .pair-plate{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+  .pair-photo{height:210px;position:relative}
+  .pair-photo span{position:absolute;bottom:14px;left:14px;color:#fff;font-size:.7rem;letter-spacing:.06em;background:rgba(0,0,0,.4);padding:.4em .9em;border-radius:100px;z-index:2}
+  .pair-plate-body{padding:26px}
+  .pair-plate-body h3{font-size:1.5rem;margin-bottom:8px}
+  .pair-plate-body p{color:var(--ink-soft);font-size:.96rem}
+  .pair-match{display:inline-block;margin-top:14px;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:#eef3e6;padding:.35em .9em;border-radius:100px}
+  .fade-swap{animation:fadeIn .35s ease}
+
+  /* Route map */
+  .route-map{max-width:800px;margin:0 auto}
+  .route-map svg{width:100%;height:auto;overflow:visible}
+  .route-line{fill:none;stroke:var(--gold);stroke-width:3.5;stroke-linecap:round;stroke-dasharray:1600;stroke-dashoffset:1600}
+  .route-map.drawn .route-line{transition:stroke-dashoffset 2.6s ease;stroke-dashoffset:0}
+  .route-node{opacity:0;transition:opacity .4s ease, transform .4s ease;transform:translateY(6px)}
+  .route-map.drawn .route-node{opacity:1;transform:none}
+  .route-map.drawn .route-node:nth-child(2){transition-delay:.3s}
+  .route-map.drawn .route-node:nth-child(3){transition-delay:.8s}
+  .route-map.drawn .route-node:nth-child(4){transition-delay:1.3s}
+  .route-map.drawn .route-node:nth-child(5){transition-delay:1.8s}
+  .route-map.drawn .route-node:nth-child(6){transition-delay:2.2s}
+  .route-node circle{fill:var(--wine)}
+  .route-node text{font-family:'Work Sans';font-size:13px;font-weight:600;fill:var(--ink)}
+  .route-node .rn-sub{font-weight:400;fill:var(--ink-soft);font-size:11px}
+
+  /* Recipe teaser */
+  .recipe-card{display:grid;grid-template-columns:1fr 1fr;background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);max-width:920px;margin:0 auto}
+  .recipe-photo{background:linear-gradient(135deg,#8a6d2a,#c0902b);min-height:300px;position:relative}
+  .recipe-photo span{position:absolute;bottom:14px;left:14px;color:#fff;font-size:.7rem;letter-spacing:.06em;background:rgba(0,0,0,.4);padding:.4em .9em;border-radius:100px}
+  .recipe-body{padding:36px}
+  .recipe-body .eyebrow{color:var(--green)}
+  .recipe-body h3{font-size:1.6rem;margin:.3em 0 .5em}
+  .recipe-body>p{color:var(--ink-soft);font-size:.96rem}
+  .recipe-ingredients{list-style:none;margin:18px 0;display:grid;gap:8px}
+  .recipe-ingredients li{padding-left:20px;position:relative;font-size:.92rem;color:var(--ink)}
+  .recipe-ingredients li::before{content:"";position:absolute;left:2px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+  .recipe-note{font-size:.86rem;color:var(--ink-soft);font-style:italic;border-left:3px solid var(--gold);padding-left:14px;margin-top:8px}
+
+  /* FAQ accordion */
+  .faq{max-width:760px;margin:0 auto}
+  .faq-item{border-bottom:1px solid var(--line)}
+  .faq-q{width:100%;background:none;border:0;text-align:left;padding:20px 40px 20px 0;font-family:'Fraunces';font-size:1.12rem;font-weight:500;color:var(--ink);cursor:pointer;position:relative}
+  .faq-q::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:1.6rem;color:var(--wine);line-height:1}
+  .faq-item.open .faq-q::after{content:"–"}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .faq-a p{padding:0 0 20px;color:var(--ink-soft);font-size:.95rem}
+
+  /* Guest photo wall */
+  .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .gph{aspect-ratio:1;border-radius:12px;position:relative;overflow:hidden;cursor:pointer}
+  .gph::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.45),transparent 55%);opacity:0;transition:opacity .2s}
+  .gph:hover::after{opacity:1}
+  .gph em{position:absolute;bottom:10px;left:12px;color:#fff;font-size:.74rem;font-style:normal;z-index:2;opacity:0;transition:opacity .2s}
+  .gph:hover em{opacity:1}
+  .gg1{background:linear-gradient(135deg,#6E1E2E,#9a4a2a)}
+  .gg2{background:linear-gradient(135deg,#3f5a2e,#7a8a3a)}
+  .gg3{background:linear-gradient(135deg,#8a6d2a,#c0902b)}
+  .gg4{background:linear-gradient(135deg,#2e5a5a,#4a8a8a)}
+  .gg5{background:linear-gradient(135deg,#5a2e4a,#8a4a6a)}
+  .gg6{background:linear-gradient(135deg,#3a4a6a,#6a7a9a)}
+  .gg7{background:linear-gradient(135deg,#6a4a2a,#a07a3a)}
+  .gg8{background:linear-gradient(135deg,#2e4a3a,#4a7a5a)}
+
+  /* What's in season panel */
+  .season{max-width:880px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:var(--r);
+    padding:30px 34px;box-shadow:var(--shadow-sm);display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center}
+  .season-badge{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;text-align:center;
+    color:#fff;font-family:'Fraunces';font-weight:600;font-size:1.2rem;line-height:1.1;flex:none}
+  .season-badge small{display:block;font-family:'Work Sans';font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;opacity:.9;margin-top:3px}
+  .season-body h3{font-size:1.4rem;margin-bottom:4px}
+  .season-body>p{color:var(--ink-soft);font-size:.92rem;margin-bottom:14px}
+  .season-cols{display:flex;gap:40px;flex-wrap:wrap}
+  .season-col span{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px}
+  .season-col b{font-family:'Fraunces';font-size:1.02rem;color:var(--wine);font-weight:600}
+
+  /* Slim book bar */
+  .bookbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--wine);color:#fff;
+    transform:translateY(115%);transition:transform .32s ease;box-shadow:0 -6px 24px rgba(0,0,0,.18)}
+  .bookbar.show{transform:none}
+  .bookbar-inner{max-width:1180px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bb-txt b{font-family:'Fraunces';font-size:1.05rem}
+  .bb-txt span{font-size:.85rem;opacity:.85;margin-left:8px}
+  .bb-actions{display:flex;align-items:center;gap:12px}
+  .bookbar-close{background:rgba(255,255,255,.18);border:0;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1.05rem;line-height:1;flex:none}
+  .bookbar-close:hover{background:rgba(255,255,255,.32)}
+
+  /* Hunter photo strip */
+  .hv-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+  .hv-strip .gph{border-radius:10px}
+  /* Delight narrative */
+  .delight{max-width:760px;margin:0 auto;text-align:center}
+  .delight .lead{font-family:'Fraunces';font-size:1.25rem;font-weight:500;color:var(--ink);margin-bottom:18px;line-height:1.4}
+  .delight p{color:var(--ink-soft);margin-bottom:16px}
+  .delight .motto{font-family:'Fraunces';font-style:italic;color:var(--wine);font-size:1.15rem}
+  /* Restrictions */
+  .restrict{max-width:760px;margin:26px auto 0;background:#fbf1f2;border:1px solid #eccdd1;border-radius:var(--r);padding:22px 26px}
+  .restrict h4{font-family:'Work Sans';font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--wine);margin-bottom:10px}
+  .restrict ul{list-style:none;display:grid;gap:8px}
+  .restrict li{position:relative;padding-left:22px;font-size:.92rem;color:var(--ink)}
+  .restrict li::before{content:"!";position:absolute;left:0;top:0;width:16px;height:16px;border-radius:50%;background:var(--wine);color:#fff;font-size:.7rem;font-weight:700;display:grid;place-items:center}
+
+  /* Trust logos */
+  .trust{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .trust-row{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;padding:34px 0}
+  .badge{font-size:.8rem;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;
+    border:1px solid var(--line);border-radius:100px;padding:.6em 1.2em;background:var(--paper)}
+
+  /* Footer */
+  footer{background:var(--wine-deep);color:#f3e8df;padding:64px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:40px}
+  footer h4{color:#fff;font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:16px;font-family:'Work Sans';font-weight:600}
+  .foot-brand b{font-family:'Fraunces';font-size:1.5rem;color:#fff;display:block;margin-bottom:10px}
+  .foot-brand p{font-size:.9rem;color:#d9c6bb;max-width:32ch}
+  footer ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  footer ul a{font-size:.92rem;color:#e7d6cc}
+  footer ul a:hover{color:#fff}
+  .foot-bottom{margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.15);
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.82rem;color:#c9b3a8}
+
+  /* Popup modal */
+  .overlay{position:fixed;inset:0;background:rgba(30,18,14,.6);backdrop-filter:blur(3px);z-index:100;
+    display:none;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity .25s}
+  .overlay.show{display:flex;opacity:1}
+  .modal{background:var(--paper);border-radius:18px;max-width:400px;width:100%;overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.35);transform:translateY(12px);transition:transform .25s}
+  .overlay.show .modal{transform:translateY(0)}
+  .modal-simple{padding:34px 30px 28px;text-align:center;position:relative}
+  .modal-simple h3{font-size:1.35rem;color:var(--ink);margin-bottom:10px;font-weight:600}
+  .modal-simple p{font-size:1rem;color:var(--ink-soft);line-height:1.55;margin-bottom:22px}
+  .modal-simple p b{color:var(--wine);font-weight:600}
+  .modal-simple .btn{width:100%;justify-content:center}
+  .modal-close-dark{position:absolute;top:12px;right:14px;background:var(--paper-2);border:0;color:var(--ink-soft);
+    width:32px;height:32px;border-radius:50%;font-size:1.15rem;cursor:pointer;line-height:1}
+  .modal-close-dark:hover{background:var(--line)}
+
+  /* Focus visibility */
+  a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+  /* Responsive */
+  @media(max-width:900px){
+    .nav-links{display:none}
+    .burger{display:flex}
+    .sig-grid,.why-grid{grid-template-columns:1fr;gap:32px}
+    .chapters::before,.chapter::after{display:none}
+    .chapter{grid-template-columns:1fr;gap:24px;padding:26px 0}
+    .chapter:nth-child(even) .ch-media{order:0}
+    .ch-media{height:240px}
+    .tours{grid-template-columns:repeat(2,1fr)}
+    .reviews{grid-template-columns:1fr}
+    .expect-grid{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:1fr}
+    .pair-grid{grid-template-columns:1fr;gap:24px}
+    .recipe-card{grid-template-columns:1fr}
+    .gallery{grid-template-columns:repeat(3,1fr)}
+    .hv-strip{grid-template-columns:repeat(3,1fr)}
+    .season{grid-template-columns:1fr;text-align:center;justify-items:center;gap:18px}
+    .bb-txt span{display:none}
+    .contact-grid{grid-template-columns:1fr;gap:36px}
+    .foot-grid{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:600px){
+    .tours{grid-template-columns:1fr}
+    .expect,.expect-grid{grid-template-columns:1fr}
+    .gallery{grid-template-columns:repeat(2,1fr)}
+    .foot-grid{grid-template-columns:1fr}
+    .video-frame{height:70vh}
+    .hero-copy{padding-bottom:34px}
+    .scroll-cue{right:14px;bottom:16px;font-size:.72rem;max-width:120px;padding:9px 12px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .video-bg{animation:none}
+    .scroll-cue .arrow{animation:none}
+    *{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- Direct-booking promo bar -->
+<div class="promo">Book direct &amp; save <strong>$20 off the adult price</strong></div>
+
+<!-- Header -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#page-home" data-page="home">
+      <b>Gourmet Getaway Tours</b>
+      <span>Hunter Valley · NSW</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#page-home" data-page="home">Home</a>
+      <a href="#page-hunter" data-page="hunter">Hunter Valley Tour</a>
+      <a href="#page-private" data-page="private">Private Tours</a>
+      <a href="#page-about" data-page="about">About</a>
+      <a href="#page-faq" data-page="faq">FAQ</a>
+      <a href="#page-contact" data-page="contact">Contact</a>
+      <a class="phone" href="tel:+61416139567">0416 139 567</a>
+      <a class="btn btn-wine" href="#page-hunter" data-page="hunter">Book now</a>
+    </nav>
+    <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ===================== HOME ===================== -->
+<main id="page-home" class="page active">
+
+<!-- Hero: signature-tour story video -->
+<section class="hero">
+  <div class="video-frame">
+    <div class="video-bg"></div>
+    <div class="video-note">▶ Signature tour film — your story of a day in the Hunter</div>
+    <button class="play" aria-label="Play tour video"></button>
+    <div class="hero-copy">
+      <div class="inner">
+        <h1>Gourmet Getaway Tours</h1>
+        <p>Chef-led Hunter Valley food &amp; wine tours, from Sydney.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="#page-hunter" data-page="hunter">Book Now</a>
+        </div>
+      </div>
+    </div>
+    <a class="scroll-cue" href="#tours">Scroll down to see our private tours <span class="arrow">↓</span></a>
+  </div>
+</section>
+
+<!-- Signature tour: pricing + facts (schedule shown once, no pickup detail) -->
+<section class="signature">
+  <div class="wrap sig-grid">
+    <div class="sig-left">
+      <div class="depart-pill"><span class="dot"></span><span id="departHome">Next departure loading…</span></div>
+      <span class="eyebrow">Our flagship day</span>
+      <h2>Hunter Valley Food &amp; Wine Tour</h2>
+      <p>Cellar doors, a progressive breakfast and lunch cooked by your guide, and three wines matched to the menu. The one tour you can book straight online.</p>
+      <div class="sig-facts">
+        <div class="fact"><b>Mon &amp; Wed</b><span>Departs weekly</span></div>
+        <div class="fact"><b>Up to 11 hrs</b><span>Full day</span></div>
+        <div class="fact"><b>2–16 guests</b><span>Small group</span></div>
+        <div class="fact"><b>Ages 4+</b><span>Family friendly</span></div>
+      </div>
+    </div>
+    <div class="price-card">
+      <h3>Book this tour</h3>
+      <div class="price-row"><div><b>Adult</b><br><small>Ages 17+</small></div><div class="amt">A$277</div></div>
+      <div class="price-row"><div><b>Senior</b><br><small>65+</small></div><div class="amt">A$267</div></div>
+      <div class="price-row"><div><b>Child / student</b><br><small>4–16 years</small></div><div class="amt">A$257</div></div>
+      <a class="btn btn-wine" href="#">Check availability</a>
+    </div>
+  </div>
+</section>
+
+<!-- All tours, visible at once -->
+<section class="pad" id="tours">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Choose your day</span>
+      <h2>Our Tours</h2>
+      <p>One signature day you can book online, plus seven private-tour destinations built around you.</p>
+    </div>
+    <div class="tours">
+
+      <div class="tour-card">
+        <div class="tour-photo p1"><span>Hunter Valley</span></div>
+        <div class="tour-body">
+          <span class="tag-online">Book online</span>
+          <h3>Hunter Valley Food &amp; Wine</h3>
+          <p class="line">Our signature day. Cellar doors, chef-cooked meals and wines matched to the menu.</p>
+          <div class="tour-foot">
+            <div class="from">From<b>A$257 pp</b></div>
+            <a class="btn btn-wine" href="#">Book now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-photo p2"><span>Blue Mountains</span></div>
+        <div class="tour-body">
+          <h3>Blue Mountains Day Trip</h3>
+          <p class="line">Clifftops, lookouts and a long lunch across the mountains.</p>
+          <div class="tour-foot">
+            <div class="from">From<b>A$237 pp</b></div>
+            <a class="btn btn-ghost" href="#">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-photo p3"><span>Orange &amp; Mudgee</span></div>
+        <div class="tour-body">
+          <h3>Orange &amp; Mudgee</h3>
+          <p class="line">High-country vines and cool-climate cellar doors.</p>
+          <div class="tour-foot">
+            <div class="from">From<b>A$249 pp</b></div>
+            <a class="btn btn-ghost" href="#">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-photo p4"><span>Sydney Beaches</span></div>
+        <div class="tour-body">
+          <h3>Sydney Beaches &amp; Brewery</h3>
+          <p class="line">Sand, surf and a tasting paddle at a local brewery.</p>
+          <div class="tour-foot">
+            <div class="from">From<b>A$219 pp</b></div>
+            <a class="btn btn-ghost" href="#">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-photo p5"><span>Kangaroo Valley</span></div>
+        <div class="tour-body">
+          <h3>Kangaroo Valley</h3>
+          <p class="line">River, ridge and paddock, with produce straight from the source.</p>
+          <div class="tour-foot">
+            <div class="from">From<b>A$245 pp</b></div>
+            <a class="btn btn-ghost" href="#">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-photo p6"><span>Southern Highlands</span></div>
+        <div class="tour-body">
+          <h3>Southern Highlands</h3>
+          <p class="line">Cool-climate cellar doors and country-town charm.</p>
+          <div class="tour-foot">
+            <div class="from">From<b>A$239 pp</b></div>
+            <a class="btn btn-ghost" href="#">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-photo p7"><span>Sydney Foodie</span></div>
+        <div class="tour-body">
+          <h3>Half-Day Sydney Foodie</h3>
+          <p class="line">Markets to morsels, a shorter taste of the city's best.</p>
+          <div class="tour-foot">
+            <div class="from">From<b>A$165 pp</b></div>
+            <a class="btn btn-ghost" href="#">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="tour-card">
+        <div class="tour-photo p8"><span>Central Coast</span></div>
+        <div class="tour-body">
+          <h3>Central Coast Oysters</h3>
+          <p class="line">Estuary oysters and a relaxed day north of the city.</p>
+          <div class="tour-foot">
+            <div class="from">From<b>A$229 pp</b></div>
+            <a class="btn btn-ghost" href="#">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- The story of the day: chef, vineyards, wine, food -->
+<section class="pad story">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What makes the day</span>
+      <h2>The story of your Hunter Valley day</h2>
+      <p>Four things set this tour apart, from the man behind the wheel to the last glass poured.</p>
+    </div>
+    <div class="chapters">
+
+      <div class="chapter reveal">
+        <div class="ch-media m1"><span>Photo — Jimmy, your chef &amp; guide</span></div>
+        <div class="ch-text">
+          <span class="ch-num">01</span>
+          <span class="eyebrow">Your guide</span>
+          <h3>Not just any old guide</h3>
+          <p>What sets us apart is that your guide is also your chef — and a qualified one at that. With culinary expertise guiding your experience, you can trust that each bite complements your wine tastings flawlessly. Your chef takes pride in crafting menus that enhance the incredible local vintages you'll sample.</p>
+        </div>
+      </div>
+
+      <div class="chapter reveal">
+        <div class="ch-media m2"><span>Photo — vineyard scenery</span></div>
+        <div class="ch-text">
+          <span class="ch-num">02</span>
+          <span class="eyebrow">The vineyards</span>
+          <h3>Three, hand-picked for you</h3>
+          <p>We've hand-picked three vineyards so you can take your time enjoying the food and wine on offer at a relaxed pace. There's plenty of time to soak up the beautiful scenery as we journey from location to location — and we know you'll love the three we've chosen for you.</p>
+        </div>
+      </div>
+
+      <div class="chapter reveal">
+        <div class="ch-media m3"><span>Photo — cellar door tasting</span></div>
+        <div class="ch-text">
+          <span class="ch-num">03</span>
+          <span class="eyebrow">The wine</span>
+          <h3>World-class, and proud of it</h3>
+          <p>We're proud to be in the Hunter Valley food and wine tour business, and committed to learning everything we can about the region to build our expertise. We love taking guests to our favourite locations to explore and experience what we've come to know as world-class wine.</p>
+        </div>
+      </div>
+
+      <div class="chapter reveal">
+        <div class="ch-media m4"><span>Photo — chef-cooked lunch</span></div>
+        <div class="ch-text">
+          <span class="ch-num">04</span>
+          <span class="eyebrow">Hunter Valley food</span>
+          <h3>Cooked for every palate</h3>
+          <p>As fellow food and wine lovers, we know connoisseurs and Hunter Valley debutantes alike have different needs. If you have any special dietary requirements, we'll do our utmost to accommodate them.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Wine & food pairing -->
+<section class="pad" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Wine is our canvas, food is our paint</span>
+      <h2>See how we match the day</h2>
+      <p>Tap a wine to see the dish it's poured alongside.</p>
+    </div>
+    <div class="pair-grid">
+      <div class="pair-list" id="pairList">
+        <button class="pair-opt active" data-pair="0"><b>Hunter Semillon</b><span>Crisp, citrusy, unoaked</span></button>
+        <button class="pair-opt" data-pair="1"><b>Shiraz</b><span>Bold, peppery, warm</span></button>
+        <button class="pair-opt" data-pair="2"><b>Chardonnay</b><span>Rounded, gently oaked</span></button>
+        <button class="pair-opt" data-pair="3"><b>Verdelho</b><span>Bright, tropical, fresh</span></button>
+      </div>
+      <div class="pair-plate">
+        <div class="pair-photo" id="pairPhoto"><span id="pairImg">Photo — matched dish</span></div>
+        <div class="pair-plate-body">
+          <h3 id="pairDish">Fresh Sydney rock oysters</h3>
+          <p id="pairDesc">Shucked to order with a squeeze of lemon — the Semillon's citrus lift is made for briny, cold oysters.</p>
+          <span class="pair-match" id="pairWith">Paired with Hunter Semillon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- What's in season -->
+<section class="pad">
+  <div class="wrap">
+    <div class="season">
+      <div class="season-badge" id="seasonBadge">Summer<small>in the Hunter</small></div>
+      <div class="season-body">
+        <span class="eyebrow" id="seasonEyebrow">Right now in wine country</span>
+        <h3 id="seasonTitle">At its best this season</h3>
+        <p id="seasonBlurb">What's in the glass and on the plate changes through the year — here's what you'll likely find on tour right now.</p>
+        <div class="season-cols">
+          <div class="season-col"><span>In the glass</span><b id="seasonWine">Chilled Semillon</b></div>
+          <div class="season-col"><span>On the plate</span><b id="seasonFood">Stone fruit &amp; seafood</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Mission -->
+<section class="mission">
+  <div class="wrap mission-inner">
+    <span class="eyebrow">Our mission</span>
+    <p class="mission-lead">There's a reason people flock from all over NSW to the quiet, rolling hills of the Hunter Valley — and we've discovered the secret.</p>
+    <h2 class="mission-statement">To make your day not just an outing, but an <em>expedition</em> — exploring vineyards and first-class cooking in idyllic surrounds.</h2>
+  </div>
+</section>
+
+<!-- What to expect -->
+<section class="pad">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What to expect</span>
+      <h2>Everything that's included</h2>
+      <p>From the moment we pick you up to the last drop-off, it's all taken care of.</p>
+    </div>
+    <ul class="expect-grid">
+      <li>Complimentary pickup and drop-off</li>
+      <li>Small tour group of 2–16 only</li>
+      <li>Door to door service</li>
+      <li>Progressive breakfast &amp; lunch cooked by your chef/guide</li>
+      <li>Three wine tastings matched to a modern Australian menu</li>
+      <li>Special dietary requirements catered for</li>
+      <li>Passionate local guides</li>
+      <li>Comfortable air-conditioned transport</li>
+      <li>Flexible and friendly experience</li>
+      <li>Professional service</li>
+      <li>Owner-operated tours</li>
+      <li>Over 30 years in catering and tour guiding</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Direct-booking savings counter -->
+<section class="pad save-band">
+  <div class="wrap">
+    <div class="save-card">
+      <span class="eyebrow">Book direct &amp; save</span>
+      <h3>Students of wine save more</h3>
+      <p class="sub">$20 off every adult when you book direct — no middle-man fees.</p>
+      <div class="stepper">
+        <button type="button" id="saveMinus" aria-label="Fewer adults">−</button>
+        <div class="count"><span id="saveNum">2</span><small>Adults</small></div>
+        <button type="button" id="savePlus" aria-label="More adults">+</button>
+      </div>
+      <div class="save-amount"><span id="saveTotal">$40</span><small>saved on your booking</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- Why book with us -->
+<section class="pad why" id="why">
+  <div class="wrap why-grid">
+    <div>
+      <span class="eyebrow">Why guests come back</span>
+      <h2 style="font-size:2.2rem;margin:.3em 0 .2em">Your driver, your chef, your guide</h2>
+      <p style="color:var(--ink-soft)">Thirty years cooking and guiding, in small vehicles, never a coach. Every tour is Jimmy's, start to finish — that's the whole point.</p>
+      <div class="stats">
+        <div class="stat"><b>Jimmy</b><span>Owner, driver &amp; chef</span></div>
+        <div class="stat"><b>30 years</b><span>On the road</span></div>
+        <div class="stat"><b>Never a coach</b><span>Small vehicles only</span></div>
+        <div class="stat"><b>5.0 ★</b><span>Tripadvisor rating</span></div>
+      </div>
+    </div>
+    <div class="why-photo"><span>Photo — Jimmy cooking roadside / cellar door</span></div>
+  </div>
+</section>
+
+<!-- Reviews (static) -->
+<section class="pad">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">5.0 on Tripadvisor</span>
+      <h2>Guests on tour with Jimmy</h2>
+      <p>Straight from Tripadvisor, after a day on the road.</p>
+    </div>
+    <div class="reviews">
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>My second tour with Jimmy, and I'd gladly go again. Incredible fresh food paired perfectly with the wine — you won't leave hungry. Highly recommend.</p>
+        <div class="who">Andrew C.</div><div class="via">via Tripadvisor</div>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>A spectacular day. Jimmy guided us through the Fish Market, then an amazing breakfast and sushi-making, with delightful wine pairings and great stories.</p>
+        <div class="who">Epin2016</div><div class="via">via Tripadvisor</div>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>One of the best food tours you'll ever experience. An incredible chef and guide — this tour is a must-do.</p>
+        <div class="who">Sylvia M.</div><div class="via">via Tripadvisor</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Guest photo wall -->
+<section class="pad" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Postcards from the road</span>
+      <h2>Come along for the ride</h2>
+      <p>Behind-the-scenes cooks, cellar doors and clifftop lunches — see where the van heads next.</p>
+    </div>
+    <div class="gallery">
+      <div class="gph gg1"><em>Breakfast on the road</em></div>
+      <div class="gph gg2"><em>Vineyard views</em></div>
+      <div class="gph gg3"><em>Cheese &amp; tastings</em></div>
+      <div class="gph gg4"><em>Kangaroos in the vines</em></div>
+      <div class="gph gg5"><em>Clifftop lunch</em></div>
+      <div class="gph gg6"><em>The pour</em></div>
+      <div class="gph gg7"><em>Fresh local produce</em></div>
+      <div class="gph gg8"><em>Guests &amp; Jimmy</em></div>
+    </div>
+    <div style="text-align:center;margin-top:30px">
+      <a class="btn btn-ghost" href="https://www.instagram.com/gourmetgetawaytours/" target="_blank" rel="noopener">Follow on Instagram</a>
+    </div>
+  </div>
+</section>
+
+<!-- Cellar door & dining partners -->
+<section class="pad">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Where the day takes you</span>
+      <h2>Our cellar door &amp; dining partners</h2>
+      <p>A few of the hand-picked spots we love — Jimmy's real partners slot in here.</p>
+    </div>
+    <div class="tours" style="grid-template-columns:repeat(3,1fr)">
+      <div class="tour-card"><div class="tour-photo p3"><span>Cellar door</span></div><div class="tour-body"><h3>Boutique family winery</h3><p class="line">Where we start — small-batch drops and a warm welcome.</p></div></div>
+      <div class="tour-card"><div class="tour-photo p1"><span>Long lunch</span></div><div class="tour-body"><h3>Vineyard restaurant</h3><p class="line">Big reds and a relaxed, chef-matched lunch among the vines.</p></div></div>
+      <div class="tour-card"><div class="tour-photo p2"><span>Local produce</span></div><div class="tour-body"><h3>Cheese &amp; providore</h3><p class="line">Local produce, cheese and a final tasting with a view.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust -->
+<section class="trust">
+  <div class="wrap" style="text-align:center;padding:40px 24px 10px">
+    <p style="max-width:56ch;margin:0 auto;color:var(--ink-soft);font-size:.95rem">We're accredited tour operators, trusted on the world's best booking platforms.</p>
+  </div>
+  <div class="wrap trust-row" style="padding-top:16px">
+    <span class="badge">Tripadvisor</span>
+    <span class="badge">Viator</span>
+    <span class="badge">GetYourGuide</span>
+    <span class="badge">Klook</span>
+    <span class="badge">Accredited operator · No. 40079</span>
+    <span class="badge">Destination NSW</span>
+  </div>
+</section>
+
+</main><!-- /page-home -->
+
+
+<!-- ===================== HUNTER VALLEY TOUR ===================== -->
+<main id="page-hunter" class="page">
+  <section class="page-hero ph-hunter">
+    <div class="ph-bg"></div>
+    <div class="wrap" style="position:relative;z-index:2">
+      <span class="eyebrow" style="color:var(--gold-soft)">Book online · Mon &amp; Wed</span>
+      <h1>Hunter Valley Food &amp; Wine Tour</h1>
+      <p>Our flagship day from Sydney — cellar doors, meals cooked by your guide, and wines matched to every course.</p>
+    </div>
+  </section>
+
+  <!-- Photo strip -->
+  <section style="padding:26px 0 0">
+    <div class="wrap">
+      <div class="hv-strip">
+        <div class="gph gg1"><em>Kangaroos in the vines</em></div>
+        <div class="gph gg2"><em>Vineyard views</em></div>
+        <div class="gph gg3"><em>Cheese &amp; tastings</em></div>
+        <div class="gph gg7"><em>Fresh produce</em></div>
+        <div class="gph gg5"><em>A long lunch</em></div>
+        <div class="gph gg6"><em>The pour</em></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap sig-grid">
+      <div class="sig-left">
+      <div class="depart-pill"><span class="dot"></span><span id="departHunter">Next departure loading…</span></div>
+      <span class="eyebrow">The day at a glance</span>
+        <h2 style="font-size:2rem;margin:.3em 0 .4em">A relaxed, full day in wine country</h2>
+        <p style="color:var(--ink-soft)">Three hand-picked vineyards, a progressive breakfast and lunch, and plenty of time to soak up the scenery between stops. Small groups only, door to door from selected Sydney hotels.</p>
+        <div class="sig-facts">
+          <div class="fact"><b>Mon &amp; Wed</b><span>Departs weekly</span></div>
+          <div class="fact"><b>Up to 11 hrs</b><span>Full day</span></div>
+          <div class="fact"><b>2–16 guests</b><span>Small group</span></div>
+          <div class="fact"><b>Ages 4+</b><span>Family friendly</span></div>
+          <div class="fact"><b>6:35–7:10am</b><span>Sydney pickup</span></div>
+          <div class="fact"><b>~6:30pm</b><span>Back in Sydney</span></div>
+        </div>
+      </div>
+      <div class="price-card">
+        <h3>Book this tour</h3>
+        <div class="price-row"><div><b>Adult</b><br><small>Ages 17+</small></div><div class="amt">A$277</div></div>
+        <div class="price-row"><div><b>Senior</b><br><small>65+</small></div><div class="amt">A$267</div></div>
+        <div class="price-row"><div><b>Child / student</b><br><small>4–16 years</small></div><div class="amt">A$257</div></div>
+        <a class="btn btn-wine" href="#">Check availability</a>
+        <p style="font-size:.78rem;color:var(--ink-soft);margin-top:12px;text-align:center">Students of wine save $20 per adult when booking direct.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Delight narrative -->
+  <section class="pad">
+    <div class="wrap">
+      <div class="delight">
+        <span class="eyebrow">From the vine to the glass</span>
+        <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);margin:.3em 0 .5em">Delight in our food &amp; wine tours from Sydney</h2>
+        <p class="lead">There's a reason people flock from all over NSW to the quiet, rolling hills of the Hunter Valley — and we've discovered the secret.</p>
+        <p>The Hunter is famous for its wineries and its cuisine cooked from fresh local produce. Our tours take you on a journey from the vine to the glass, with Australian-made wines matched to menus designed to complement every drop.</p>
+        <p class="motto">"Our wine is our canvas, and our food is our paint."</p>
+        <p>Let us help you appreciate the art of perfectly matched wine and food at the region's most renowned wineries. Our mission is to make your day not just an outing, but an expedition — exploring vineyards and experiencing first-class cooking in idyllic surrounds.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Route map -->
+  <section class="pad">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">The journey</span>
+        <h2>Sydney to the vines, and home again</h2>
+        <p>A relaxed loop with plenty of time between stops.</p>
+      </div>
+      <div class="route-map" id="routeMap">
+        <svg viewBox="0 0 760 300" role="img" aria-label="Map of the tour route from Sydney through three vineyards and back">
+          <path class="route-line" d="M 70 240 C 160 120, 240 120, 300 90 C 360 60, 430 90, 470 130 C 520 180, 600 180, 690 90"/>
+          <g class="route-node"><circle cx="70" cy="240" r="9"/><text x="70" y="270" text-anchor="middle">Sydney</text><text x="70" y="287" text-anchor="middle" class="rn-sub">6:35am pickup</text></g>
+          <g class="route-node"><circle cx="300" cy="90" r="9"/><text x="300" y="66" text-anchor="middle">Vineyard one</text><text x="300" y="49" text-anchor="middle" class="rn-sub">first tasting</text></g>
+          <g class="route-node"><circle cx="470" cy="130" r="9"/><text x="470" y="162" text-anchor="middle">Vineyard two</text><text x="470" y="179" text-anchor="middle" class="rn-sub">progressive lunch</text></g>
+          <g class="route-node"><circle cx="600" cy="150" r="9"/><text x="600" y="182" text-anchor="middle">Vineyard three</text><text x="600" y="199" text-anchor="middle" class="rn-sub">final cellar door</text></g>
+          <g class="route-node"><circle cx="690" cy="90" r="9"/><text x="690" y="66" text-anchor="middle">Home</text><text x="690" y="49" text-anchor="middle" class="rn-sub">~6:30pm</text></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Day timeline -->
+  <section class="pad" style="background:var(--paper-2)">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Your day, hour by hour</span>
+        <h2>How the day unfolds</h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">6:35am</div><div class="tl-body"><h3>Door-to-door pickup</h3><p>We collect you from your Sydney hotel and set off toward the Hunter.</p></div></div>
+        <div class="tl-item"><div class="tl-time">Mid-morning</div><div class="tl-body"><h3>Progressive breakfast</h3><p>A light cooked breakfast prepared by your chef/guide as we arrive.</p></div></div>
+        <div class="tl-item"><div class="tl-time">Late morning</div><div class="tl-body"><h3>Vineyard one</h3><p>Your first tasting, with wines chosen to match what's coming for lunch.</p></div></div>
+        <div class="tl-item"><div class="tl-time">Midday</div><div class="tl-body"><h3>Vineyard two &amp; lunch</h3><p>A relaxed progressive lunch from local produce, three wines matched to the menu.</p></div></div>
+        <div class="tl-item"><div class="tl-time">Afternoon</div><div class="tl-body"><h3>Vineyard three</h3><p>A final cellar door, plus time to enjoy the rolling-hill scenery.</p></div></div>
+        <div class="tl-item"><div class="tl-time">~6:30pm</div><div class="tl-body"><h3>Home to Sydney</h3><p>We drop you back where we started, full and happy.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's included -->
+  <section class="pad">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">What to expect</span>
+        <h2>Everything that's included</h2>
+      </div>
+      <ul class="expect-grid">
+        <li>Complimentary pickup and drop-off</li>
+        <li>Small tour group of 2–16 only</li>
+        <li>Door to door service</li>
+        <li>Progressive breakfast &amp; lunch cooked by your chef/guide</li>
+        <li>Three wine tastings matched to a modern Australian menu</li>
+        <li>Special dietary requirements catered for</li>
+        <li>Passionate local guides</li>
+        <li>Comfortable air-conditioned transport</li>
+        <li>Owner-operated tours</li>
+      </ul>
+      <div class="restrict">
+        <h4>Restrictions</h4>
+        <ul>
+          <li>We cannot accommodate infants aged 0–3 years.</li>
+          <li>Guests under 18 cannot be served alcohol under Australian licensing laws.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="pad" style="background:var(--paper-2)">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Good to know</span>
+        <h2>Dietary needs &amp; common questions</h2>
+      </div>
+      <div class="faq">
+        <div class="faq-item">
+          <button class="faq-q" type="button">Can you cater for dietary requirements?</button>
+          <div class="faq-a"><p>Yes. As fellow food and wine lovers, we'll do our utmost to accommodate special diets — vegetarian, vegan, gluten-free and allergies. Just let us know when you book so your chef can plan the menu around you.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">Can children come along?</button>
+          <div class="faq-a"><p>Absolutely — the tour is family friendly for ages 4 and up. We can't accommodate infants aged 0–3, and under-18s can't be served alcohol under Australian licensing laws.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">Where do you pick up from?</button>
+          <div class="faq-a"><p>Door-to-door from selected Sydney hotels, roughly between 6:35 and 7:10am. Tell us where you're staying and we'll confirm your pickup time.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">How big are the groups?</button>
+          <div class="faq-a"><p>Always small — between 2 and 16 guests, never a coach. That's the whole point: a personal day with your chef and guide.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">What if I book direct?</button>
+          <div class="faq-a"><p>You save $20 per adult as a student of wine, with no booking fees — and it goes straight to Jimmy rather than a booking platform.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Ready for a day in the Hunter?</h2>
+      <p>Monday and Wednesday, straight from Sydney.</p>
+      <a class="btn btn-gold" href="#">Check availability</a>
+    </div>
+  </section>
+</main><!-- /page-hunter -->
+
+
+<!-- ===================== PRIVATE TOURS ===================== -->
+<main id="page-private" class="page">
+  <section class="page-hero ph-private">
+    <div class="ph-bg"></div>
+    <div class="wrap" style="position:relative;z-index:2">
+      <span class="eyebrow" style="color:var(--gold-soft)">Just your group</span>
+      <h1>Private Tours</h1>
+      <p>Your own guide, your own pace, and a day shaped around what you love. Seven destinations to choose from.</p>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="pad">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">How private tours work</span>
+        <h2>Three steps to your day</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="step-n">1</span><h3>Pick a destination</h3><p>Choose from any of the seven regions below, or mix ideas together.</p></div>
+        <div class="step"><span class="step-n">2</span><h3>Tell us your group</h3><p>Two to sixteen guests. Let us know numbers, dates and any dietary needs.</p></div>
+        <div class="step"><span class="step-n">3</span><h3>We craft the day</h3><p>Jimmy plans the route, the food and the tastings, then confirms your itinerary.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Destination cards -->
+  <section class="pad" style="background:var(--paper-2)">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Choose your region</span>
+        <h2>Private-tour destinations</h2>
+      </div>
+      <div class="tours">
+        <div class="tour-card"><div class="tour-photo p2"><span>Blue Mountains</span></div><div class="tour-body"><h3>Blue Mountains Day Trip</h3><p class="line">Clifftops, lookouts and a long lunch across the mountains.</p><div class="tour-foot"><div class="from">From<b>A$237 pp</b></div><a class="btn btn-ghost" href="#page-contact" data-page="contact">Enquire</a></div></div></div>
+        <div class="tour-card"><div class="tour-photo p3"><span>Orange &amp; Mudgee</span></div><div class="tour-body"><h3>Orange &amp; Mudgee</h3><p class="line">High-country vines and cool-climate cellar doors.</p><div class="tour-foot"><div class="from">From<b>A$249 pp</b></div><a class="btn btn-ghost" href="#page-contact" data-page="contact">Enquire</a></div></div></div>
+        <div class="tour-card"><div class="tour-photo p4"><span>Sydney Beaches</span></div><div class="tour-body"><h3>Sydney Beaches &amp; Brewery</h3><p class="line">Sand, surf and a tasting paddle at a local brewery.</p><div class="tour-foot"><div class="from">From<b>A$219 pp</b></div><a class="btn btn-ghost" href="#page-contact" data-page="contact">Enquire</a></div></div></div>
+        <div class="tour-card"><div class="tour-photo p5"><span>Kangaroo Valley</span></div><div class="tour-body"><h3>Kangaroo Valley</h3><p class="line">River, ridge and paddock, with produce straight from the source.</p><div class="tour-foot"><div class="from">From<b>A$245 pp</b></div><a class="btn btn-ghost" href="#page-contact" data-page="contact">Enquire</a></div></div></div>
+        <div class="tour-card"><div class="tour-photo p6"><span>Southern Highlands</span></div><div class="tour-body"><h3>Southern Highlands</h3><p class="line">Cool-climate cellar doors and country-town charm.</p><div class="tour-foot"><div class="from">From<b>A$239 pp</b></div><a class="btn btn-ghost" href="#page-contact" data-page="contact">Enquire</a></div></div></div>
+        <div class="tour-card"><div class="tour-photo p7"><span>Sydney Foodie</span></div><div class="tour-body"><h3>Half-Day Sydney Foodie</h3><p class="line">Markets to morsels, a shorter taste of the city's best.</p><div class="tour-foot"><div class="from">From<b>A$165 pp</b></div><a class="btn btn-ghost" href="#page-contact" data-page="contact">Enquire</a></div></div></div>
+        <div class="tour-card"><div class="tour-photo p8"><span>Central Coast</span></div><div class="tour-body"><h3>Central Coast Oysters</h3><p class="line">Estuary oysters and a relaxed day north of the city.</p><div class="tour-foot"><div class="from">From<b>A$229 pp</b></div><a class="btn btn-ghost" href="#page-contact" data-page="contact">Enquire</a></div></div></div>
+        <div class="tour-card"><div class="tour-photo p1"><span>Hunter Valley</span></div><div class="tour-body"><h3>Hunter Valley, private</h3><p class="line">Our signature day, just for your group and at your pace.</p><div class="tour-foot"><div class="from">From<b>A$257 pp</b></div><a class="btn btn-ghost" href="#page-contact" data-page="contact">Enquire</a></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Let's plan your private day</h2>
+      <p>Tell us your group and dates — Jimmy will take it from there.</p>
+      <a class="btn btn-gold" href="#page-contact" data-page="contact">Enquire now</a>
+    </div>
+  </section>
+</main><!-- /page-private -->
+
+
+<!-- ===================== ABOUT ===================== -->
+<main id="page-about" class="page">
+  <section class="page-hero ph-about">
+    <div class="ph-bg"></div>
+    <div class="wrap" style="position:relative;z-index:2">
+      <span class="eyebrow" style="color:var(--gold-soft)">Owner-operated since day one</span>
+      <h1>About Jimmy</h1>
+      <p>Your driver, your chef and your guide — all the same person, for thirty years.</p>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap why-grid">
+      <div>
+        <span class="eyebrow">The whole point</span>
+        <h2 style="font-size:2.2rem;margin:.3em 0 .3em">One person, start to finish</h2>
+        <p style="color:var(--ink-soft);margin-bottom:14px">Thirty years cooking and guiding, always in small vehicles, never a coach. Every tour is Jimmy's from the first pickup to the last drop-off — that's what keeps guests coming back, and coming back again.</p>
+        <p style="color:var(--ink-soft)">A qualified chef behind the wheel means the food isn't an afterthought. Menus are written by hand to match the wines you'll taste, and no two days run exactly the same.</p>
+        <div class="stats">
+          <div class="stat"><b>Jimmy</b><span>Owner, driver &amp; chef</span></div>
+          <div class="stat"><b>30 years</b><span>On the road</span></div>
+          <div class="stat"><b>Never a coach</b><span>Small vehicles only</span></div>
+          <div class="stat"><b>5.0 ★</b><span>Tripadvisor rating</span></div>
+        </div>
+      </div>
+      <div class="why-photo"><span>Photo — Jimmy at a cellar door</span></div>
+    </div>
+  </section>
+
+  <!-- Recipe teaser -->
+  <section class="pad" style="background:var(--paper-2)">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">A taste before you go</span>
+        <h2>From Jimmy's kitchen</h2>
+        <p>A little something we cook on the road — the rest, you'll taste on tour.</p>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-photo"><span>Photo — the finished dish</span></div>
+        <div class="recipe-body">
+          <span class="eyebrow">Roadside favourite</span>
+          <h3>Pan-seared barramundi, lemon &amp; herb</h3>
+          <p>Bright, simple and built to sit beside a chilled Hunter Semillon — the kind of plate that turns a lookout into a long lunch.</p>
+          <ul class="recipe-ingredients">
+            <li>Fresh barramundi fillets</li>
+            <li>Lemon, olive oil &amp; sea salt</li>
+            <li>Handful of local herbs</li>
+            <li>Knob of butter to finish</li>
+          </ul>
+          <p class="recipe-note">Jimmy's tip: rest the fish skin-side up for a minute before serving so it stays crisp.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission reused -->
+  <section class="mission">
+    <div class="wrap mission-inner">
+      <span class="eyebrow">Our mission</span>
+      <p class="mission-lead">There's a reason people flock from all over NSW to the quiet, rolling hills of the Hunter Valley — and we've discovered the secret.</p>
+      <h2 class="mission-statement">To make your day not just an outing, but an <em>expedition</em> — exploring vineyards and first-class cooking in idyllic surrounds.</h2>
+    </div>
+  </section>
+
+  <section class="trust">
+    <div class="wrap trust-row">
+      <span class="badge">Viator Experience Award 2023</span>
+      <span class="badge">Tripadvisor Certificate of Excellence</span>
+      <span class="badge">Featured on Sydney Weekender</span>
+      <span class="badge">Listed with Destination NSW</span>
+      <span class="badge">Accredited operator · No. 40079</span>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Come along for the ride</h2>
+      <p>Book the signature day, or plan a private one.</p>
+      <a class="btn btn-gold" href="#page-hunter" data-page="hunter">See the Hunter Valley tour</a>
+    </div>
+  </section>
+</main><!-- /page-about -->
+
+
+<!-- ===================== CONTACT ===================== -->
+<main id="page-contact" class="page">
+  <section class="page-hero ph-contact">
+    <div class="ph-bg"></div>
+    <div class="wrap" style="position:relative;z-index:2">
+      <span class="eyebrow" style="color:var(--gold-soft)">We'd love to hear from you</span>
+      <h1>Contact Us</h1>
+      <p>Questions, private-tour enquiries or dietary needs — send a note and Jimmy will get back to you.</p>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap contact-grid">
+      <div>
+        <span class="eyebrow">Get in touch</span>
+        <h2 style="font-size:1.9rem;margin:.3em 0 .8em">Reach us directly</h2>
+        <div class="contact-item"><div class="ci-ic">☎</div><div><b>Phone</b><br><a href="tel:+61416139567">0416 139 567</a></div></div>
+        <div class="contact-item"><div class="ci-ic">✉</div><div><b>Email</b><br><a href="#">info@gourmetgetawaytours.com.au</a></div></div>
+        <div class="contact-item"><div class="ci-ic">📍</div><div><b>Base</b><br>17 Allambie Rd, Allambie Heights NSW 2100</div></div>
+        <div class="contact-item"><div class="ci-ic">🕑</div><div><b>Tours run</b><br>Hunter Valley: Monday &amp; Wednesday · Private: most days</div></div>
+        <div class="contact-map"><span>Map — pickup area &amp; base</span></div>
+      </div>
+      <div class="contact-form">
+        <h3 style="font-size:1.3rem;margin-bottom:6px">Send an enquiry</h3>
+        <p style="color:var(--ink-soft);font-size:.9rem;margin-bottom:20px">No booking fees — enquire direct and save.</p>
+        <div class="form-field"><label for="c-name">Name</label><input id="c-name" type="text" placeholder="Your name"></div>
+        <div class="form-field"><label for="c-email">Email</label><input id="c-email" type="email" placeholder="you@email.com"></div>
+        <div class="form-field"><label for="c-tour">Which tour?</label>
+          <select id="c-tour">
+            <option>Hunter Valley Food &amp; Wine</option>
+            <option>Blue Mountains Day Trip</option>
+            <option>Orange &amp; Mudgee</option>
+            <option>Sydney Beaches &amp; Brewery</option>
+            <option>Kangaroo Valley</option>
+            <option>Southern Highlands</option>
+            <option>Half-Day Sydney Foodie</option>
+            <option>Central Coast Oysters</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div class="form-field"><label for="c-msg">Message</label><textarea id="c-msg" placeholder="Group size, dates, dietary needs…"></textarea></div>
+        <button type="button" class="btn btn-wine" id="sendEnquiry" style="width:100%;justify-content:center">Send enquiry</button>
+        <p id="enquiryDone" style="display:none;color:var(--green);font-weight:600;font-size:.9rem;margin-top:14px;text-align:center">Thanks — this is a preview, so nothing was sent. On the live site Jimmy would get this straight away. 🍷</p>
+      </div>
+    </div>
+  </section>
+</main><!-- /page-contact -->
+
+
+<!-- ===================== FAQ ===================== -->
+<main id="page-faq" class="page">
+  <section class="page-hero ph-faq">
+    <div class="ph-bg"></div>
+    <div class="wrap" style="position:relative;z-index:2">
+      <span class="eyebrow" style="color:var(--gold-soft)">Good to know</span>
+      <h1>Frequently Asked Questions</h1>
+      <p>Everything you might want to know before the day — and if it's not here, just ask.</p>
+    </div>
+  </section>
+
+  <section class="pad">
+    <div class="wrap">
+      <div class="faq">
+        <div class="faq-item">
+          <button class="faq-q" type="button">Can you cater for dietary requirements?</button>
+          <div class="faq-a"><p>Yes. As fellow food and wine lovers, we'll do our utmost to accommodate special diets — vegetarian, vegan, gluten-free and allergies. Just let us know when you book so your chef can plan the menu around you.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">Where do you pick up from?</button>
+          <div class="faq-a"><p>Door-to-door from selected Sydney hotels, roughly between 6:35 and 7:10am. Tell us where you're staying and we'll confirm your pickup time.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">What time do we get back?</button>
+          <div class="faq-a"><p>We aim to have you back in Sydney around 6:30pm. It's a full day — up to 11 hours door to door.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">How big are the groups?</button>
+          <div class="faq-a"><p>Always small — between 2 and 16 guests, never a coach. That's the whole point: a personal day with your chef and guide.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">Can children come along?</button>
+          <div class="faq-a"><p>Absolutely — the tour is family friendly for ages 4 and up. We can't accommodate infants aged 0–3, and under-18s can't be served alcohol under Australian licensing laws.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">What's included in the price?</button>
+          <div class="faq-a"><p>Pickup and drop-off, a progressive breakfast and lunch cooked by your chef/guide, three wine tastings matched to the menu, and comfortable air-conditioned transport all day.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">How do I save by booking direct?</button>
+          <div class="faq-a"><p>Book direct and select "Student of wine" at checkout to take $20 off the adult price — with no booking fees, and it goes straight to Jimmy rather than a booking platform.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">Do you run private tours?</button>
+          <div class="faq-a"><p>Yes — seven destinations across NSW for just your group, from 2 to 16 guests. Head to the Private Tours page or send an enquiry and we'll craft the day around you.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Still have a question?</h2>
+      <p>Send us a note — Jimmy's happy to help.</p>
+      <a class="btn btn-gold" href="#page-contact" data-page="contact">Contact us</a>
+    </div>
+  </section>
+</main><!-- /page-faq -->
+
+
+<!-- Slim book bar -->
+<div class="bookbar" id="bookbar">
+  <div class="bookbar-inner">
+    <div class="bb-txt"><b>Hunter Valley Food &amp; Wine Tour</b><span>From A$257 · Mon &amp; Wed · save $20/adult direct</span></div>
+    <div class="bb-actions">
+      <a class="btn btn-gold" href="#page-hunter" data-page="hunter">Book now</a>
+      <button class="bookbar-close" id="bookbarClose" aria-label="Hide">×</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <b>Gourmet Getaway Tours</b>
+        <p>Food, wine &amp; adventure tours from Sydney, New South Wales. Small groups, door to door.</p>
+      </div>
+      <div>
+        <h4>Tours</h4>
+        <ul>
+          <li><a href="#page-hunter" data-page="hunter">Hunter Valley Tour</a></li>
+          <li><a href="#page-private" data-page="private">Private Tours</a></li>
+          <li><a href="#">Gift cards</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#page-about" data-page="about">About Jimmy</a></li>
+          <li><a href="#page-contact" data-page="contact">Contact</a></li>
+          <li><a href="#page-faq" data-page="faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get in touch</h4>
+        <ul>
+          <li><a href="tel:+61416139567">0416 139 567</a></li>
+          <li><a href="#">info@gourmetgetawaytours.com.au</a></li>
+          <li>17 Allambie Rd, Allambie Heights NSW 2100</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Gourmet Getaway Tours · ACN 627 789 146</span>
+      <span>Cancellation policy · Terms &amp; conditions</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Direct-booking popup -->
+<div class="overlay" id="overlay">
+  <div class="modal modal-simple" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close-dark" id="closeModal" aria-label="Close">×</button>
+    <h3 id="modalTitle">Thanks for booking direct 🍷</h3>
+    <p>Save <b>$20 off the adult price</b> by selecting <b>“Student of wine”</b> at checkout.</p>
+    <button class="btn btn-wine" id="claimBtn">Got it</button>
+  </div>
+</div>
+
+<script>
+  // Popup after short delay
+  var overlay = document.getElementById('overlay');
+  var openModal = function(){ overlay.classList.add('show'); };
+  var closeModal = function(){ overlay.classList.remove('show'); };
+  setTimeout(openModal, 1400);
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  document.getElementById('claimBtn').addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+
+  // Simple page switching for the nav tabs
+  var pages = document.querySelectorAll('.page');
+  var navas = document.querySelectorAll('.nav-links a[data-page]');
+  function showPage(name){
+    pages.forEach(function(p){ p.classList.toggle('active', p.id === 'page-' + name); });
+    navas.forEach(function(a){ a.classList.toggle('current', a.getAttribute('data-page') === name); });
+    window.scrollTo({top:0, behavior:'auto'});
+    if(window.updateBookbar) window.updateBookbar();
+  }
+  document.querySelectorAll('[data-page]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      showPage(el.getAttribute('data-page'));
+    });
+  });
+
+  // Contact enquiry preview
+  var sendBtn = document.getElementById('sendEnquiry');
+  if(sendBtn){
+    sendBtn.addEventListener('click', function(){
+      document.getElementById('enquiryDone').style.display = 'block';
+    });
+  }
+
+  // Next departure (next Monday or Wednesday)
+  (function(){
+    var today = new Date();
+    var best = null;
+    for(var i=0;i<=7;i++){
+      var d = new Date(today); d.setDate(today.getDate()+i);
+      var day = d.getDay(); // 1=Mon,3=Wed
+      if(day===1 || day===3){ best = d; break; }
+    }
+    if(best){
+      var names=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var isToday = best.toDateString()===today.toDateString();
+      var label = (isToday?'today, ':'') + names[best.getDay()] + ' ' + best.getDate() + ' ' + months[best.getMonth()];
+      var txt = 'Next Hunter Valley departure: ' + label + ' · a few seats left';
+      ['departHome','departHunter'].forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent = txt; });
+    }
+  })();
+
+  // Direct-booking savings counter
+  (function(){
+    var num = document.getElementById('saveNum'), total = document.getElementById('saveTotal');
+    if(!num) return;
+    var adults = 2;
+    function render(){ num.textContent = adults; total.textContent = '$' + (adults*20); }
+    document.getElementById('savePlus').addEventListener('click', function(){ if(adults<16){adults++; render();} });
+    document.getElementById('saveMinus').addEventListener('click', function(){ if(adults>1){adults--; render();} });
+    render();
+  })();
+
+  // Wine & food pairing
+  (function(){
+    var pairs = [
+      {dish:'Fresh Sydney rock oysters', desc:"Shucked to order with a squeeze of lemon — the Semillon's citrus lift is made for briny, cold oysters.", wine:'Hunter Semillon', img:'linear-gradient(135deg,#2e5a5a,#4a8a8a)', label:'Photo — oysters'},
+      {dish:'Slow-cooked lamb shoulder', desc:'Pulled, sticky and rich, with rosemary and garlic — a bold Shiraz stands right up to it.', wine:'Shiraz', img:'linear-gradient(135deg,#6E1E2E,#9a4a2a)', label:'Photo — lamb'},
+      {dish:'Roast chicken & mushrooms', desc:'Buttery, herby and comforting — a gently oaked Chardonnay rounds out every bite.', wine:'Chardonnay', img:'linear-gradient(135deg,#8a6d2a,#d0a84b)', label:'Photo — roast chicken'},
+      {dish:'Grilled prawns & mango', desc:'Sweet, charred and fresh — the tropical notes of Verdelho echo the mango perfectly.', wine:'Verdelho', img:'linear-gradient(135deg,#3f5a2e,#8a9a4a)', label:'Photo — prawns'}
+    ];
+    var opts = document.querySelectorAll('.pair-opt');
+    var dish=document.getElementById('pairDish'), desc=document.getElementById('pairDesc'),
+        wth=document.getElementById('pairWith'), photo=document.getElementById('pairPhoto'),
+        img=document.getElementById('pairImg'), body=null;
+    if(!opts.length) return;
+    function select(i){
+      var p=pairs[i];
+      dish.textContent=p.dish; desc.textContent=p.desc; wth.textContent='Paired with '+p.wine;
+      img.textContent=p.label; photo.style.background=p.img;
+      photo.parentElement.classList.remove('fade-swap'); void photo.parentElement.offsetWidth;
+      photo.parentElement.classList.add('fade-swap');
+      opts.forEach(function(o){ o.classList.remove('active'); });
+      opts[i].classList.add('active');
+    }
+    opts.forEach(function(o){ o.addEventListener('click', function(){ select(+o.getAttribute('data-pair')); }); });
+    document.getElementById('pairPhoto').style.background = pairs[0].img;
+  })();
+
+  // Route map draw on scroll
+  (function(){
+    var map = document.getElementById('routeMap');
+    if(!map) return;
+    var reduceM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduceM || !('IntersectionObserver' in window)){ map.classList.add('drawn'); return; }
+    var mo = new IntersectionObserver(function(en){
+      en.forEach(function(e){ if(e.isIntersecting){ map.classList.add('drawn'); mo.disconnect(); } });
+    }, {threshold:.35});
+    mo.observe(map);
+  })();
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(function(q){
+    q.addEventListener('click', function(){
+      var item = q.parentElement;
+      var ans = q.nextElementSibling;
+      var open = item.classList.toggle('open');
+      ans.style.maxHeight = open ? ans.scrollHeight + 'px' : null;
+    });
+  });
+
+  // What's in season (Southern Hemisphere / Sydney)
+  (function(){
+    var badge=document.getElementById('seasonBadge'); if(!badge) return;
+    var m=new Date().getMonth();
+    var seasons={
+      summer:{name:'Summer',blurb:'Long, warm days — bright whites and fresh, lighter plates are the pick right now.',wine:'Chilled Semillon & Verdelho',food:'Stone fruit, tomatoes & seafood',c:'linear-gradient(135deg,#c0902b,#e0b84b)'},
+      autumn:{name:'Autumn',blurb:'Vintage season in the vines — fresh reds and earthy, comforting food come into their own.',wine:'Young Shiraz & vintage reds',food:'Figs, mushrooms & olives',c:'linear-gradient(135deg,#9a4a2a,#c06a2a)'},
+      winter:{name:'Winter',blurb:'Cool and cosy — big reds by the fire and slow-cooked, hearty plates are the order of the day.',wine:'Bold Shiraz & fortifieds',food:'Truffles, root veg & slow roasts',c:'linear-gradient(135deg,#551520,#8a2a3a)'},
+      spring:{name:'Spring',blurb:'The valley greens up — crisp whites, rosé and fresh spring produce lead the menu.',wine:'Crisp whites & rosé',food:'Asparagus, herbs & spring lamb',c:'linear-gradient(135deg,#4A5D3A,#7a8a3a)'}
+    };
+    var key = (m===11||m<2)?'summer':(m<5)?'autumn':(m<8)?'winter':'spring';
+    var s=seasons[key];
+    badge.style.background=s.c;
+    badge.innerHTML=s.name+'<small>in the Hunter</small>';
+    document.getElementById('seasonTitle').textContent='At its best this '+s.name.toLowerCase();
+    document.getElementById('seasonBlurb').textContent=s.blurb;
+    document.getElementById('seasonWine').textContent=s.wine;
+    document.getElementById('seasonFood').textContent=s.food;
+  })();
+
+  // Slim book bar
+  (function(){
+    var bar=document.getElementById('bookbar'); if(!bar) return;
+    var dismissed=false;
+    document.getElementById('bookbarClose').addEventListener('click', function(){ dismissed=true; bar.classList.remove('show'); });
+    window.updateBookbar=function(){
+      var active=document.querySelector('.page.active');
+      var onBookPage = active && (active.id==='page-home' || active.id==='page-hunter');
+      var scrolled = window.scrollY > 560;
+      bar.classList.toggle('show', !dismissed && onBookPage && scrolled);
+    };
+    window.addEventListener('scroll', window.updateBookbar, {passive:true});
+    window.updateBookbar();
+  })();
+
+  // Gentle reveal on scroll (skips if reduced motion preferred)
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reveals = document.querySelectorAll('.reveal');
+  if(reduce || !('IntersectionObserver' in window)){
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, {threshold:.2});
+    reveals.forEach(function(el){ io.observe(el); });
+  }
+</script>
+
+</body>
+</html>

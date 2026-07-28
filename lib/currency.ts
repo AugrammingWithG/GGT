@@ -32,7 +32,17 @@ export type CurrencyCode =
   | "SGD"
   | "PHP"
   | "JPY"
-  | "CAD";
+  | "CAD"
+  | "CNY"
+  | "HKD"
+  | "KRW"
+  | "INR"
+  | "THB"
+  | "IDR"
+  | "MYR"
+  | "TWD"
+  | "AED"
+  | "CHF";
 
 /** The currency every stored price is denominated in. */
 export const BASE_CURRENCY: CurrencyCode = "AUD";
@@ -72,6 +82,17 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyMeta> = {
   PHP: { symbol: "₱", locale: "en-PH", position: "before", label: "Philippine peso" },
   JPY: { symbol: "¥", locale: "ja-JP", position: "before", label: "Japanese yen" },
   CAD: { symbol: "CA$", locale: "en-CA", position: "before", label: "Canadian dollar" },
+  // CNY shows as "CN¥" rather than a bare "¥", which JPY already uses above.
+  CNY: { symbol: "CN¥", locale: "zh-CN", position: "before", label: "Chinese yuan" },
+  HKD: { symbol: "HK$", locale: "zh-HK", position: "before", label: "Hong Kong dollar" },
+  KRW: { symbol: "₩", locale: "ko-KR", position: "before", label: "South Korean won" },
+  INR: { symbol: "₹", locale: "en-IN", position: "before", label: "Indian rupee" },
+  THB: { symbol: "฿", locale: "th-TH", position: "before", label: "Thai baht" },
+  IDR: { symbol: "Rp", locale: "id-ID", position: "before", label: "Indonesian rupiah" },
+  MYR: { symbol: "RM", locale: "ms-MY", position: "before", label: "Malaysian ringgit" },
+  TWD: { symbol: "NT$", locale: "zh-TW", position: "before", label: "New Taiwan dollar" },
+  AED: { symbol: "AED", locale: "en-AE", position: "before", label: "UAE dirham" },
+  CHF: { symbol: "CHF", locale: "de-CH", position: "before", label: "Swiss franc" },
 };
 
 export const CURRENCY_CODES = Object.keys(CURRENCIES) as CurrencyCode[];
@@ -93,6 +114,16 @@ const COUNTRY_TO_CURRENCY: Record<string, CurrencyCode> = {
   PH: "PHP",
   JP: "JPY",
   CA: "CAD",
+  CN: "CNY",
+  HK: "HKD",
+  KR: "KRW",
+  IN: "INR",
+  TH: "THB",
+  ID: "IDR",
+  MY: "MYR",
+  TW: "TWD",
+  AE: "AED",
+  CH: "CHF",
   // Eurozone members only — EU countries on their own currency (PL, SE, CZ, …)
   // are deliberately absent so they see AUD rather than a wrong-currency price.
   AT: "EUR",
@@ -138,6 +169,16 @@ const ZONE_TO_COUNTRY: Record<string, string> = {
   "Asia/Singapore": "SG",
   "Asia/Tokyo": "JP",
   "Europe/London": "GB",
+  "Asia/Shanghai": "CN",
+  "Asia/Hong_Kong": "HK",
+  "Asia/Seoul": "KR",
+  "Asia/Kolkata": "IN",
+  "Asia/Bangkok": "TH",
+  "Asia/Jakarta": "ID",
+  "Asia/Kuala_Lumpur": "MY",
+  "Asia/Taipei": "TW",
+  "Asia/Dubai": "AE",
+  "Europe/Zurich": "CH",
   // United States
   "America/New_York": "US",
   "America/Detroit": "US",

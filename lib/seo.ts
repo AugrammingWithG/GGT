@@ -111,28 +111,37 @@ export function toursJsonLd(tours: Tour[]) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    itemListElement: tours.map((tour, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      item: {
-        "@type": "TouristTrip",
-        name: tour.name,
-        url: `${SITE_URL}/#builder`,
-        provider: { "@id": `${SITE_URL}/#organization` },
-        // Private tours are quoted by enquiry — no confirmed price, and a $0
-        // or null Offer is worse than omitting it. Hunter Valley is the only
-        // tour with its own price; its adult rate stands in as "the" price
-        // since Offer has no clean way to express three age-tier rates.
-        ...(tour.priceAdult != null && {
-          offers: {
-            "@type": "Offer",
-            price: tour.priceAdult,
-            priceCurrency: "AUD",
-            availability: "https://schema.org/InStock",
-            url: `${SITE_URL}/#builder`,
-          },
-        }),
-      },
-    })),
+    itemListElement: tours.map((tour, i) => {
+      // Hunter Valley is the one tour with its own page and a confirmed
+      // price; every other itinerary is quoted by enquiry from the private
+      // tours listing.
+      const url =
+        tour.priceAdult != null
+          ? `${SITE_URL}/hunter-valley-tour`
+          : `${SITE_URL}/private-tours`;
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "TouristTrip",
+          name: tour.name,
+          url,
+          provider: { "@id": `${SITE_URL}/#organization` },
+          // Private tours are quoted by enquiry — no confirmed price, and a $0
+          // or null Offer is worse than omitting it. Hunter Valley is the only
+          // tour with its own price; its adult rate stands in as "the" price
+          // since Offer has no clean way to express three age-tier rates.
+          ...(tour.priceAdult != null && {
+            offers: {
+              "@type": "Offer",
+              price: tour.priceAdult,
+              priceCurrency: "AUD",
+              availability: "https://schema.org/InStock",
+              url,
+            },
+          }),
+        },
+      };
+    }),
   };
 }
