@@ -10,6 +10,9 @@
   --ink-soft:#6A6157;
   --wine:#6E1E2E;
   --wine-deep:#551520;
+  /* Opaque wine, paired with fixed white button/badge text — unlike --wine
+     above, this never brightens in dark mode, so that pairing stays legible. */
+  --wine-solid:#6E1E2E;
   --green:#4A5D3A;
   --gold-muted:#C0902B;
   --gold-soft:#E7C878;
@@ -17,6 +20,10 @@
   --white:#ffffff;
   --shadow:0 14px 40px rgba(43,38,34,.12);
   --shadow-sm:0 6px 18px rgba(43,38,34,.08);
+  --header-bg:rgba(251,248,243,.92);
+  --tint-green:#eef3e6;
+  --tint-wine:#fbf1f2;
+  --tint-wine-border:#eccdd1;
   --r:14px;
   --nav-h:92px;
   --section:clamp(52px,7.6vw,84px);
@@ -47,8 +54,39 @@
   --on-glass:rgba(255,255,255,.94);
   --on-glass-dim:rgba(255,255,255,.66);
 }
+
+/* ===========================================================
+   Dark theme — same token names, re-pointed at a dark "paper / wine /
+   gold" palette so every public-site rule above picks it up for free.
+   Toggled via ThemeToggle.tsx, which sets this attribute on <html> (and
+   the blocking script in app/layout.tsx sets it before first paint, so
+   there's no flash of the wrong theme). Doesn't touch the admin-legacy
+   tokens — the admin dashboard has always been dark and isn't affected.
+   =========================================================== */
+:root[data-theme="dark"]{
+  --paper:#191512;
+  --paper-2:#221D18;
+  --ink:#F1E9DE;
+  --ink-soft:#B7AA98;
+  --wine:#D9899E;
+  --wine-deep:#EFB3C1;
+  --green:#8AA473;
+  --gold-muted:#D9A94A;
+  --gold-soft:#F0D896;
+  --line:#3A342C;
+  --white:#241E19;
+  --shadow:0 14px 40px rgba(0,0,0,.5);
+  --shadow-sm:0 6px 18px rgba(0,0,0,.4);
+  --header-bg:rgba(25,21,18,.85);
+  --tint-green:rgba(138,164,115,.16);
+  --tint-wine:rgba(217,137,158,.14);
+  --tint-wine-border:rgba(217,137,158,.35);
+  /* --wine-solid deliberately not overridden: it stays the original opaque
+     wine in both themes, see the definition above. */
+}
+html[data-theme="dark"]{color-scheme:dark}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;color-scheme:light}
 body{
   background:var(--paper);
   color:var(--ink);
@@ -56,6 +94,7 @@ body{
   font-weight:400;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
+  transition:background-color .25s ease,color .25s ease;
 }
 h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.12;color:var(--ink)}
 a{color:inherit;text-decoration:none}
@@ -73,17 +112,17 @@ img{max-width:100%;display:block}
   transition:transform .15s ease, background .15s ease, color .15s ease;white-space:nowrap}
 .btn:hover{transform:translateY(-2px)}
 .btn:disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
-.btn-wine{background:var(--wine);color:#fff}
+.btn-wine{background:var(--wine-solid);color:#fff}
 .btn-wine:hover{background:var(--wine-deep)}
 .btn-outline{background:transparent;border-color:var(--ink);color:var(--ink)}
 .btn-outline:hover{background:var(--ink);color:var(--paper)}
 .btn-gold{background:var(--gold-muted);color:#2b2210}
 .btn-gold:hover{background:var(--gold-soft)}
 .btn-outline-light{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.7);color:#fff;backdrop-filter:blur(4px)}
-.btn-outline-light:hover{background:#fff;color:var(--wine);border-color:#fff}
+.btn-outline-light:hover{background:#fff;color:var(--wine-solid);border-color:#fff}
 
 /* Header */
-header{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+header{position:sticky;top:0;z-index:50;background:var(--header-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
   transition:background .3s ease,border-color .3s ease,backdrop-filter .3s ease}
 /* Home page only (Header.tsx): floats transparent over the hero video —
    letting the video be the header's "background" — until the visitor
@@ -96,7 +135,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.92);backdro
    winning the cascade on properties this rule didn't redeclare and were
    stretching the header to fill the whole viewport. */
 header.header-overlay{position:fixed;left:0;right:0;top:0;z-index:50;background:transparent;backdrop-filter:none;border-bottom-color:transparent}
-header.header-overlay.header-scrolled{background:rgba(251,248,243,.92);backdrop-filter:blur(10px);border-bottom-color:var(--line)}
+header.header-overlay.header-scrolled{background:var(--header-bg);backdrop-filter:blur(10px);border-bottom-color:var(--line)}
 header.header-overlay:not(.header-scrolled) .brand-word b{color:#fff}
 header.header-overlay:not(.header-scrolled) .brand-word span{color:rgba(255,255,255,.75)}
 header.header-overlay:not(.header-scrolled) .nav-links a:not(.btn),
@@ -106,13 +145,13 @@ header.header-overlay:not(.header-scrolled) .nav-links button:not(.btn)::after{b
 header.header-overlay:not(.header-scrolled) .nav-links a[aria-current="page"]{color:var(--gold-soft)}
 header.header-overlay:not(.header-scrolled) .burger span{background:#fff}
 header.header-overlay:not(.header-scrolled) .btn-wine{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.5);color:#fff;backdrop-filter:blur(4px)}
-header.header-overlay:not(.header-scrolled) .btn-wine:hover{background:#fff;color:var(--wine)}
+header.header-overlay:not(.header-scrolled) .btn-wine:hover{background:#fff;color:var(--wine-solid)}
 /* The mobile dropdown is solid cream regardless — its own contents need
    full-strength ink/wine, not the white-on-video overrides above. */
 header.header-overlay .nav-links.open a:not(.btn),
 header.header-overlay .nav-links.open button:not(.btn){color:var(--ink)}
 header.header-overlay .nav-links.open a[aria-current="page"]{color:var(--wine)}
-header.header-overlay .nav-links.open .btn-wine{background:var(--wine);border-color:var(--wine);color:#fff;backdrop-filter:none}
+header.header-overlay .nav-links.open .btn-wine{background:var(--wine-solid);border-color:var(--wine-solid);color:#fff;backdrop-filter:none}
 header.header-overlay .nav-links.open .btn-wine:hover{background:var(--wine-deep)}
 header .wrap{max-width:1440px}
 .nav{display:flex;align-items:center;justify-content:space-between;height:var(--nav-h);gap:20px}
@@ -128,6 +167,11 @@ header .wrap{max-width:1440px}
 .nav-links a:not(.btn)::after,.nav-links button:not(.btn)::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--wine);transition:width .2s}
 .nav-links a:not(.btn):hover::after,.nav-links button:not(.btn):hover::after,.nav-links a[aria-current="page"]::after{width:100%}
 .header-logo{height:76px;width:auto;flex:none}
+.theme-toggle{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;
+  border:1px solid var(--line);background:none;color:var(--ink-soft);cursor:pointer;transition:color .15s ease,border-color .15s ease,background .15s ease}
+.theme-toggle:hover{color:var(--wine);border-color:var(--wine)}
+header.header-overlay:not(.header-scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.5)}
+header.header-overlay:not(.header-scrolled) .theme-toggle:hover{color:var(--gold-soft);border-color:var(--gold-soft)}
 .burger{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:8px}
 .burger span{width:24px;height:2px;background:var(--ink);display:block}
 /* 1400px, not 900px: with 8 nav links + the Book Now button, the row needs
@@ -235,7 +279,7 @@ section.pad{padding:78px 0}
 @media(max-width:900px){.sig-grid{grid-template-columns:1fr;gap:32px}}
 
 /* Next-departure pill */
-.depart-pill{display:flex;width:fit-content;align-items:center;gap:9px;background:#eef3e6;color:var(--green);
+.depart-pill{display:flex;width:fit-content;align-items:center;gap:9px;background:var(--tint-green);color:var(--green);
   font-size:.85rem;font-weight:600;padding:.5em 1em;border-radius:100px;margin-bottom:16px}
 .depart-pill .dot{width:8px;height:8px;border-radius:50%;background:var(--green);position:relative}
 .depart-pill .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--green);opacity:.5;animation:pulse 1.9s ease-out infinite}
@@ -257,7 +301,7 @@ section.pad{padding:78px 0}
 .from{font-size:.8rem;color:var(--ink-soft)}
 .from b{display:block;font-family:var(--font-display);font-size:1.15rem;color:var(--wine)}
 .tag-online{display:inline-block;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--green);background:#eef3e6;padding:.3em .7em;border-radius:100px;margin-bottom:10px}
+  color:var(--green);background:var(--tint-green);padding:.3em .7em;border-radius:100px;margin-bottom:10px}
 /* Enquire-only cards with no confirmed price skip the "from $X" line
    entirely (see TourCard.tsx) — the button fills the row instead of
    sitting stranded on one side of an empty space-between row. */
@@ -313,7 +357,7 @@ section.pad{padding:78px 0}
 .pair-opt b{font-family:var(--font-display);font-size:1.1rem;display:block;color:var(--ink);line-height:1.2}
 .pair-opt span{font-size:.82rem;color:var(--ink-soft)}
 .pair-opt:hover{border-color:var(--wine)}
-.pair-opt.active{border-color:var(--wine);background:#fbf1f2;box-shadow:var(--shadow-sm)}
+.pair-opt.active{border-color:var(--wine);background:var(--tint-wine);box-shadow:var(--shadow-sm)}
 .pair-opt.active b{color:var(--wine)}
 .pair-plate{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
 .pair-photo{height:210px;position:relative;background-size:cover;background-position:center}
@@ -321,23 +365,10 @@ section.pad{padding:78px 0}
 .pair-plate-body{padding:26px}
 .pair-plate-body h3{font-size:1.5rem;margin-bottom:8px}
 .pair-plate-body p{color:var(--ink-soft);font-size:.96rem}
-.pair-match{display:inline-block;margin-top:14px;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:#eef3e6;padding:.35em .9em;border-radius:100px}
+.pair-match{display:inline-block;margin-top:14px;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:var(--tint-green);padding:.35em .9em;border-radius:100px}
 .fade-swap{animation:fadeIn .35s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @media(max-width:900px){.pair-grid{grid-template-columns:1fr;gap:24px}}
-
-/* What's in season panel */
-.season{max-width:880px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:var(--r);
-  padding:30px 34px;box-shadow:var(--shadow-sm);display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center}
-.season-badge{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;text-align:center;
-  color:#fff;font-family:var(--font-display);font-weight:600;font-size:1.2rem;line-height:1.1;flex:none}
-.season-badge small{display:block;font-family:var(--font);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;opacity:.9;margin-top:3px}
-.season-body h3{font-size:1.4rem;margin-bottom:4px}
-.season-body>p{color:var(--ink-soft);font-size:.92rem;margin-bottom:14px}
-.season-cols{display:flex;gap:40px;flex-wrap:wrap}
-.season-col span{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px}
-.season-col b{font-family:var(--font-display);font-size:1.02rem;color:var(--wine);font-weight:600}
-@media(max-width:900px){.season{grid-template-columns:1fr;text-align:center;justify-items:center;gap:18px}}
 
 /* Mission band */
 .mission{background:linear-gradient(135deg,var(--green),#37472a);color:#fff;text-align:center}
@@ -363,8 +394,8 @@ section.pad{padding:78px 0}
 .save-card h3{font-size:1.5rem;margin-bottom:6px}
 .save-card .sub{color:var(--ink-soft);font-size:.95rem;margin-bottom:8px}
 .save-stepper{display:inline-flex;align-items:center;gap:22px;margin:16px 0 8px}
-.save-stepper button{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--wine);background:#fff;color:var(--wine);font-size:1.5rem;cursor:pointer;line-height:1;transition:all .15s}
-.save-stepper button:hover{background:var(--wine);color:#fff}
+.save-stepper button{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--wine);background:var(--white);color:var(--wine);font-size:1.5rem;cursor:pointer;line-height:1;transition:all .15s}
+.save-stepper button:hover{background:var(--wine-solid);color:#fff}
 .save-stepper .count{font-family:var(--font-display);font-size:2rem;min-width:52px}
 .save-stepper .count small{display:block;font-family:var(--font);font-size:.7rem;color:var(--ink-soft);font-weight:500;letter-spacing:.1em;text-transform:uppercase}
 .save-amount{font-family:var(--font-display);font-size:3.4rem;color:var(--gold-muted);font-weight:700;line-height:1;margin-top:14px}
@@ -472,7 +503,7 @@ section.pad{padding:78px 0}
 @media(max-width:900px){.highlight-list{border-left:0;padding-left:0}}
 
 /* CTA band */
-.cta-band{background:var(--wine);color:#fff;text-align:center;padding:60px 0}
+.cta-band{background:var(--wine-solid);color:#fff;text-align:center;padding:60px 0}
 .cta-band h2{color:#fff;font-size:clamp(1.6rem,3.6vw,2.3rem);margin-bottom:.25em}
 .cta-band p{color:rgba(255,255,255,.85);margin-bottom:1.4em}
 
@@ -509,11 +540,11 @@ section.pad{padding:78px 0}
 .tl-body p{color:var(--ink-soft);font-size:.93rem}
 
 /* Restrictions */
-.restrict{max-width:760px;margin:26px auto 0;background:#fbf1f2;border:1px solid #eccdd1;border-radius:var(--r);padding:22px 26px}
+.restrict{max-width:760px;margin:26px auto 0;background:var(--tint-wine);border:1px solid var(--tint-wine-border);border-radius:var(--r);padding:22px 26px}
 .restrict h4{font-family:var(--font);font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--wine);margin-bottom:10px}
 .restrict ul{list-style:none;display:grid;gap:8px}
 .restrict li{position:relative;padding-left:22px;font-size:.92rem;color:var(--ink)}
-.restrict li::before{content:"!";position:absolute;left:0;top:0;width:16px;height:16px;border-radius:50%;background:var(--wine);color:#fff;font-size:.7rem;font-weight:700;display:grid;place-items:center}
+.restrict li::before{content:"!";position:absolute;left:0;top:0;width:16px;height:16px;border-radius:50%;background:var(--wine-solid);color:#fff;font-size:.7rem;font-weight:700;display:grid;place-items:center}
 
 /* FAQ accordion */
 .faq{max-width:760px;margin:0 auto}
@@ -527,7 +558,7 @@ section.pad{padding:78px 0}
 /* ===================== Private Tours page ===================== */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;max-width:960px;margin:0 auto}
 .step{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px 26px;box-shadow:var(--shadow-sm);text-align:center}
-.step-n{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--wine);color:#fff;font-family:var(--font-display);font-size:1.3rem;font-weight:600;margin-bottom:14px}
+.step-n{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--wine-solid);color:#fff;font-family:var(--font-display);font-size:1.3rem;font-weight:600;margin-bottom:14px}
 .step h3{font-size:1.2rem;margin-bottom:6px}
 .step p{color:var(--ink-soft);font-size:.93rem}
 @media(max-width:900px){.steps{grid-template-columns:1fr}}
@@ -541,12 +572,23 @@ section.pad{padding:78px 0}
 @media(max-width:700px){.guide-grid{grid-template-columns:1fr}}
 
 .pickup-list{max-width:760px;margin:0 auto;display:grid;gap:2px}
-.pickup-item{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:16px 4px;border-bottom:1px dashed var(--line)}
+.pickup-item{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:16px 4px;border-bottom:1px dashed var(--line)}
 .pickup-item:last-child{border-bottom:0}
-.pickup-item b{font-size:.98rem;color:var(--ink)}
+.pickup-item b{display:block;font-size:.98rem;color:var(--ink)}
 .pickup-item span{font-family:var(--font-display);color:var(--wine);font-weight:600;white-space:nowrap}
+.pickup-item-link{display:inline-block;margin-top:3px;font-size:.76rem;color:var(--wine);text-decoration:underline;text-underline-offset:2px}
+.pickup-item-link:hover{color:var(--wine-deep)}
 .map-embed{border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);max-width:960px;margin:0 auto;border:1px solid var(--line)}
 .map-embed iframe{width:100%;height:380px;display:block;border:0}
+
+/* Interactive pick-up points map (components/PickupMap.tsx), built on
+   Leaflet + free OpenStreetMap tiles — no API key needed. */
+.pickup-map-embed{margin-bottom:28px}
+.pickup-map{width:100%;height:380px}
+.pickup-map-pin{filter:drop-shadow(0 2px 3px rgba(43,38,34,.35))}
+.pickup-map .leaflet-popup-content-wrapper{border-radius:10px;box-shadow:var(--shadow-sm)}
+.pickup-map .leaflet-popup-content{margin:10px 14px;font-family:var(--font);font-size:.85rem;line-height:1.5;color:var(--ink)}
+.pickup-map .leaflet-popup-content a{color:var(--wine);font-weight:600}
 
 /* Destinations grouped by direction: a genuine compass layout, not a card
    grid with a badge — North sits above the compass, South below, East and
@@ -571,8 +613,26 @@ section.pad{padding:78px 0}
 .compass-rose{overflow:visible;display:block}
 .compass-hub .compass-rose{width:min(240px,86%);height:auto}
 .compass-label{font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:.04em;fill:var(--ink-soft)}
-.region-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;height:100%}
-.region-badge{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--wine);color:#fff;font-size:1.4rem;line-height:1;margin-bottom:12px}
+.region-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;height:100%;transition:transform .3s ease,box-shadow .3s ease}
+.region-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+
+/* Editorial photo split: a large top photo with a smaller inset photo
+   hanging over its bottom-right corner, both shown in full colour. On card
+   hover the large photo zooms in very slightly and the inset nudges up —
+   see region-photo-main / -inset below. Swap a real photo in via
+   `region.photos[n].image` (lib/regions.ts). */
+.region-photos{position:relative;height:190px;flex-shrink:0}
+.region-photo-main-wrap{position:absolute;inset:0;overflow:hidden}
+.region-photo{background-size:cover;background-position:center}
+.region-photo-main{position:absolute;inset:0;transform:scale(1);transition:transform .5s ease}
+.region-card:hover .region-photo-main{transform:scale(1.045)}
+.region-photo-inset{position:absolute;right:18px;bottom:-26px;width:44%;height:110px;border-radius:10px;border:3px solid #fff;box-shadow:0 10px 24px rgba(43,38,34,.18);z-index:2;transition:transform .35s ease}
+.region-card:hover .region-photo-inset{transform:translateY(-6px)}
+.region-photo-label{position:absolute;left:10px;bottom:10px;z-index:3;color:#fff;font-size:.68rem;letter-spacing:.06em;background:rgba(43,38,34,.45);padding:.35em .8em;border-radius:100px}
+.region-photo-inset .region-photo-label{left:8px;bottom:8px;font-size:.62rem;padding:.3em .65em}
+
+.region-body{padding:44px 28px 30px;display:flex;flex-direction:column;flex:1}
+.region-badge{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--wine-solid);color:#fff;font-size:1.4rem;line-height:1;margin-bottom:12px}
 .region-direction{display:block;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--wine);font-weight:600;margin-bottom:6px}
 .region-card h3{font-size:1.3rem;margin-bottom:16px}
 .region-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:20px;flex:1}
@@ -611,23 +671,26 @@ section.pad{padding:78px 0}
 @media(max-width:900px){.recipe-card{grid-template-columns:1fr}}
 
 /* ===================== Contact page ===================== */
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start}
+/* The enquiry form usually runs taller than this column — pin it alongside
+   the form on scroll instead of leaving it stranded above a blank gap. */
+.contact-info{position:sticky;top:104px}
 .contact-item{display:flex;gap:14px;margin-bottom:18px;align-items:flex-start}
 .ci-ic{width:40px;height:40px;flex:none;border-radius:50%;background:var(--paper-2);display:grid;place-items:center;font-size:1.1rem}
 .contact-item b{font-size:.95rem}
 .contact-item a{color:var(--wine);font-weight:500}
-.contact-map{height:220px;border-radius:var(--r);margin-top:14px;background:linear-gradient(135deg,var(--green),var(--wine));position:relative;box-shadow:var(--shadow-sm)}
-.contact-map span{position:absolute;bottom:14px;left:14px;color:#fff;font-size:.72rem;background:rgba(0,0,0,.4);padding:.4em .9em;border-radius:100px}
+.contact-map{height:280px;border-radius:var(--r);overflow:hidden;margin-top:14px;position:relative;box-shadow:var(--shadow-sm);border:1px solid var(--line)}
+.contact-map .pickup-map{height:100%}
 .contact-form{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:32px;box-shadow:var(--shadow-sm)}
 .form-field{margin-bottom:16px}
 .form-field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px}
 .form-field input,.form-field textarea,.form-field select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-family:inherit;font-size:.95rem;background:var(--paper);color:var(--ink)}
 .form-field textarea{min-height:118px;resize:vertical}
 .form-field input:focus,.form-field textarea:focus,.form-field select:focus{outline:2px solid var(--gold-muted);border-color:var(--gold-muted)}
-@media(max-width:900px){.contact-grid{grid-template-columns:1fr;gap:36px}}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr;gap:36px}.contact-info{position:static}}
 
 /* ===================== Slim book bar ===================== */
-.bookbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--wine);color:#fff;
+.bookbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--wine-solid);color:#fff;
   transform:translateY(115%);transition:transform .32s ease;box-shadow:0 -6px 24px rgba(0,0,0,.18)}
 .bookbar.show{transform:none}
 .bookbar-inner{max-width:1180px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
@@ -698,11 +761,11 @@ footer ul a:hover,footer ul button:hover{color:#fff}
   font-size:1.15rem;cursor:pointer;line-height:1;float:right}
 .modal-close:hover,.modal-close-dark:hover{background:var(--line)}
 .form-msg{padding:12px 14px;border-radius:12px;font-size:.85rem;margin-bottom:16px}
-.modal .form-msg.ok{background:#eef3e6;color:var(--green)}
-.modal .form-msg.err{background:#fbeae6;color:var(--wine-deep)}
+.modal .form-msg.ok{background:var(--tint-green);color:var(--green)}
+.modal .form-msg.err{background:var(--tint-wine);color:var(--wine-deep)}
 .modal .btn-ghost{border-color:var(--ink);color:var(--ink);background:transparent}
 .modal .btn-ghost:hover{background:var(--ink);color:var(--paper)}
-.modal .btn-primary{background:var(--wine);color:#fff}
+.modal .btn-primary{background:var(--wine-solid);color:#fff}
 .modal .btn-primary:hover{background:var(--wine-deep)}
 .clause-list{list-style:none;display:flex;flex-direction:column;gap:12px;background:var(--paper-2);border:1px solid var(--line);
   border-radius:12px;padding:16px 18px;margin-bottom:16px;max-height:44vh;overflow-y:auto}
@@ -744,7 +807,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
 .legal-more{margin-top:34px;font-size:13px}
 .legal-more a{color:var(--wine);border-bottom:1.5px solid var(--gold-muted);padding-bottom:2px}
 .legal-more a:hover{color:var(--wine-deep)}
-.draft-banner{background:#fbeae6;border:1.5px solid var(--wine);border-radius:12px;padding:16px 20px;font-size:14px;line-height:1.55;color:var(--ink)}
+.draft-banner{background:var(--tint-wine);border:1.5px solid var(--wine);border-radius:12px;padding:16px 20px;font-size:14px;line-height:1.55;color:var(--ink)}
 .draft-banner strong{color:var(--wine)}
 .legal-prose{margin-top:34px;font-size:16px;line-height:1.7;color:var(--ink)}
 .legal-prose h2:first-child{margin-top:0}
@@ -759,6 +822,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
   .scroll-cue .arrow{animation:none}
   .reveal{opacity:1;transform:none;transition:none}
   *{scroll-behavior:auto}
+  .region-card,.region-photo-main,.region-photo-inset{transition:none}
+  .region-card:hover{transform:none}
+  .region-card:hover .region-photo-main{transform:none}
+  .region-card:hover .region-photo-inset{transform:none}
+  body{transition:none}
 }
 
 /* ===========================================================

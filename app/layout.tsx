@@ -12,6 +12,7 @@ import CurrencyProvider from "@/components/CurrencyProvider";
 import { SITE_URL, SITE_NAME, HOME_DESCRIPTION, organizationJsonLd } from "@/lib/seo";
 import { FAREHARBOR_ENABLED } from "@/lib/fareharbor";
 import { detectCountry } from "@/lib/geo.server";
+import { themeInitScript } from "@/lib/theme";
 
 // Kept loaded: app/admin/admin.css and app/admin/login/page.tsx still read
 // `--font-mono` (see the admin-legacy section of globals.css).
@@ -80,7 +81,7 @@ export default async function RootLayout({
   const country = await detectCountry();
 
   return (
-    <html lang="en-AU">
+    <html lang="en-AU" suppressHydrationWarning>
       <body
         className={`${plexMono.variable} ${fraunces.variable} ${workSans.variable}`}
         style={
@@ -90,6 +91,10 @@ export default async function RootLayout({
           } as React.CSSProperties
         }
       >
+        {/* Sets <html data-theme> from localStorage/system preference before
+            first paint, so there's no flash of the wrong theme. Must run
+            before Header (or anything else) renders. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript() }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

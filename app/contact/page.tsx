@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
+import PickupMap from "@/components/PickupMap";
+import { BUSINESS_BASE_POINT, PICKUP_POINTS } from "@/lib/pickups";
 import {
   BUSINESS_ADDRESS,
   BUSINESS_EMAIL,
@@ -32,7 +34,7 @@ export default function ContactPage() {
 
       <section className="pad">
         <div className="wrap contact-grid">
-          <div>
+          <div className="contact-info">
             <span className="eyebrow">Get in touch</span>
             <h2 style={{ fontSize: "1.9rem", margin: ".3em 0 .8em" }}>Reach us directly</h2>
             <div className="contact-item">
@@ -69,7 +71,7 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="contact-map">
-              <span>Pickup area &amp; base</span>
+              <PickupMap points={PICKUP_POINTS} basePoint={BUSINESS_BASE_POINT} />
             </div>
           </div>
           <div className="contact-form">
