@@ -20,6 +20,8 @@ export type EnquiryFields = {
   total: number;
   /** "YYYY-MM-DD" */
   preferredDate: string;
+  /** Compass region for private-tour enquiries; blank for other enquiry sources. */
+  region?: string;
 };
 
 /** A confirmed booking — an enquiry with a locked-in tour date. */
@@ -47,6 +49,7 @@ async function getResend(): Promise<{ resend: import("resend").Resend; from: str
 
 /** Formats "2026-08-05" as "Wednesday, 5 August 2026" without timezone drift. */
 function prettyDate(ymd: string): string {
+  if (!ymd) return "Flexible / not specified";
   const [y, m, d] = ymd.split("-").map(Number);
   const dt = new Date(Date.UTC(y, m - 1, d, 12));
   return dt.toLocaleDateString("en-AU", {
@@ -64,6 +67,19 @@ function addOnsLine(addOns: EnquiryFields["addOns"]): string {
 
 function guestsLabel(n: number): string {
   return `${n} guest${n > 1 ? "s" : ""}`;
+}
+
+/** Only private-tour enquiries carry a region — omitted entirely for other flows. */
+function regionLine(region?: string): string[] {
+  return region ? [`Region of interest: ${region}`] : [];
+}
+
+/** Business inbox recipients — ENQUIRY_TO_EMAIL may be one address or several, comma-separated. */
+function businessRecipients(): string[] {
+  return (process.env.ENQUIRY_TO_EMAIL ?? "")
+    .split(",")
+    .map((e) => e.trim())
+    .filter(Boolean);
 }
 
 /**
@@ -90,11 +106,11 @@ export async function sendEnquiryNotification(
   id: string,
 ): Promise<void> {
   const cfg = await getResend();
-  const to = process.env.ENQUIRY_TO_EMAIL;
-  if (!cfg || !to) return;
+  const to = businessRecipients();
+  if (!cfg || !to.length) return;
 
   try {
-    await cfg.resend.emails.send({
+    const { error } = await cfg.resend.emails.send({
       from: cfg.from,
       to,
       replyTo: data.email,
@@ -104,6 +120,7 @@ export async function sendEnquiryNotification(
         ``,
         `Tour: ${data.tourName}`,
         `Preferred date: ${prettyDate(data.preferredDate)}`,
+        ...regionLine(data.region),
         `Guests: ${data.guests}`,
         `Add-ons: ${addOnsLine(data.addOns)}`,
         `Estimated total: ${money(data.total)}`,
@@ -117,6 +134,7 @@ export async function sendEnquiryNotification(
         data.message || "No message provided",
       ].join("\n"),
     });
+    if (error) throw error;
   } catch (err) {
     console.error("Enquiry notification failed (enquiry still saved):", err);
   }
@@ -128,7 +146,7 @@ export async function sendEnquiryAck(data: EnquiryFields): Promise<void> {
   if (!cfg) return;
 
   try {
-    await cfg.resend.emails.send({
+    const { error } = await cfg.resend.emails.send({
       from: cfg.from,
       to: data.email,
       subject: `We've got your enquiry: ${data.tourName}`,
@@ -139,6 +157,7 @@ export async function sendEnquiryAck(data: EnquiryFields): Promise<void> {
         ``,
         `Tour: ${data.tourName}`,
         `Preferred date: ${prettyDate(data.preferredDate)}`,
+        ...regionLine(data.region),
         `Guests: ${guestsLabel(data.guests)}`,
         `Add-ons: ${addOnsLine(data.addOns)}`,
         `Estimated total: ${money(data.total)}`,
@@ -152,6 +171,7 @@ export async function sendEnquiryAck(data: EnquiryFields): Promise<void> {
         `Gourmet Getaway Tours`,
       ].join("\n"),
     });
+    if (error) throw error;
   } catch (err) {
     console.error("Enquiry acknowledgement failed (enquiry still saved):", err);
   }
@@ -172,7 +192,7 @@ export async function sendConfirmation(booking: BookingFields): Promise<boolean>
 
   let guestSent = false;
   try {
-    await cfg.resend.emails.send({
+    const { error } = await cfg.resend.emails.send({
       from: cfg.from,
       to: booking.email,
       subject: `You're booked! ${booking.tourName} (${dateLabel})`,
@@ -205,15 +225,16 @@ export async function sendConfirmation(booking: BookingFields): Promise<boolean>
         },
       ],
     });
+    if (error) throw error;
     guestSent = true;
   } catch (err) {
     console.error("Guest confirmation email failed:", err);
   }
 
-  const to = process.env.ENQUIRY_TO_EMAIL;
-  if (to) {
+  const to = businessRecipients();
+  if (to.length) {
     try {
-      await cfg.resend.emails.send({
+      const { error } = await cfg.resend.emails.send({
         from: cfg.from,
         to,
         replyTo: booking.email,
@@ -232,6 +253,7 @@ export async function sendConfirmation(booking: BookingFields): Promise<boolean>
           `Phone: ${booking.phone || "Not provided"}`,
         ].join("\n"),
       });
+      if (error) throw error;
     } catch (err) {
       console.error("Jimmy confirmation email failed:", err);
     }

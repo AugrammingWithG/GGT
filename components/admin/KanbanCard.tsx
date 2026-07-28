@@ -46,7 +46,10 @@ export default function KanbanCard({
             <Trash2 className="size-3.5" />
           </button>
         </div>
-        <p className="mt-0.5 text-xs text-muted-foreground">{e.tourName}</p>
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          {e.tourName}
+          {e.region && ` · ${e.region}`}
+        </p>
 
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">

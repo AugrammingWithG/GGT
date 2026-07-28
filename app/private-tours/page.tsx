@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BookingCta from "@/components/BookingCta";
+import ContactForm from "@/components/ContactForm";
 import { tourItemId } from "@/lib/fareharbor";
 
 export const metadata: Metadata = {
@@ -68,6 +69,18 @@ export default function PrivateToursPage() {
           <BookingCta itemId={tourItemId()} className="btn btn-gold">
             Enquire now
           </BookingCta>
+        </div>
+      </section>
+
+      <section className="pad">
+        <div className="wrap" style={{ maxWidth: 560 }}>
+          <div className="sec-head">
+            <span className="eyebrow">Not ready to book?</span>
+            <h2>Ask us first</h2>
+          </div>
+          <div className="contact-form">
+            <ContactForm />
+          </div>
         </div>
       </section>
     </>

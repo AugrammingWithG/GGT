@@ -2,25 +2,19 @@
 
 import { useState } from "react";
 
-const TOUR_OPTIONS = [
-  "Hunter Valley Food & Wine",
-  "Blue Mountains Day Trip",
-  "Orange & Mudgee",
-  "Sydney Beaches & Brewery",
-  "Kangaroo Valley",
-  "Southern Highlands",
-  "Half-Day Sydney Foodie",
-  "Central Coast Oysters",
-  "Not sure yet",
-];
+const REGION_OPTIONS = ["North", "East", "West", "South", "Not sure"];
 
 type Status = "idle" | "sending" | "ok" | "err";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [tour, setTour] = useState(TOUR_OPTIONS[0]);
+  const [phone, setPhone] = useState("");
+  const [region, setRegion] = useState("");
+  const [guests, setGuests] = useState("");
+  const [date, setDate] = useState("");
   const [message, setMessage] = useState("");
+  const [company, setCompany] = useState(""); // honeypot
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
 
@@ -35,13 +29,17 @@ export default function ContactForm() {
         body: JSON.stringify({
           name,
           email,
+          phone,
           message,
+          region,
+          preferredDate: date,
+          guests: guests ? Number(guests) : 2,
           tourId: "contact-form",
-          tourName: tour,
-          guests: 1,
+          tourName: "Private Tour Enquiry",
           addOns: [],
           payOnDayAddOns: [],
           total: 0,
+          company,
         }),
       });
       if (!res.ok) {
@@ -58,7 +56,7 @@ export default function ContactForm() {
   if (status === "ok") {
     return (
       <p style={{ color: "var(--green)", fontWeight: 600, fontSize: ".9rem", textAlign: "center" }}>
-        Thanks — your enquiry is in. Jimmy will get back to you shortly. 🍷
+        Thanks! Your enquiry&apos;s on its way. Jimmy will get back to you soon.
       </p>
     );
   }
@@ -89,22 +87,65 @@ export default function ContactForm() {
         />
       </div>
       <div className="form-field">
-        <label htmlFor="c-tour">Which tour?</label>
-        <select id="c-tour" value={tour} onChange={(e) => setTour(e.target.value)}>
-          {TOUR_OPTIONS.map((t) => (
-            <option key={t}>{t}</option>
+        <label htmlFor="c-phone">Phone (optional)</label>
+        <input
+          id="c-phone"
+          type="tel"
+          placeholder="04xx xxx xxx"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+      </div>
+      <div className="form-field">
+        <label htmlFor="c-region">Region of interest</label>
+        <select id="c-region" value={region} onChange={(e) => setRegion(e.target.value)}>
+          <option value="">Select a region…</option>
+          {REGION_OPTIONS.map((r) => (
+            <option key={r}>{r}</option>
           ))}
         </select>
       </div>
       <div className="form-field">
-        <label htmlFor="c-msg">Message</label>
+        <label htmlFor="c-guests">Group size</label>
+        <input
+          id="c-guests"
+          type="number"
+          min={2}
+          max={16}
+          placeholder="2–16 guests"
+          value={guests}
+          onChange={(e) => setGuests(e.target.value)}
+        />
+      </div>
+      <div className="form-field">
+        <label htmlFor="c-date">Preferred date (optional)</label>
+        <input
+          id="c-date"
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
+      </div>
+      <div className="form-field">
+        <label htmlFor="c-msg">Your questions</label>
         <textarea
           id="c-msg"
           placeholder="Group size, dates, dietary needs…"
+          required
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
       </div>
+      <input
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{ position: "absolute", left: "-9999px" }}
+        value={company}
+        onChange={(e) => setCompany(e.target.value)}
+      />
       <button
         type="submit"
         className="btn btn-wine"

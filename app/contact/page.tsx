@@ -73,10 +73,7 @@ export default function ContactPage() {
             </div>
           </div>
           <div className="contact-form">
-            <h3 style={{ fontSize: "1.3rem", marginBottom: 6 }}>Send an enquiry</h3>
-            <p style={{ color: "var(--ink-soft)", fontSize: ".9rem", marginBottom: 20 }}>
-              No booking fees — enquire direct and save.
-            </p>
+            <h3 style={{ fontSize: "1.3rem", marginBottom: 20 }}>Send an enquiry</h3>
             <ContactForm />
           </div>
         </div>
