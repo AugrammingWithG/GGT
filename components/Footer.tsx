@@ -66,6 +66,15 @@ export default function Footer() {
             <li>
               <Link href="/faq">FAQ</Link>
             </li>
+            <li>
+              <Link href="/recipes">Recipes</Link>
+            </li>
+            <li>
+              <Link href="/shopping-in-sydney">Shopping in Sydney</Link>
+            </li>
+            <li>
+              <Link href="/pick-up-map">Pick-up Map</Link>
+            </li>
           </ul>
         </div>
         <div>
