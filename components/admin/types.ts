@@ -9,6 +9,8 @@ export type Enquiry = {
   tourName: string;
   guests: number;
   preferredDate: string;
+  /** Compass region for private-tour enquiries; blank for other enquiry sources. */
+  region: string;
   addOns: { id: string; name: string; price: number }[];
   /** Third-party extras the guest pays direct — outside `total`. */
   payOnDayAddOns: { id: string; name: string; price: number }[];

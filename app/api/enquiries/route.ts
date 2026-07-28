@@ -34,6 +34,10 @@ const enquirySchema = z.object({
     .regex(/^(\d{4}-\d{2}-\d{2})?$/, "Invalid date.")
     .optional()
     .default(""),
+  /** Compass region for private-tour enquiries; blank for other enquiry sources. */
+  region: z.string().max(20).optional().default(""),
+  /** Honeypot — real visitors never fill this in. */
+  company: z.string().optional().default(""),
 });
 
 /** POST — public: validate, save the enquiry, notify the business, ack the guest. */
@@ -45,6 +49,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
+  // Honeypot: bots fill every field, including this hidden one. Pretend to
+  // succeed without validating, saving, or emailing anything.
+  if (body && typeof body === "object" && "company" in body && (body as { company?: unknown }).company) {
+    return NextResponse.json({ ok: true });
+  }
+
   const parsed = enquirySchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
@@ -52,7 +62,7 @@ export async function POST(req: Request) {
       { status: 422 },
     );
   }
-  const data = parsed.data;
+  const { company: _company, ...data } = parsed.data;
 
   try {
     const ref = await adminDb()
@@ -109,6 +119,7 @@ export async function GET(req: Request) {
       tourName: v.tourName,
       guests: v.guests,
       preferredDate: v.preferredDate ?? "",
+      region: v.region ?? "",
       addOns: v.addOns ?? [],
       payOnDayAddOns: v.payOnDayAddOns ?? [],
       total: v.total,
