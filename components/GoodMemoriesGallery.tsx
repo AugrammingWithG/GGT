@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export type GalleryPhoto = { src: string; caption: string };
+export type GalleryPhoto = { src: string; caption: string; position?: string };
 
 const SLOTS = ["m1", "m2", "m3", "m4", "m5"] as const;
 const PER_PAGE = SLOTS.length;
@@ -31,7 +31,10 @@ export default function GoodMemoriesGallery({ photos }: { photos: GalleryPhoto[]
           <div
             key={p.src}
             className={`gm-tile ${SLOTS[i]}`}
-            style={{ backgroundImage: `url(${p.src})` }}
+            style={{
+              backgroundImage: `url(${p.src})`,
+              backgroundPosition: p.position ?? "center",
+            }}
           >
             <span className="gm-tag">{p.caption}</span>
           </div>
