@@ -8,7 +8,6 @@ import CompassRose from "@/components/CompassRose";
 import RegionCard from "@/components/RegionCard";
 import StoryChapters from "@/components/StoryChapters";
 import WineFoodPairing from "@/components/WineFoodPairing";
-import SeasonPanel from "@/components/SeasonPanel";
 import MissionBand from "@/components/MissionBand";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import Reviews from "@/components/Reviews";
@@ -345,13 +344,6 @@ export default async function Home() {
             <p>Tap a wine to see the dish it&apos;s poured alongside.</p>
           </div>
           <WineFoodPairing />
-        </div>
-      </section>
-
-      {/* What's in season */}
-      <section className="pad">
-        <div className="wrap">
-          <SeasonPanel />
         </div>
       </section>
 

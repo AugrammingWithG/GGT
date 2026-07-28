@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BUSINESS_ADDRESS, BUSINESS_PHONE, BUSINESS_EMAIL } from "@/lib/seo";
+import PickupMap from "@/components/PickupMap";
+import { PICKUP_POINTS } from "@/lib/pickups";
 
 export const metadata: Metadata = {
   title: "Pick-up Map",
@@ -8,16 +10,6 @@ export const metadata: Metadata = {
     "Where and when we pick up in Sydney — hotel pickup points and times for the Hunter Valley tour.",
   alternates: { canonical: "/pick-up-map" },
 };
-
-const PICKUPS = [
-  { name: "Four Seasons (back entrance, Harrington St)", time: "6:55am" },
-  { name: "Meriton Suites, Sussex St", time: "7:00am" },
-  { name: "Metro Hotel Marlow Central", time: "6:35am" },
-  { name: "Rydges World Square, Pitt St", time: "6:40am" },
-  { name: "Sheraton Grand on the Park, Elizabeth St entrance", time: "6:40am" },
-  { name: "Sofitel Wentworth, Philip St", time: "6:45am" },
-  { name: "Sydney Fish Market Pyrmont (outside Claudio's)", time: "7:10am" },
-];
 
 const MAP_QUERY = encodeURIComponent(
   `${BUSINESS_ADDRESS.street}, ${BUSINESS_ADDRESS.suburb} ${BUSINESS_ADDRESS.stateCode} ${BUSINESS_ADDRESS.postcode}`
@@ -47,10 +39,18 @@ export default function PickUpMapPage() {
               and we&apos;ll confirm the closest point and time.
             </p>
           </div>
+          <div className="map-embed pickup-map-embed">
+            <PickupMap points={PICKUP_POINTS} />
+          </div>
           <div className="pickup-list">
-            {PICKUPS.map((p) => (
+            {PICKUP_POINTS.map((p) => (
               <div key={p.name} className="pickup-item">
-                <b>{p.name}</b>
+                <div>
+                  <b>{p.name}</b>
+                  <a href={p.mapLink} target="_blank" rel="noopener noreferrer" className="pickup-item-link">
+                    Open in Google Maps
+                  </a>
+                </div>
                 <span>{p.time}</span>
               </div>
             ))}

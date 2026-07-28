@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import BookingCta from "./BookingCta";
+import ThemeToggle from "./ThemeToggle";
 import { FAREHARBOR_ENABLED, FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
 
 const NAV_LINKS = [
@@ -78,6 +79,8 @@ export default function Header() {
             {cta}
           </BookingCta>
         </nav>
+
+        <ThemeToggle />
 
         <button
           className="burger"
