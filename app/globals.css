@@ -112,6 +112,8 @@ header.header-overlay:not(.header-scrolled) .btn-wine:hover{background:#fff;colo
 header.header-overlay .nav-links.open a:not(.btn),
 header.header-overlay .nav-links.open button:not(.btn){color:var(--ink)}
 header.header-overlay .nav-links.open a[aria-current="page"]{color:var(--wine)}
+header.header-overlay .nav-links.open .btn-wine{background:var(--wine);border-color:var(--wine);color:#fff;backdrop-filter:none}
+header.header-overlay .nav-links.open .btn-wine:hover{background:var(--wine-deep)}
 header .wrap{max-width:1440px}
 .nav{display:flex;align-items:center;justify-content:space-between;height:var(--nav-h);gap:20px}
 .brand{display:flex;align-items:center;gap:10px;line-height:1;min-width:0;flex:none}
@@ -128,7 +130,11 @@ header .wrap{max-width:1440px}
 .header-logo{height:76px;width:auto;flex:none}
 .burger{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:8px}
 .burger span{width:24px;height:2px;background:var(--ink);display:block}
-@media(max-width:900px){
+/* 1400px, not 900px: with 8 nav links + the Book Now button, the row needs
+   ~1360px before it fits (see the Recipes-link-addition regression where
+   1024-1280px laptop widths silently clipped Contact/FAQ/Book Now off the
+   edge of the fixed header, with no scrollbar to reveal it). */
+@media(max-width:1400px){
   .nav-links{position:absolute;top:var(--nav-h);left:0;right:0;background:var(--paper);border-bottom:1px solid var(--line);
     flex-direction:column;align-items:stretch;gap:0;padding:8px 24px 20px;display:none}
   .nav-links.open{display:flex}
@@ -526,6 +532,22 @@ section.pad{padding:78px 0}
 .step p{color:var(--ink-soft);font-size:.93rem}
 @media(max-width:900px){.steps{grid-template-columns:1fr}}
 
+/* ===================== Shopping / Pick-up guide pages ===================== */
+.guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:960px;margin:0 auto}
+.guide-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px 28px;box-shadow:var(--shadow-sm)}
+.guide-card h3{font-size:1.15rem;margin-bottom:2px}
+.guide-meta{display:block;font-size:.78rem;color:var(--wine);font-weight:600;letter-spacing:.02em;margin-bottom:10px}
+.guide-card p{color:var(--ink-soft);font-size:.92rem}
+@media(max-width:700px){.guide-grid{grid-template-columns:1fr}}
+
+.pickup-list{max-width:760px;margin:0 auto;display:grid;gap:2px}
+.pickup-item{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:16px 4px;border-bottom:1px dashed var(--line)}
+.pickup-item:last-child{border-bottom:0}
+.pickup-item b{font-size:.98rem;color:var(--ink)}
+.pickup-item span{font-family:var(--font-display);color:var(--wine);font-weight:600;white-space:nowrap}
+.map-embed{border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);max-width:960px;margin:0 auto;border:1px solid var(--line)}
+.map-embed iframe{width:100%;height:380px;display:block;border:0}
+
 /* Destinations grouped by direction: a genuine compass layout, not a card
    grid with a badge — North sits above the compass, South below, East and
    West either side, so the arrow really does point at each region. */
@@ -583,6 +605,9 @@ section.pad{padding:78px 0}
 .recipe-ingredients li{padding-left:20px;position:relative;font-size:.92rem;color:var(--ink)}
 .recipe-ingredients li::before{content:"";position:absolute;left:2px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--gold-muted)}
 .recipe-note{font-size:.86rem;color:var(--ink-soft);font-style:italic;border-left:3px solid var(--gold-muted);padding-left:14px;margin-top:8px}
+.recipe-method{margin:6px 0 18px;padding-left:20px;display:grid;gap:8px}
+.recipe-method li{font-size:.92rem;color:var(--ink);padding-left:6px}
+.recipe-method li::marker{color:var(--wine);font-weight:600}
 @media(max-width:900px){.recipe-card{grid-template-columns:1fr}}
 
 /* ===================== Contact page ===================== */

@@ -12,19 +12,14 @@ function Stars({ rating }: { rating: number }) {
   );
 }
 
-/** Three of the site's real, owner-approved Tripadvisor reviews, one per guest. */
+/** All five of the site's real, owner-approved Tripadvisor reviews. */
 export default function Reviews() {
-  const seen = new Set<string>();
-  const reviews = TESTIMONIALS.filter((r) => {
-    if (seen.has(r.author)) return false;
-    seen.add(r.author);
-    return true;
-  }).slice(0, 3);
+  const reviews = TESTIMONIALS;
 
   return (
     <div className="review-grid">
       {reviews.map((r) => (
-        <figure key={r.author} className="review-card">
+        <figure key={r.title} className="review-card">
           <Stars rating={r.rating} />
           <blockquote>&ldquo;{r.quote}&rdquo;</blockquote>
           <figcaption>

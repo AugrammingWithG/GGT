@@ -61,6 +61,16 @@ export const SOCIAL_LINKS = [
     url: "https://www.youtube.com/channel/UCdEIGgqZqPOtDQXrR5AaG3w",
     cta: "Watch on YouTube",
   },
+  {
+    name: "Tripadvisor",
+    url: "https://www.tripadvisor.com/Attraction_Review-g255060-d7171789-Reviews-Gourmet_Getaway_Tours-Sydney_New_South_Wales.html",
+    cta: "Review us on Tripadvisor",
+  },
+  {
+    name: "Google",
+    url: "https://www.google.com/maps/search/?api=1&query=Gourmet+Getaway+Tours+17+Allambie+Rd+Allambie+Heights+NSW+2100",
+    cta: "Find us on Google",
+  },
 ] as const;
 
 /**
