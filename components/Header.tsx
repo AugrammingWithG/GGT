@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/hunter-valley-tour", label: "Hunter Valley Tour" },
   { href: "/private-tours", label: "Private Tours" },
+  { href: "/gallery", label: "Gallery of Good Memories" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
