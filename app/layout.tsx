@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import {
-  IBM_Plex_Mono,
-  Caveat,
-  Fraunces,
-  Hanken_Grotesk,
-  Bricolage_Grotesque,
-  Poppins,
-} from "next/font/google";
+import { IBM_Plex_Mono, Fraunces, Work_Sans } from "next/font/google";
 import "./globals.css";
-import TypeSwitcher from "@/components/TypeSwitcher";
-import CustomCursor from "@/components/CustomCursor";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import BookBar from "@/components/BookBar";
+import DirectBookingModal from "@/components/DirectBookingModal";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import VisitorBeacon from "@/components/VisitorBeacon";
+import CurrencyProvider from "@/components/CurrencyProvider";
 import { SITE_URL, SITE_NAME, HOME_DESCRIPTION, organizationJsonLd } from "@/lib/seo";
 import { FAREHARBOR_ENABLED } from "@/lib/fareharbor";
+import { detectCountry } from "@/lib/geo.server";
 
+// Kept loaded: app/admin/admin.css and app/admin/login/page.tsx still read
+// `--font-mono` (see the admin-legacy section of globals.css).
 const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
@@ -22,55 +22,24 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-// Handwriting accent — used for the postcard signatures in the testimonials.
-const caveat = Caveat({
-  subsets: ["latin"],
-  weight: ["600", "700"],
-  variable: "--font-hand",
-  display: "swap",
-});
-
-/* ── Type exploration (nature + glass) ──────────────────────────────────
-   Three candidate directions loaded side by side so they can be compared
-   live via the dev-only <TypeSwitcher>. globals.css maps each to --font /
-   --font-display through a body.type-{a,b,c} class. TYPE_DEFAULT sets the
-   server-rendered starting point. Once a direction is chosen, keep that
-   one family and delete the other two loaders + the switcher. */
-const TYPE_DEFAULT: "a" | "b" | "c" | "d" | "e" = "d";
-
-// A — editorial serif display: warm, "gourmet" headlines over the glass.
 const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["400", "600", "700", "900"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-fraunces",
   display: "swap",
 });
-// A & C — clean humanist body / all-rounder.
-const hanken = Hanken_Grotesk({
+
+const workSans = Work_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "700", "800"],
-  variable: "--font-hanken",
-  display: "swap",
-});
-// B — one organic grotesque for headlines + body.
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  weight: ["400", "500", "700", "800"],
-  variable: "--font-bricolage",
-  display: "swap",
-});
-// E — geometric sans (Helvetica is a system stack, needs no loader → D).
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-work-sans",
   display: "swap",
 });
 
 /*
   Brand name first, then the phrase the page is trying to win — the pattern the
   client's existing site already ranks with, and the same pairing as the home
-  page's H1/H2. This is the site-wide default; the legal pages set their own
+  page's H1/H2. This is the site-wide default; other pages set their own
   titles through the template below.
 */
 const TITLE =
@@ -101,15 +70,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // A header read, not a network call: costs nothing on any route. Currency
+  // rates themselves are fetched client-side so nothing here can delay a price.
+  const country = await detectCountry();
+
   return (
-    <html lang="en">
+    <html lang="en-AU">
       <body
-        className={`${plexMono.variable} ${caveat.variable} ${fraunces.variable} ${hanken.variable} ${bricolage.variable} ${poppins.variable} type-${TYPE_DEFAULT}`}
+        className={`${plexMono.variable} ${fraunces.variable} ${workSans.variable}`}
+        style={
+          {
+            "--font": "var(--font-work-sans), system-ui, sans-serif",
+            "--font-display": "var(--font-fraunces), Georgia, serif",
+          } as React.CSSProperties
+        }
       >
         <script
           type="application/ld+json"
@@ -117,10 +96,15 @@ export default function RootLayout({
             __html: JSON.stringify(organizationJsonLd()),
           }}
         />
-        <TypeSwitcher />
-        <CustomCursor />
+        <CurrencyProvider initialCountry={country}>
+          <Header />
+          {children}
+          <Footer />
+          <BookBar />
+          <DirectBookingModal />
+          <WhatsAppButton />
+        </CurrencyProvider>
         <VisitorBeacon />
-        {children}
 
         {/*
           FareHarbor embed API. `autolightframe=yes` makes it intercept clicks

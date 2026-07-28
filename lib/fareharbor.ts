@@ -48,8 +48,11 @@ export const FAREHARBOR_ENABLED = FAREHARBOR_SHORTNAME !== "";
 
 const EMBED_ORIGIN = "https://fareharbor.com";
 
-/** Where CTAs point when FareHarbor isn't configured yet. */
-export const BOOKING_FALLBACK_HREF = "#builder";
+/**
+ * Where CTAs point when FareHarbor isn't configured yet — the enquiry form,
+ * since there's no on-page booking widget to fall back to.
+ */
+export const BOOKING_FALLBACK_HREF = "/contact";
 
 export type FareHarborPrefill = {
   /** FareHarbor item ID. Omitted → the account's full item list. */

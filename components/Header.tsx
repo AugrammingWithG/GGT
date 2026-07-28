@@ -2,99 +2,91 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import BookingCta from "./BookingCta";
-import {
-  FAREHARBOR_ENABLED,
-  FAREHARBOR_FLAGSHIP_ITEM_ID,
-  tourItemId,
-} from "@/lib/fareharbor";
+import { FAREHARBOR_ENABLED, FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
 
-/**
- * Site header.
- *
- * Three zones on a grid — brand pill / links / actions — with the links
- * bunched against the CTA on the right rather than centred in the bar.
- *
- * `overlay` floats the bar over a full-bleed hero (the home page) instead of
- * sitting above it as its own cream band. In that mode it starts transparent
- * with white type and settles into the standard cream glass once the page
- * scrolls, which is what `scrolled` has always tracked.
- */
-export default function Header({ overlay = false }: { overlay?: boolean }) {
+const NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/hunter-valley-tour", label: "Hunter Valley Tour" },
+  { href: "/private-tours", label: "Private Tours" },
+  { href: "/about", label: "About" },
+  { href: "/faq", label: "FAQ" },
+  { href: "/contact", label: "Contact" },
+] as const;
+
+export default function Header() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const closeMenu = () => setOpen(false);
+  const cta = FAREHARBOR_ENABLED ? "Book now" : "Build your tour";
+
+  // Only the home page has a hero video for the header to float over — every
+  // other page keeps the solid bar since there's nothing to show through it.
+  const isHome = pathname === "/";
 
   useEffect(() => {
+    if (!isHome) return;
     const onScroll = () => setScrolled(window.scrollY > 10);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
 
-  const closeMenu = () => setOpen(false);
-
-  const cta = FAREHARBOR_ENABLED ? "Book now" : "Build your tour";
-  const className =
-    [overlay && "overlay", scrolled && "scrolled"].filter(Boolean).join(" ") ||
-    undefined;
+  const headerClassName = isHome
+    ? `header-overlay${scrolled ? " header-scrolled" : ""}`
+    : undefined;
 
   return (
-    <header className={className}>
+    <header className={headerClassName}>
       <div className="wrap nav">
         <Link href="/" className="brand" aria-label="Gourmet Getaway Tours, home">
           <Image
             src="/images/Untitled-design-19.png"
             alt=""
-            className="brand-logo"
+            className="header-logo"
             width={415}
             height={240}
             priority
           />
-          {/* Wordmark beside the logo. It's plain text (not baked into the
-              image) so it inherits the header's colour — white while floating
-              over the hero, ink once scrolled. */}
-          <span className="brand-word" aria-hidden>
-            <span className="brand-name">Gourmet Getaway</span>
-            <span className="brand-sub">&nbsp;Tours</span>
+          <span className="brand-word">
+            <b>Gourmet Getaway Tours</b>
+            <span>Hunter Valley · NSW</span>
           </span>
         </Link>
 
         <nav className={open ? "nav-links open" : "nav-links"}>
-          <BookingCta itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined} onClick={closeMenu}>
-            Hunter Valley Tour
-          </BookingCta>
-          <BookingCta itemId={tourItemId()} onClick={closeMenu}>
-            Private Tours
-          </BookingCta>
-          {/* The bar's own CTA is hidden on narrow screens, where it would
-              crowd the brand and the menu button — this one takes over inside
-              the dropdown instead. */}
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={pathname === link.href ? "page" : undefined}
+              onClick={closeMenu}
+            >
+              {link.label}
+            </Link>
+          ))}
           <BookingCta
             itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-            className="btn btn-primary nav-cta-m"
+            className="btn btn-wine"
             onClick={closeMenu}
           >
             {cta}
           </BookingCta>
         </nav>
 
-        <div className="nav-actions">
-          <BookingCta
-            itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-            className="btn btn-primary nav-cta"
-          >
-            {cta}
-          </BookingCta>
-          <button
-            className="menu-btn"
-            aria-label="Menu"
-            aria-expanded={open}
-            onClick={() => setOpen((o) => !o)}
-          >
-            {open ? "Close" : "Menu"}
-          </button>
-        </div>
+        <button
+          className="burger"
+          aria-label="Menu"
+          aria-expanded={open}
+          onClick={() => setOpen((o) => !o)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </header>
   );
