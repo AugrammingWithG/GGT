@@ -229,6 +229,13 @@ section.pad{padding:78px 0}
   width:100%;height:100%;width:max(100cqw,177.7778cqh);height:max(100cqh,56.25cqw);border:0;
   pointer-events:none;opacity:0;transition:opacity .8s ease}
 .hero-video-el.loaded{opacity:1}
+.hero-video-controls{position:absolute;left:50%;bottom:20px;z-index:4;transform:translateX(-50%);
+  display:flex;gap:6px}
+.hero-video-controls button{width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  border:none;border-radius:50%;color:#fff;background:rgba(0,0,0,.3);backdrop-filter:blur(4px);
+  cursor:pointer;transition:transform .2s,background .2s}
+.hero-video-controls button:hover{transform:translateY(-3px);background:rgba(0,0,0,.45)}
+.hero-video-controls button:disabled{opacity:.4;cursor:default;transform:none}
 /* Centred in the band *below* the floating header rather than in the raw
    frame — the header sits on top of the video, so measuring from y=0 would
    push the block visually low. Same 24px gutter + 1440px inner as
@@ -856,7 +863,6 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
 
 /* ===================== Responsive ===================== */
 @media(prefers-reduced-motion:reduce){
-  .video-bg{animation:none}
   .scroll-cue .arrow{animation:none}
   .reveal{opacity:1;transform:none;transition:none}
   *{scroll-behavior:auto}
