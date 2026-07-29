@@ -1,3 +1,4 @@
+import { Wine, Fish, ChefHat, UtensilsCrossed, Bus } from "lucide-react";
 import Price from "@/components/Price";
 import CurrencyPicker from "@/components/CurrencyPicker";
 import BookingCta from "@/components/BookingCta";
@@ -76,7 +77,7 @@ export default async function Home() {
           />
           <div className="hero-promo-badge">
             <span className="hero-promo-badge-icon" aria-hidden="true">
-              🍷
+              <Wine size={18} color="var(--wine-deep)" strokeWidth={2} />
             </span>
             <span>
               Book direct &amp; save <strong>$20 off the adult price</strong>
@@ -85,7 +86,7 @@ export default async function Home() {
           <div className="hero-copy">
             <div className="inner">
               <h1>Gourmet Getaway Tours</h1>
-              <p>Chef-led Hunter Valley food &amp; wine tours, from Sydney.</p>
+              <p>Chef-led Hunter Valley food and wine tours, from Sydney.</p>
               <div className="hero-actions">
                 <BookingCta
                   itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
@@ -104,19 +105,19 @@ export default async function Home() {
 
       {/* Private tours, laid out around a compass — the first thing you hit
           scrolling down from the hero. */}
-      <section className="pad" id="directions">
+      <section className="pad compass-section" id="directions">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">Choose your direction</span>
-            <h2>Our private tours, by direction</h2>
-            <p>Every destination we run, laid out exactly where it sits from Sydney.</p>
+            <span className="eyebrow">Make it personal</span>
+            <h2>Now choose your own adventure</h2>
+            <p>Private tours for 2 guests and above — pick a direction to begin.</p>
           </div>
           <div className="compass-layout">
             <RegionCard region={north} className="region-north" />
-            <RegionCard region={west} className="region-west" />
             <div className="compass-hub">
               <CompassRose />
             </div>
+            <RegionCard region={west} className="region-west" />
             <RegionCard region={east} className="region-east" />
             <RegionCard region={south} className="region-south" />
           </div>
@@ -181,19 +182,19 @@ export default async function Home() {
           </div>
           <div className="highlight-list">
             <div className="contact-item">
-              <div className="ci-ic">🐟</div>
+              <div className="ci-ic"><Fish size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>See the Sydney Fish Markets and visit Hunter Valley boutique wineries.</div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic">🍽</div>
+              <div className="ci-ic"><ChefHat size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>Enjoy delicious food, cooked on the spot by your guide and chef.</div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic">⭐</div>
+              <div className="ci-ic"><UtensilsCrossed size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>Includes breakfast, lunch, wine tastings, and other chef-prepared foods.</div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic">🚐</div>
+              <div className="ci-ic"><Bus size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>Hassle-free round-trip transportation from select Sydney hotels.</div>
             </div>
           </div>

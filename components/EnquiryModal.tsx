@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { PartyPopper } from "lucide-react";
 import Price, { ChargedInAud } from "./Price";
 import PolicyGate from "./PolicyGate";
 import { FAREHARBOR_ENABLED } from "@/lib/fareharbor";
@@ -119,7 +120,9 @@ export default function EnquiryModal({
 
         {status === "ok" ? (
           <>
-            <h3>Thanks, {name || "friend"}! 🎉</h3>
+            <h3>
+              Thanks, {name || "friend"}! <PartyPopper size={22} color="var(--wine-solid)" strokeWidth={1.75} style={{ verticalAlign: "-4px" }} />
+            </h3>
             <p className="sub">
               Your enquiry is in. Jimmy will be in touch shortly to lock in
               the details.

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { IBM_Plex_Mono, Fraunces, Work_Sans } from "next/font/google";
+import { IBM_Plex_Mono, Quicksand, Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -23,17 +23,21 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-const fraunces = Fraunces({
+// Matches the old site's actual headline/body font pairing
+// (gourmetgetawaytours.com.au sets --font-headline-name: 'Quicksand' /
+// --font-body-name: 'Poppins' inline — not the theme's generic fallback
+// names, which is a different, similar-sounding pair).
+const quicksand = Quicksand({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-fraunces",
+  weight: ["500", "600", "700"],
+  variable: "--font-quicksand",
   display: "swap",
 });
 
-const workSans = Work_Sans({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
-  variable: "--font-work-sans",
+  variable: "--font-poppins",
   display: "swap",
 });
 
@@ -83,11 +87,11 @@ export default async function RootLayout({
   return (
     <html lang="en-AU" suppressHydrationWarning>
       <body
-        className={`${plexMono.variable} ${fraunces.variable} ${workSans.variable}`}
+        className={`${plexMono.variable} ${quicksand.variable} ${poppins.variable}`}
         style={
           {
-            "--font": "var(--font-work-sans), system-ui, sans-serif",
-            "--font-display": "var(--font-fraunces), Georgia, serif",
+            "--font": "var(--font-poppins), system-ui, sans-serif",
+            "--font-display": "var(--font-quicksand), Arial, sans-serif",
           } as React.CSSProperties
         }
       >
