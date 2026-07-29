@@ -45,6 +45,9 @@ export default function Header() {
   return (
     <header className={headerClassName}>
       <div className="wrap nav">
+        {/* The logo artwork already carries the wordmark and the
+            "Hunter Valley · NSW" line, so the bar shows the mark alone —
+            the name lives on in the link's aria-label for screen readers. */}
         <Link href="/" className="brand" aria-label="Gourmet Getaway Tours, home">
           <Image
             src="/images/Untitled-design-19.png"
@@ -54,10 +57,6 @@ export default function Header() {
             height={240}
             priority
           />
-          <span className="brand-word">
-            <b>Gourmet Getaway Tours</b>
-            <span>Hunter Valley · NSW</span>
-          </span>
         </Link>
 
         <nav className={open ? "nav-links open" : "nav-links"}>
