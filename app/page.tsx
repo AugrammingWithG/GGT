@@ -6,6 +6,7 @@ import TourCard from "@/components/TourCard";
 import HeroVideo from "@/components/HeroVideo";
 import NextDeparture from "@/components/NextDeparture";
 import CompassRose from "@/components/CompassRose";
+import ChooseDirection from "@/components/ChooseDirection";
 import RegionCard from "@/components/RegionCard";
 import StoryChapters from "@/components/StoryChapters";
 import WineFoodPairing from "@/components/WineFoodPairing";
@@ -17,6 +18,7 @@ import { getTours } from "@/lib/tours.server";
 import { toursJsonLd, SOCIAL_LINKS } from "@/lib/seo";
 import { SHOWCASE_TOURS } from "@/lib/showcase";
 import { REGIONS } from "@/lib/regions";
+import { mediaBg } from "@/lib/media";
 import { FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
 
 const north = REGIONS.find((r) => r.id === "north")!;
@@ -97,21 +99,36 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <a className="scroll-cue" href="#directions">
+          <a className="scroll-cue" href="#choose">
             Scroll down to see our private tours <span className="arrow">↓</span>
           </a>
         </div>
       </section>
 
-      {/* Private tours, laid out around a compass — the first thing you hit
-          scrolling down from the hero. */}
-      <section className="pad compass-section" id="directions">
+      {/* Choose a direction — the compass narrative, and the first thing you
+          hit scrolling down from the hero. It carries the heading copy that
+          used to sit above the dial below, so #directions now reads as this
+          section's continuation rather than a separately-titled block. The
+          compass here cycles the big photo; the small rose in the dial below
+          still tracks the cursor. Two compasses, on purpose. */}
+      <ChooseDirection
+        slides={[north, east, south, west].map((r) => ({
+          direction: r.direction,
+          label: r.photo.label,
+          background: mediaBg(r.photo.bg, r.photo.image, r.photo.focus),
+        }))}
+      />
+
+      {/* The dial itself — the continuation of the section above, which
+          carries this block's heading. Keeps #directions: /private-tours
+          deep-links here for "every destination laid out by direction", which
+          is this list. */}
+      <section
+        className="pad compass-section"
+        id="directions"
+        aria-label="Destinations by direction"
+      >
         <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">Make it personal</span>
-            <h2>Now choose your own adventure</h2>
-            <p>Private tours for 2 guests and above — pick a direction to begin.</p>
-          </div>
           <div className="compass-layout">
             <RegionCard region={north} className="region-north" />
             <div className="compass-hub">

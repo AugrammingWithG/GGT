@@ -166,10 +166,10 @@ header .wrap{max-width:1440px}
 .nav-links a:not(.btn)::after,.nav-links button:not(.btn)::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--wine);transition:width .2s}
 .nav-links a:not(.btn):hover::after,.nav-links button:not(.btn):hover::after,.nav-links a[aria-current="page"]::after{width:100%}
 .header-logo{height:76px;width:auto;flex:none;transition:height .28s ease}
-/* Compact bar: Header.tsx watches the #directions compass section and adds
-   .header-compact while it's on screen. The header is `fixed` on home, so it
-   floats over the top of that section — dropping 92px to 58px hands ~34px of
-   viewport back to the four-card dial rather than reflowing anything. */
+/* Compact bar: Header.tsx watches the #choose and #directions compass sections
+   and adds .header-compact while either is on screen. The header is `fixed` on
+   home, so it floats over the top of them — dropping 92px to 58px hands ~34px
+   of viewport back to the four-card dial rather than reflowing anything. */
 header.header-compact .nav{height:var(--nav-h-compact)}
 header.header-compact .header-logo{height:44px}
 /* Keeps the burger dropdown flush under the shrunken bar (`top` is inert on
@@ -620,6 +620,92 @@ section.pad{padding:78px 0}
 .pickup-map .leaflet-popup-content{margin:10px 14px;font-family:var(--font);font-size:.85rem;line-height:1.5;color:var(--ink)}
 .pickup-map .leaflet-popup-content a{color:var(--wine);font-weight:600}
 
+/* ===================== HOME: choose a direction ===================== */
+/* The compass narrative that hands straight off into the dial below
+   (#directions). Copy left, big portrait photo right, and an interactive
+   compass under the copy: it cycles N-E-S-W on a ~4s timer and the photo
+   cross-fades to whichever heading the needle lands on. Hover, focus or a
+   click takes it over — see components/ChooseDirection.tsx.
+
+   Deliberately not `.pad`: this section owns its padding so it can sit tight
+   against the dial it introduces, and so it never has to out-specify
+   `section.pad{padding:78px 0}` the way `section.compass-section` below does. */
+.choose-section{padding:clamp(56px,7vw,86px) 0 30px;scroll-margin-top:var(--nav-h-compact)}
+/* The photo spans both rows and the `1fr` dial row absorbs the slack, so the
+   compass sits directly under the copy with the whitespace below it. */
+.choose-grid{display:grid;grid-template-columns:1.06fr .94fr;
+  grid-template-areas:"copy photo" "dial photo";grid-template-rows:auto 1fr;
+  column-gap:clamp(34px,5vw,66px);row-gap:clamp(20px,3vw,34px);align-items:start}
+/* Left-aligned on purpose — the site's only section head that isn't .sec-head
+   (which is centred, width-capped and auto-margined). A modifier would have to
+   unset all of that, so it gets its own class. */
+.choose-copy{grid-area:copy}
+.choose-copy h2{font-size:clamp(2.1rem,4.4vw,3.3rem);margin:.22em 0 .38em;max-width:15ch}
+.choose-copy p{color:var(--ink-soft);font-size:clamp(1rem,1.2vw,1.12rem);max-width:38ch;line-height:1.65}
+/* Sized off the column, never the viewport, so it can't crowd the copy.
+   position:relative anchors the four hit-area buttons. */
+.choose-dial{grid-area:dial;position:relative;width:min(258px,66%);aspect-ratio:1;justify-self:start}
+.choose-rose{width:100%;height:100%;overflow:visible;display:block}
+/* Same 0 0 120 120 geometry and 60,60 centre as components/CompassRose.tsx, so
+   the page's two compasses read as one instrument. This needle snaps between
+   four fixed headings instead of tracking the cursor; its rotation is
+   accumulated and never wrapped back into 0-360, which is what stops W -> N
+   unwinding 270deg backwards. The >1 control point overshoots and settles,
+   like a real card finding north. */
+.choose-needle{transition:transform .9s cubic-bezier(.22,1.4,.36,1)}
+/* The N/E/S/W letters are real <button> text rather than SVG <text>: they have
+   to be focusable, hoverable and nameable, and a button outside the SVG picks
+   up the global :focus-visible ring for free. ::before pads the tap target out
+   past 44px without inflating the visible pill. */
+.choose-point{position:absolute;z-index:2;width:32px;height:32px;display:grid;place-items:center;
+  background:none;border:0;padding:0;cursor:pointer;border-radius:50%;
+  font-family:var(--font);font-size:.82rem;font-weight:600;letter-spacing:.04em;
+  color:var(--ink-soft);transition:color .18s ease,background .18s ease,box-shadow .18s ease}
+.choose-point::before{content:"";position:absolute;inset:-6px;border-radius:50%}
+.choose-point:hover{color:var(--wine);background:var(--tint-wine)}
+.choose-point[aria-pressed="true"]{color:var(--wine);background:var(--tint-wine);
+  box-shadow:0 0 0 1.5px var(--tint-wine-border)}
+.choose-point-n{top:-4px;left:50%;transform:translateX(-50%)}
+.choose-point-s{bottom:-4px;left:50%;transform:translateX(-50%)}
+.choose-point-e{right:-8px;top:50%;transform:translateY(-50%)}
+.choose-point-w{left:-8px;top:50%;transform:translateY(-50%)}
+/* Portrait card. Fixed height rather than aspect-ratio, matching .why-photo
+   and .ch-media — it's what keeps the whole section inside one screen. */
+.choose-photo{grid-area:photo;position:relative;margin:0;overflow:hidden;
+  border-radius:var(--r);box-shadow:var(--shadow);background:var(--paper-2);
+  height:clamp(430px,60vh,640px)}
+/* All four region photos are stacked here and only the active one is opaque,
+   so every photo is fetched during the first parse and no swap is ever blank.
+   opacity:0, NOT display:none — a display:none layer is never fetched and the
+   pre-warm silently breaks. No background-size/position here either: mediaBg()
+   bakes `center/cover no-repeat` into the inline shorthand. */
+.choose-photo-layer{position:absolute;inset:0;opacity:0;transition:opacity .7s ease}
+.choose-photo-layer.is-active{opacity:1}
+/* Same pill as .region-photo-label below, one size up for the bigger frame. */
+.choose-photo-caption{position:absolute;left:16px;bottom:16px;z-index:3;color:#fff;
+  font-size:.78rem;letter-spacing:.04em;background:rgba(43,38,34,.55);
+  padding:.45em 1.05em;border-radius:100px;backdrop-filter:blur(3px)}
+@media(max-width:1000px){
+  /* One column, source order kept: copy, compass, photo. Unlike the dial below
+     — which drops its compass entirely at this width — the compass stays here:
+     it IS the interaction, and without it the photo changes with nothing on
+     screen driving it. Above the photo rather than below so the visual order
+     still matches the DOM order. */
+  .choose-section{padding:46px 0 26px}
+  .choose-grid{grid-template-columns:1fr;grid-template-rows:auto;
+    grid-template-areas:"copy" "dial" "photo";max-width:560px;row-gap:24px}
+  .choose-copy h2,.choose-copy p{max-width:none}
+  .choose-dial{justify-self:center;width:212px}
+  .choose-photo{height:min(60vh,400px)}
+}
+@media(max-width:600px){
+  .choose-section{padding:38px 0 22px}
+  .choose-dial{width:182px}
+  .choose-point{width:28px;height:28px;font-size:.74rem}
+  .choose-photo{height:290px}
+  .choose-photo-caption{left:12px;bottom:12px;font-size:.72rem}
+}
+
 /* Destinations grouped by direction: a compass dial — North sits above the
    hub, South below, East and West either side.
 
@@ -633,14 +719,15 @@ section.pad{padding:78px 0}
    `section.pad{padding:78px 0}` above, which is why this section silently
    ran at 78px before. Padding + the row gap below are tuned so the whole
    dial clears ~970px and fits a 1080p viewport under the compact header —
-   grow the type here and you lose that. */
-section.compass-section{padding:44px 0;
-  /* The hero's scroll-cue links straight here and the header is fixed, so
-     without this the eyebrow lands underneath the bar. Matches the compact
+   grow the type here and you lose that. That budget is now shared with
+   .choose-section above, which carries this block's heading; the tiny top
+   padding is what makes the two read as one movement rather than two
+   sections. */
+section.compass-section{padding:8px 0 54px;
+  /* /private-tours deep-links straight here and the header is fixed, so
+     without this the first row lands underneath the bar. Matches the compact
      height because the header is always compact by the time you arrive. */
   scroll-margin-top:var(--nav-h-compact)}
-.compass-section .sec-head{margin-bottom:26px}
-.compass-section .sec-head h2{font-size:clamp(1.5rem,2.8vw,2.1rem)}
 /* Wider than the 1180px page shell: with the card padding gone the text
    needs the room back, and the shrinking header (header.header-compact)
    frees the height to match. */
@@ -907,6 +994,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
   *{scroll-behavior:auto}
   .region-photo{transition:none}
   .region-card:hover .region-photo{transform:none}
+  /* ChooseDirection.tsx also stops its own timer here, so the needle just
+     rests on North and picking a direction swaps instantly. Scoped to the
+     caption rather than bare .fade-swap, which WineFoodPairing shares. */
+  .choose-needle,.choose-photo-layer,.choose-point{transition:none}
+  .choose-photo-caption .fade-swap{animation:none}
   body{transition:none}
   .nav,.header-logo{transition:none}
 }

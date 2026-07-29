@@ -39,24 +39,33 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
-  // The compass dial (#directions) is the densest block on the page and the
-  // fixed header floats right over its top edge. Shrink the bar while that
-  // section holds the viewport so the four cards get the space back, then let
-  // it grow again once the visitor scrolls on. Home only — no other page has
-  // the section, and elsewhere the header is in flow, so resizing it would
-  // reflow the whole page.
+  // The compass narrative (#choose) and the dial it hands off into
+  // (#directions) are the densest run on the page, and the fixed header floats
+  // right over them. Shrink the bar for the whole run so the four cards get the
+  // space back, then let it grow again once the visitor scrolls on. Watching
+  // only the dial made the bar snap back to full height at the seam between
+  // the two. Home only — no other page has these sections, and elsewhere the
+  // header is in flow, so resizing it would reflow the whole page.
   useEffect(() => {
-    if (!isHome) return;
-    const section = document.getElementById("directions");
-    if (!section || typeof IntersectionObserver === "undefined") return;
-    // Watches the band between 12% and 70% down the viewport: the section has
+    if (!isHome || typeof IntersectionObserver === "undefined") return;
+    const targets = ["choose", "directions"]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (!targets.length) return;
+    // Watches the band between 12% and 70% down the viewport: a section has
     // to actually be the thing you're looking at, not merely peeking in at the
     // bottom edge, before the bar collapses.
+    const visible = new Set<Element>();
     const observer = new IntersectionObserver(
-      ([entry]) => setCompact(entry.isIntersecting),
+      (entries) => {
+        entries.forEach((e) =>
+          e.isIntersecting ? visible.add(e.target) : visible.delete(e.target),
+        );
+        setCompact(visible.size > 0);
+      },
       { rootMargin: "-12% 0px -30% 0px" },
     );
-    observer.observe(section);
+    targets.forEach((t) => observer.observe(t));
     return () => observer.disconnect();
   }, [isHome]);
 
