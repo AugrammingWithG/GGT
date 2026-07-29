@@ -669,7 +669,7 @@ html{scroll-snap-type:y proximity}
 .choose-section{min-height:calc(100vh - var(--nav-h-compact));
   min-height:calc(100svh - var(--nav-h-compact));
   display:grid;align-content:center;align-content:safe center;
-  padding:26px 0 34px;scroll-margin-top:var(--nav-h-compact)}
+  padding:26px 0 31px;scroll-margin-top:var(--nav-h-compact)}
 /* The photo spans both rows and the `1fr` dial row absorbs the slack, so the
    compass sits directly under the copy with the whitespace below it. */
 .choose-grid{display:grid;grid-template-columns:1.06fr .94fr;
@@ -733,7 +733,7 @@ html{scroll-snap-type:y proximity}
   /* Height back to natural: with snapping off below this width there's nothing
      for a full-screen section to line up with, and pinning it to the viewport
      would only strand the stacked content against a hard edge. */
-  .choose-section{min-height:0;padding:46px 0 34px}
+  .choose-section{min-height:0;padding:46px 0 31px}
   .choose-grid{grid-template-columns:1fr;grid-template-rows:auto;
     grid-template-areas:"copy" "dial" "photo";max-width:560px;row-gap:24px}
   .choose-copy h2,.choose-copy p{max-width:none}
@@ -741,7 +741,7 @@ html{scroll-snap-type:y proximity}
   .choose-photo{height:min(60vh,400px)}
 }
 @media(max-width:600px){
-  .choose-section{padding:38px 0 30px}
+  .choose-section{padding:38px 0 27px}
   .choose-dial{width:182px}
   .choose-point{width:28px;height:28px;font-size:.74rem}
   .choose-photo{height:290px}
@@ -765,7 +765,7 @@ html{scroll-snap-type:y proximity}
    scroll-snap stop, where the whole dial wants to land on one screen. The
    air above it comes from .choose-section's full-screen centring rather than
    padding here, which is why the top padding is so small. */
-section.compass-section{padding:8px 0 54px;
+section.compass-section{padding:7px 0 54px;
   /* /private-tours deep-links straight here and the header is fixed, so
      without this the first row lands underneath the bar. Matches the compact
      height because the header is always compact by the time you arrive. */
@@ -824,7 +824,7 @@ section.compass-section{padding:8px 0 54px;
 @media(max-width:1000px){
   /* No room for a compact dial at this width — hide the compass graphic
      and stack the four regions in a single reading-order column. */
-  .compass-section{padding:40px 0 48px}
+  .compass-section{padding:36px 0 48px}
   .compass-layout{
     grid-template-columns:1fr;
     grid-template-areas:"north" "east" "south" "west";
