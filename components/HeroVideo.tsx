@@ -20,6 +20,7 @@ import { useEffect, useRef, useState } from "react";
 /** The slice of the YouTube IFrame Player API this component touches. */
 type YTPlayer = {
   playVideo: () => void;
+  unloadModule: (module: string) => void;
   destroy: () => void;
 };
 type YTApi = {
@@ -28,7 +29,7 @@ type YTApi = {
     opts: {
       events: {
         onReady: (e: { target: YTPlayer }) => void;
-        onStateChange: (e: { data: number }) => void;
+        onStateChange: (e: { data: number; target: YTPlayer }) => void;
       };
     },
   ) => YTPlayer;
@@ -65,9 +66,26 @@ function loadPlayerApi(): Promise<YTApi> {
 }
 
 /**
+ * Strips the caption track. `cc_load_policy=0` only means "don't force them
+ * on" — a visitor whose own YouTube settings enable captions still gets them
+ * burned over the hero — so the module has to be unloaded outright. Both
+ * names are tried: the HTML5 player answers to "captions", older ones to
+ * "cc". Cheap enough to re-run on every loop restart as insurance.
+ */
+function hideCaptions(player: YTPlayer) {
+  for (const name of ["captions", "cc"]) {
+    try {
+      player.unloadModule(name);
+    } catch {
+      // Module was never loaded for this video — nothing to unload.
+    }
+  }
+}
+
+/**
  * Embed URL for a background video: no controls, no keyboard, no annotations,
- * no fullscreen affordance. Only ever called client-side (the iframe mounts
- * after IntersectionObserver fires), so `window` is safe to read.
+ * no captions, no fullscreen affordance. Only ever called client-side (the
+ * iframe mounts after IntersectionObserver fires), so `window` is safe to read.
  */
 function embedSrc(videoId: string) {
   const q = new URLSearchParams({
@@ -78,6 +96,7 @@ function embedSrc(videoId: string) {
     loop: "1",
     playlist: videoId,
     controls: "0",
+    cc_load_policy: "0",
     disablekb: "1",
     fs: "0",
     playsinline: "1",
@@ -144,9 +163,16 @@ export default function HeroVideo({
           // Belt and suspenders: some browsers ignore `autoplay=1` when the
           // frame mounts after their gesture heuristics have already run.
           // Blocked autoplay just leaves the poster frame up, which is fine.
-          onReady: (e) => e.target.playVideo(),
+          onReady: (e) => {
+            hideCaptions(e.target);
+            e.target.playVideo();
+          },
           onStateChange: (e) => {
-            if (e.data === YT.PlayerState.PLAYING) setLoaded(true);
+            if (e.data !== YT.PlayerState.PLAYING) return;
+            // The captions module can load with playback rather than before
+            // it, so onReady alone isn't always early enough.
+            hideCaptions(e.target);
+            setLoaded(true);
           },
         },
       });
