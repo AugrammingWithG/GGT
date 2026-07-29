@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Wine } from "lucide-react";
 
 /**
  * One-time "book direct and save" popup. Mounted once in the root layout, so
@@ -41,7 +42,9 @@ export default function DirectBookingModal() {
         >
           ×
         </button>
-        <h3 id="direct-booking-title">Thanks for booking direct 🍷</h3>
+        <h3 id="direct-booking-title">
+          Thanks for booking direct <Wine size={22} color="var(--wine-solid)" strokeWidth={1.75} style={{ verticalAlign: "-4px" }} />
+        </h3>
         <p>
           Save <b>$20 off the adult price</b> by selecting{" "}
           <b>&ldquo;Student of wine&rdquo;</b> at checkout.
