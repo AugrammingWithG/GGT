@@ -86,7 +86,7 @@ export default async function Home() {
           <div className="hero-copy">
             <div className="inner">
               <h1>Gourmet Getaway Tours</h1>
-              <p>Chef-led Hunter Valley food &amp; wine tours, from Sydney.</p>
+              <p>Chef-led Hunter Valley food and wine tours, from Sydney.</p>
               <div className="hero-actions">
                 <BookingCta
                   itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
@@ -105,19 +105,19 @@ export default async function Home() {
 
       {/* Private tours, laid out around a compass — the first thing you hit
           scrolling down from the hero. */}
-      <section className="pad" id="directions">
+      <section className="pad compass-section" id="directions">
         <div className="wrap">
           <div className="sec-head">
-            <span className="eyebrow">Choose your direction</span>
-            <h2>Our private tours, by direction</h2>
-            <p>Every destination we run, laid out exactly where it sits from Sydney.</p>
+            <span className="eyebrow">Make it personal</span>
+            <h2>Now choose your own adventure</h2>
+            <p>Private tours for 2 guests and above — pick a direction to begin.</p>
           </div>
           <div className="compass-layout">
             <RegionCard region={north} className="region-north" />
-            <RegionCard region={west} className="region-west" />
             <div className="compass-hub">
               <CompassRose />
             </div>
+            <RegionCard region={west} className="region-west" />
             <RegionCard region={east} className="region-east" />
             <RegionCard region={south} className="region-south" />
           </div>

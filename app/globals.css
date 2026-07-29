@@ -227,9 +227,9 @@ section.pad{padding:78px 0}
 .hero-copy{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 24px 52px}
 .hero-copy .inner{max-width:1180px;margin:0 auto;color:#fff}
 .hero-copy .eyebrow{color:var(--gold-soft)}
-.hero-copy h1{color:#fff;font-size:clamp(2.4rem,6vw,4.2rem);font-weight:600;margin:.25em 0 .35em;max-width:16ch;
+.hero-copy h1{color:#fff;font-size:clamp(2.8rem,7.5vw,5.2rem);font-weight:600;margin:.25em 0 .35em;max-width:16ch;
   text-shadow:0 2px 24px rgba(0,0,0,.4)}
-.hero-copy p{font-size:1.1rem;max-width:46ch;color:rgba(255,255,255,.92);margin-bottom:1.6em}
+.hero-copy p{font-size:clamp(1.3rem,3.2vw,2.15rem);max-width:46ch;color:rgba(255,255,255,.92);margin-bottom:1.6em}
 .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
 .scroll-cue{position:absolute;right:24px;bottom:32px;z-index:4;color:#fff;font-size:.82rem;font-weight:500;
   display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;max-width:150px;line-height:1.3;
@@ -591,67 +591,65 @@ section.pad{padding:78px 0}
 .pickup-map .leaflet-popup-content{margin:10px 14px;font-family:var(--font);font-size:.85rem;line-height:1.5;color:var(--ink)}
 .pickup-map .leaflet-popup-content a{color:var(--wine);font-weight:600}
 
-/* Destinations grouped by direction: a genuine compass layout, not a card
-   grid with a badge — North sits above the compass, South below, East and
-   West either side, so the arrow really does point at each region. */
+/* Destinations grouped by direction: a compass dial — North sits above the
+   hub, South below, East and West either side. Cards run big and detailed
+   (full destination list, larger photo, larger type) to use the space
+   around the dial rather than leaving it empty. */
+.compass-section{padding:32px 0}
+.compass-section .sec-head{margin-bottom:16px}
+.compass-section .sec-head h2{font-size:clamp(1.4rem,2.6vw,1.9rem)}
 .compass-layout{
   display:grid;
-  grid-template-columns:minmax(240px,1fr) minmax(300px,380px) minmax(240px,1fr);
+  grid-template-columns:repeat(3,minmax(280px,336px));
   grid-template-areas:
     ".    north .   "
     "west hub   east"
     ".    south .   ";
-  gap:44px 32px;
-  align-items:center;
-  max-width:1180px;
+  gap:12px 20px;
+  align-items:stretch;
+  justify-content:center;
   margin:0 auto;
 }
 .region-north{grid-area:north}
 .region-east{grid-area:east}
 .region-west{grid-area:west}
 .region-south{grid-area:south}
-.compass-hub{grid-area:hub;display:flex;align-items:center;justify-content:center;padding:12px}
+.compass-hub{grid-area:hub;display:flex;align-items:center;justify-content:center;padding:4px}
 .compass-rose{overflow:visible;display:block}
-.compass-hub .compass-rose{width:min(240px,86%);height:auto}
+.compass-hub .compass-rose{width:min(92px,70%);height:auto}
 .compass-label{font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:.04em;fill:var(--ink-soft)}
-.region-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;height:100%;transition:transform .3s ease,box-shadow .3s ease}
-.region-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
 
-/* Editorial photo split: a large top photo with a smaller inset photo
-   hanging over its bottom-right corner, both shown in full colour. On card
-   hover the large photo zooms in very slightly and the inset nudges up —
-   see region-photo-main / -inset below. Swap a real photo in via
-   `region.photos[n].image` (lib/regions.ts). */
-.region-photos{position:relative;height:190px;flex-shrink:0}
-.region-photo-main-wrap{position:absolute;inset:0;overflow:hidden}
-.region-photo{background-size:cover;background-position:center}
-.region-photo-main{position:absolute;inset:0;transform:scale(1);transition:transform .5s ease}
-.region-card:hover .region-photo-main{transform:scale(1.045)}
-.region-photo-inset{position:absolute;right:18px;bottom:-26px;width:44%;height:110px;border-radius:10px;border:3px solid #fff;box-shadow:0 10px 24px rgba(43,38,34,.18);z-index:2;transition:transform .35s ease}
-.region-card:hover .region-photo-inset{transform:translateY(-6px)}
-.region-photo-label{position:absolute;left:10px;bottom:10px;z-index:3;color:#fff;font-size:.68rem;letter-spacing:.06em;background:rgba(43,38,34,.45);padding:.35em .8em;border-radius:100px}
-.region-photo-inset .region-photo-label{left:8px;bottom:8px;font-size:.62rem;padding:.3em .65em}
+/* Landscape card: text left, photo right. */
+.region-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:row;height:100%;transition:transform .3s ease,box-shadow .3s ease}
+.region-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
 
-.region-body{padding:44px 28px 30px;display:flex;flex-direction:column;flex:1}
-.region-badge{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--wine-solid);color:#fff;font-size:1.4rem;line-height:1;margin-bottom:12px}
-.region-direction{display:block;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--wine);font-weight:600;margin-bottom:6px}
-.region-card h3{font-size:1.3rem;margin-bottom:16px}
-.region-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:20px;flex:1}
-.region-list li{position:relative;padding-left:20px;font-size:.92rem;color:var(--ink-soft);line-height:1.5}
-.region-list li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:50%;background:var(--gold-muted)}
-.region-list li b{color:var(--ink);font-weight:600}
-.region-enquire{align-self:flex-start;font-size:.85rem;font-weight:600;color:var(--wine);border-bottom:1.5px solid var(--gold-muted);padding-bottom:2px;transition:color .15s ease}
+.region-photo{position:relative;width:36%;min-width:100px;flex-shrink:0;background-size:cover;background-position:center;transition:transform .5s ease}
+.region-photo-label{position:absolute;left:6px;bottom:6px;z-index:3;color:#fff;font-size:.58rem;letter-spacing:.04em;background:rgba(43,38,34,.55);padding:.24em .6em;border-radius:100px}
+
+.region-body{padding:10px 12px;display:flex;flex-direction:column;flex:1;min-width:0}
+.region-lead{font-size:.82rem;font-weight:700;margin-bottom:5px;line-height:1.2}
+.region-lead span{color:var(--wine);font-weight:700}
+.region-list{list-style:none;margin:0 0 5px;padding:0;font-size:.66rem;color:var(--ink-soft);line-height:1.28;flex:1}
+.region-list li{margin-bottom:3px}
+.region-list li:last-child{margin-bottom:0}
+.region-list strong{color:var(--ink);font-weight:600}
+.region-enquire{align-self:flex-start;font-size:.68rem;font-weight:600;color:var(--wine);border-bottom:1.5px solid var(--gold-muted);padding-bottom:1px;transition:color .15s ease}
 .region-enquire:hover{color:var(--wine-deep)}
 @media(max-width:1000px){
-  /* No room for a true cross layout — compass becomes a heading graphic,
-     the four cards stack in reading order underneath. */
+  /* No room for a compact dial at this width — hide the compass graphic
+     and stack the four cards in a single reading-order column. */
   .compass-layout{
     grid-template-columns:1fr;
-    grid-template-areas:"hub" "north" "east" "west" "south";
-    gap:26px;max-width:520px;
+    grid-template-areas:"north" "east" "south" "west";
+    gap:18px;max-width:460px;
   }
-  .compass-hub .compass-rose{width:160px}
-  .region-card{height:auto}
+  .compass-hub{display:none}
+  .region-card{flex-direction:column}
+  .region-photo{width:100%;height:170px}
+  .region-body{padding:20px 22px}
+  .region-lead{font-size:1.1rem;margin-bottom:10px}
+  .region-list{font-size:.88rem;margin-bottom:14px}
+  .region-enquire{font-size:.88rem}
 }
 
 /* ===================== About page ===================== */
@@ -823,10 +821,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
   .scroll-cue .arrow{animation:none}
   .reveal{opacity:1;transform:none;transition:none}
   *{scroll-behavior:auto}
-  .region-card,.region-photo-main,.region-photo-inset{transition:none}
+  .region-card{transition:none}
   .region-card:hover{transform:none}
-  .region-card:hover .region-photo-main{transform:none}
-  .region-card:hover .region-photo-inset{transform:none}
   body{transition:none}
 }
 
