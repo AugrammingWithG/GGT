@@ -1,3 +1,4 @@
+import { Wine, Fish, ChefHat, UtensilsCrossed, Bus } from "lucide-react";
 import Price from "@/components/Price";
 import CurrencyPicker from "@/components/CurrencyPicker";
 import BookingCta from "@/components/BookingCta";
@@ -76,7 +77,7 @@ export default async function Home() {
           />
           <div className="hero-promo-badge">
             <span className="hero-promo-badge-icon" aria-hidden="true">
-              🍷
+              <Wine size={18} color="var(--wine-deep)" strokeWidth={2} />
             </span>
             <span>
               Book direct &amp; save <strong>$20 off the adult price</strong>
@@ -181,19 +182,19 @@ export default async function Home() {
           </div>
           <div className="highlight-list">
             <div className="contact-item">
-              <div className="ci-ic">🐟</div>
+              <div className="ci-ic"><Fish size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>See the Sydney Fish Markets and visit Hunter Valley boutique wineries.</div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic">🍽</div>
+              <div className="ci-ic"><ChefHat size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>Enjoy delicious food, cooked on the spot by your guide and chef.</div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic">⭐</div>
+              <div className="ci-ic"><UtensilsCrossed size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>Includes breakfast, lunch, wine tastings, and other chef-prepared foods.</div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic">🚐</div>
+              <div className="ci-ic"><Bus size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>Hassle-free round-trip transportation from select Sydney hotels.</div>
             </div>
           </div>

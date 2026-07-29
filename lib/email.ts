@@ -199,7 +199,7 @@ export async function sendConfirmation(booking: BookingFields): Promise<boolean>
       text: [
         `Hi ${booking.name},`,
         ``,
-        `Great news, your Gourmet Getaway is confirmed! 🎉`,
+        `Great news, your Gourmet Getaway is confirmed!`,
         ``,
         `Tour: ${booking.tourName}`,
         `Date: ${dateLabel}`,

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import PickupMap from "@/components/PickupMap";
 import { BUSINESS_BASE_POINT, PICKUP_POINTS } from "@/lib/pickups";
@@ -38,7 +39,7 @@ export default function ContactPage() {
             <span className="eyebrow">Get in touch</span>
             <h2 style={{ fontSize: "1.9rem", margin: ".3em 0 .8em" }}>Reach us directly</h2>
             <div className="contact-item">
-              <div className="ci-ic">☎</div>
+              <div className="ci-ic"><Phone size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>
                 <b>Phone</b>
                 <br />
@@ -46,7 +47,7 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic">✉</div>
+              <div className="ci-ic"><Mail size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>
                 <b>Email</b>
                 <br />
@@ -54,7 +55,7 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic">📍</div>
+              <div className="ci-ic"><MapPin size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>
                 <b>Base</b>
                 <br />
@@ -63,7 +64,7 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic">🕑</div>
+              <div className="ci-ic"><Clock size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>
                 <b>Tours run</b>
                 <br />
