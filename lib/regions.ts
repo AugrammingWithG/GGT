@@ -4,16 +4,9 @@ export type RegionDestination = {
 };
 
 /**
- * One photo in a region card's editorial split. `bg` is the CSS gradient
- * fallback; `image` layers a photo over it, same swap-in-place pattern as
- * `lib/showcase.ts`. `label` always renders as a small on-photo caption —
- * it's the placeholder marker, naming the shot each slot still needs.
- *
- * Every region below already points `image` at the closest existing shot in
- * `public/images/` as a stand-in — none were taken for this exact spot, so
- * treat every one as a placeholder regardless. Swap `image` for Jimmy's real
- * photo of the labelled subject when it's ready, and drop that `label` line
- * in RegionCard.tsx at the same time.
+ * A region card's single photo. `bg` is the CSS gradient fallback; `image`
+ * layers a photo over it, same swap-in-place pattern as `lib/showcase.ts`.
+ * `label` renders as a small on-photo caption naming the shot.
  */
 export type RegionPhoto = {
   label: string;
@@ -28,9 +21,11 @@ export type Region = {
   /** Decorative — the accessible direction name is `direction` above. */
   arrow: string;
   title: string;
+  /** Full destination + highlight list — used on /private-tours and /faq. */
   destinations: RegionDestination[];
-  /** [large top photo, smaller inset photo] for the card's editorial split. */
-  photos: [RegionPhoto, RegionPhoto];
+  /** Short place names for the homepage card's condensed one-line summary. */
+  summary: string[];
+  photo: RegionPhoto;
 };
 
 /** The private-tour destinations, grouped by direction from Sydney. */
@@ -40,19 +35,12 @@ export const REGIONS: Region[] = [
     direction: "North",
     arrow: "↑",
     title: "Wine country & the coast",
-    photos: [
-      {
-        label: "Oyster shucking",
-        bg: "linear-gradient(150deg,#cdbfa0,#5b4d34)",
-        image: "/images/tours/central-coast.webp",
-      },
-      {
-        label: "Hunter Valley vineyard",
-        bg: "linear-gradient(150deg,#8a9b5e,#3c4326)",
-        image: "/images/tours/kangaroo-valley.webp",
-        focus: "72% center",
-      },
-    ],
+    photo: {
+      label: "Oyster shucking",
+      bg: "linear-gradient(150deg,#cdbfa0,#5b4d34)",
+      image: "/images/tours/central-coast.webp",
+    },
+    summary: ["Hunter Valley", "Central Coast", "Hawkesbury River", "Port Stephens"],
     destinations: [
       { name: "Hunter Valley", highlights: "wine, chocolate & cheese" },
       {
@@ -72,18 +60,12 @@ export const REGIONS: Region[] = [
     direction: "East",
     arrow: "→",
     title: "City & beaches",
-    photos: [
-      {
-        label: "Sydney beaches",
-        bg: "linear-gradient(150deg,#8fb3c9,#2e4a56)",
-        image: "/images/ggt-pictures/sydney-beaches-tour.jpg",
-      },
-      {
-        label: "Market food stop",
-        bg: "linear-gradient(150deg,#c98a5e,#5c3a26)",
-        image: "/images/ggt-pictures/beaches-bbq.jpg",
-      },
-    ],
+    photo: {
+      label: "Seafood by the beach",
+      bg: "linear-gradient(150deg,#8fb3c9,#2e4a56)",
+      image: "/images/ggt-pictures/sydney-beaches-tour.jpg",
+    },
+    summary: ["Sydney City", "Fish Markets", "Beaches"],
     destinations: [
       {
         name: "Sydney City",
@@ -102,18 +84,12 @@ export const REGIONS: Region[] = [
     direction: "West",
     arrow: "←",
     title: "Mountains & highlands",
-    photos: [
-      {
-        label: "Blue Mountains lookout",
-        bg: "linear-gradient(150deg,#7d93a3,#2c3a42)",
-        image: "/images/AdobeStock_204510460.jpeg",
-      },
-      {
-        label: "Cellar door tasting",
-        bg: "linear-gradient(150deg,#8a6a4a,#3a2a1a)",
-        image: "/images/tours/hunter.webp",
-      },
-    ],
+    photo: {
+      label: "Three Sisters, Blue Mountains",
+      bg: "linear-gradient(150deg,#7d93a3,#2c3a42)",
+      image: "/images/AdobeStock_204510460.jpeg",
+    },
+    summary: ["Blue Mountains", "Hawkesbury", "Oberon"],
     destinations: [
       {
         name: "Hawkesbury",
@@ -132,18 +108,12 @@ export const REGIONS: Region[] = [
     direction: "South",
     arrow: "↓",
     title: "Coast & national park",
-    photos: [
-      {
-        label: "Royal National Park bushwalk",
-        bg: "linear-gradient(150deg,#7a8f6e,#33402c)",
-        image: "/images/tours/beaches.webp",
-      },
-      {
-        label: "South Coast waterfall",
-        bg: "linear-gradient(150deg,#6ea3a0,#233d3b)",
-        image: "/images/ggt-pictures/blue-mountains-1.jpg",
-      },
-    ],
+    photo: {
+      label: "Sea Cliff Bridge",
+      bg: "linear-gradient(150deg,#6ea3a0,#233d3b)",
+      image: "/images/tours/sea-cliff-bridge.webp",
+    },
+    summary: ["Royal National Park", "Sea Cliff Bridge", "Kiama"],
     destinations: [
       {
         name: "Royal National Park",

@@ -26,6 +26,9 @@
   --tint-wine-border:#eccdd1;
   --r:14px;
   --nav-h:92px;
+  /* Shrunken bar used while the compass dial is on screen — see
+     header.header-compact below and the observer in Header.tsx. */
+  --nav-h-compact:58px;
   --section:clamp(52px,7.6vw,84px);
   --font:'Poppins',system-ui,sans-serif;
   --font-display:'Quicksand',Arial,sans-serif;
@@ -153,7 +156,7 @@ header.header-overlay .nav-links.open a[aria-current="page"]{color:var(--wine)}
 header.header-overlay .nav-links.open .btn-wine{background:var(--wine-solid);border-color:var(--wine-solid);color:#fff;backdrop-filter:none}
 header.header-overlay .nav-links.open .btn-wine:hover{background:var(--wine-deep)}
 header .wrap{max-width:1440px}
-.nav{display:flex;align-items:center;justify-content:space-between;height:var(--nav-h);gap:20px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:var(--nav-h);gap:20px;transition:height .28s ease}
 .brand{display:flex;align-items:center;gap:10px;line-height:1;min-width:0;flex:none}
 .brand-mark{height:40px;width:auto;display:block}
 .nav-links{display:flex;align-items:center;gap:22px;flex-wrap:nowrap}
@@ -162,7 +165,16 @@ header .wrap{max-width:1440px}
 .nav-links a[aria-current="page"]{color:var(--wine)}
 .nav-links a:not(.btn)::after,.nav-links button:not(.btn)::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--wine);transition:width .2s}
 .nav-links a:not(.btn):hover::after,.nav-links button:not(.btn):hover::after,.nav-links a[aria-current="page"]::after{width:100%}
-.header-logo{height:76px;width:auto;flex:none}
+.header-logo{height:76px;width:auto;flex:none;transition:height .28s ease}
+/* Compact bar: Header.tsx watches the #choose and #directions compass sections
+   and adds .header-compact while either is on screen. The header is `fixed` on
+   home, so it floats over the top of them — dropping 92px to 58px hands ~34px
+   of viewport back to the four-card dial rather than reflowing anything. */
+header.header-compact .nav{height:var(--nav-h-compact)}
+header.header-compact .header-logo{height:44px}
+/* Keeps the burger dropdown flush under the shrunken bar (`top` is inert on
+   the desktop flex row, so this needs no breakpoint of its own). */
+header.header-compact .nav-links{top:var(--nav-h-compact)}
 .theme-toggle{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;
   border:1px solid var(--line);background:none;color:var(--ink-soft);cursor:pointer;transition:color .15s ease,border-color .15s ease,background .15s ease}
 .theme-toggle:hover{color:var(--wine);border-color:var(--wine)}
@@ -188,6 +200,9 @@ header.header-overlay:not(.header-scrolled) .theme-toggle:hover{color:var(--gold
   .nav{gap:6px}
   .brand{gap:8px}
   .header-logo{height:40px}
+  /* The phone logo is already below the compact size — shrink it further
+     rather than letting .header-compact scale it back up. */
+  header.header-compact .header-logo{height:32px}
 }
 
 /* Section shell */
@@ -244,9 +259,9 @@ section.pad{padding:78px 0}
   display:flex;align-items:center;padding:0 24px}
 .hero-copy .inner{width:100%;max-width:1440px;margin:0 auto;color:#fff}
 .hero-copy .eyebrow{color:var(--gold-soft)}
-.hero-copy h1{color:#fff;font-size:clamp(2.4rem,6vw,4.2rem);font-weight:600;margin:.25em 0 .35em;max-width:16ch;
+.hero-copy h1{color:#fff;font-size:clamp(2.8rem,7.5vw,5.2rem);font-weight:600;margin:.25em 0 .35em;max-width:16ch;
   text-shadow:0 2px 24px rgba(0,0,0,.4)}
-.hero-copy p{font-size:1.1rem;max-width:46ch;color:rgba(255,255,255,.92);margin-bottom:1.6em}
+.hero-copy p{font-size:clamp(1.3rem,3.2vw,2.15rem);max-width:46ch;color:rgba(255,255,255,.92);margin-bottom:1.6em}
 .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
 /* Sits on the shell line with the promo badge above it, but never closer to
    the edge than 92px — below ~1840px the shell inset collapses toward the
@@ -612,67 +627,232 @@ section.pad{padding:78px 0}
 .pickup-map .leaflet-popup-content{margin:10px 14px;font-family:var(--font);font-size:.85rem;line-height:1.5;color:var(--ink)}
 .pickup-map .leaflet-popup-content a{color:var(--wine);font-weight:600}
 
-/* Destinations grouped by direction: a genuine compass layout, not a card
-   grid with a badge — North sits above the compass, South below, East and
-   West either side, so the arrow really does point at each region. */
+/* ===================== HOME: scroll snapping ===================== */
+/* Hero -> choose a direction -> the dial: three full stops, so getting from
+   the video to the destinations is one flick each rather than a long drag.
+
+   `proximity`, never `mandatory`. Only three of the homepage's fifteen
+   sections are snap targets, and mandatory would haul the visitor back to the
+   nearest of them from anywhere further down the page. Proximity only bites
+   within about half a viewport of a target, so everything below the dial
+   scrolls normally.
+
+   No scroll-padding is needed: a snap area is the border box adjusted by
+   scroll-margin, so the scroll-margin-top these two sections already carry for
+   their anchor links doubles as the offset that keeps them clear of the fixed
+   header. The hero wants no offset — it snaps flush to the top of the page. */
+html{scroll-snap-type:y proximity}
+/* `scroll-snap-stop:always` is what makes this feel like one flick per
+   section: proximity on its own only pulls you in from about 30% of a
+   viewport away, so a firm scroll would sail straight past a section and
+   land in the dead space between two. `always` forbids passing over a snap
+   point at all, so a fling out of the hero stops dead on this section and the
+   next one stops on the dial. */
+.hero,.choose-section,section.compass-section{scroll-snap-align:start;scroll-snap-stop:always}
+@media(max-width:1000px){
+  /* The dial stacks into a ~1900px single column here — more than twice a
+     phone screen — so a snap point at its top would fight every swipe. */
+  html{scroll-snap-type:none}
+}
+
+/* ===================== HOME: choose a direction ===================== */
+/* The compass narrative that hands straight off into the dial below
+   (#directions). Copy left, big portrait photo right, and an interactive
+   compass under the copy: it cycles N-E-S-W on a ~4s timer and the photo
+   cross-fades to whichever heading the needle lands on. Hover, focus or a
+   click takes it over — see components/ChooseDirection.tsx.
+
+   Deliberately not `.pad`: this section owns its padding so it can sit tight
+   against the dial it introduces, and so it never has to out-specify
+   `section.pad{padding:78px 0}` the way `section.compass-section` below does.
+
+   It fills exactly one screen below the compact header, with the content
+   centred in it. That is what puts real air between this and the dial — the
+   leftover space lands as ~90px under the photo instead of the 30px of
+   padding it used to be — and it is what makes the snap points below sit
+   exactly one viewport apart. `safe center` on the second line so content
+   taller than the screen (short laptops) spills downward rather than sliding
+   up under the fixed bar; browsers without it keep plain `center`. */
+.choose-section{min-height:calc(100vh - var(--nav-h-compact));
+  min-height:calc(100svh - var(--nav-h-compact));
+  display:grid;align-content:center;align-content:safe center;
+  padding:26px 0 31px;scroll-margin-top:var(--nav-h-compact)}
+/* Centred title sitting above the whole grid — unlike .choose-copy below it,
+   this one isn't left-aligned, so it reads as the section's name rather than
+   part of the copy block. */
+.choose-eyebrow{display:block;text-align:center;color:var(--wine);font-weight:700;
+  letter-spacing:.24em;text-transform:uppercase;font-size:clamp(.95rem,1.6vw,1.2rem);
+  margin:0 0 clamp(16px,3vw,30px)}
+/* The photo spans both rows and the `1fr` dial row absorbs the slack, so the
+   compass sits directly under the copy with the whitespace below it. */
+.choose-grid{display:grid;grid-template-columns:1.06fr .94fr;
+  grid-template-areas:"copy photo" "dial photo";grid-template-rows:auto 1fr;
+  column-gap:clamp(34px,5vw,66px);row-gap:clamp(20px,3vw,34px);align-items:start}
+/* Left-aligned on purpose — the site's only section head that isn't .sec-head
+   (which is centred, width-capped and auto-margined). A modifier would have to
+   unset all of that, so it gets its own class. */
+.choose-copy{grid-area:copy}
+.choose-copy h2{font-size:clamp(2.1rem,4.4vw,3.3rem);margin:.22em 0 .38em;max-width:15ch}
+.choose-copy p{color:var(--ink-soft);font-size:clamp(1rem,1.2vw,1.12rem);max-width:38ch;line-height:1.65}
+/* Sized off the column, never the viewport, so it can't crowd the copy.
+   position:relative anchors the four hit-area buttons. */
+.choose-dial{grid-area:dial;position:relative;width:min(258px,66%);aspect-ratio:1;justify-self:start}
+.choose-rose{width:100%;height:100%;overflow:visible;display:block}
+/* Same 0 0 120 120 geometry and 60,60 centre as components/CompassRose.tsx, so
+   the page's two compasses read as one instrument. This needle snaps between
+   four fixed headings instead of tracking the cursor; its rotation is
+   accumulated and never wrapped back into 0-360, which is what stops W -> N
+   unwinding 270deg backwards. The >1 control point overshoots and settles,
+   like a real card finding north. */
+.choose-needle{transition:transform .9s cubic-bezier(.22,1.4,.36,1)}
+/* The N/E/S/W letters are real <button> text rather than SVG <text>: they have
+   to be focusable, hoverable and nameable, and a button outside the SVG picks
+   up the global :focus-visible ring for free. ::before pads the tap target out
+   past 44px without inflating the visible pill. */
+.choose-point{position:absolute;z-index:2;width:32px;height:32px;display:grid;place-items:center;
+  background:none;border:0;padding:0;cursor:pointer;border-radius:50%;
+  font-family:var(--font);font-size:.82rem;font-weight:600;letter-spacing:.04em;
+  color:var(--ink-soft);transition:color .18s ease,background .18s ease,box-shadow .18s ease}
+.choose-point::before{content:"";position:absolute;inset:-6px;border-radius:50%}
+.choose-point:hover{color:var(--wine);background:var(--tint-wine)}
+.choose-point[aria-pressed="true"]{color:var(--wine);background:var(--tint-wine);
+  box-shadow:0 0 0 1.5px var(--tint-wine-border)}
+.choose-point-n{top:-4px;left:50%;transform:translateX(-50%)}
+.choose-point-s{bottom:-4px;left:50%;transform:translateX(-50%)}
+.choose-point-e{right:-8px;top:50%;transform:translateY(-50%)}
+.choose-point-w{left:-8px;top:50%;transform:translateY(-50%)}
+/* Portrait card. Fixed height rather than aspect-ratio, matching .why-photo
+   and .ch-media — it's what keeps the whole section inside one screen. */
+.choose-photo{grid-area:photo;position:relative;margin:0;overflow:hidden;
+  border-radius:var(--r);box-shadow:var(--shadow);background:var(--paper-2);
+  height:clamp(430px,60vh,640px)}
+/* All four region photos are stacked here and only the active one is opaque,
+   so every photo is fetched during the first parse and no swap is ever blank.
+   opacity:0, NOT display:none — a display:none layer is never fetched and the
+   pre-warm silently breaks. No background-size/position here either: mediaBg()
+   bakes `center/cover no-repeat` into the inline shorthand. */
+.choose-photo-layer{position:absolute;inset:0;opacity:0;transition:opacity .7s ease}
+.choose-photo-layer.is-active{opacity:1}
+/* Same pill as .region-photo-label below, one size up for the bigger frame. */
+.choose-photo-caption{position:absolute;left:16px;bottom:16px;z-index:3;color:#fff;
+  font-size:.78rem;letter-spacing:.04em;background:rgba(43,38,34,.55);
+  padding:.45em 1.05em;border-radius:100px;backdrop-filter:blur(3px)}
+@media(max-width:1000px){
+  /* One column, source order kept: copy, compass, photo. Unlike the dial below
+     — which drops its compass entirely at this width — the compass stays here:
+     it IS the interaction, and without it the photo changes with nothing on
+     screen driving it. Above the photo rather than below so the visual order
+     still matches the DOM order. */
+  /* Height back to natural: with snapping off below this width there's nothing
+     for a full-screen section to line up with, and pinning it to the viewport
+     would only strand the stacked content against a hard edge. */
+  .choose-section{min-height:0;padding:46px 0 31px}
+  .choose-grid{grid-template-columns:1fr;grid-template-rows:auto;
+    grid-template-areas:"copy" "dial" "photo";max-width:560px;row-gap:24px}
+  .choose-copy h2,.choose-copy p{max-width:none}
+  .choose-dial{justify-self:center;width:212px}
+  .choose-photo{height:min(60vh,400px)}
+}
+@media(max-width:600px){
+  .choose-section{padding:38px 0 27px}
+  .choose-dial{width:182px}
+  .choose-point{width:28px;height:28px;font-size:.74rem}
+  .choose-photo{height:290px}
+  .choose-photo-caption{left:12px;bottom:12px;font-size:.72rem}
+}
+
+/* Destinations grouped by direction: a compass dial — North sits above the
+   hub, South below, East and West either side.
+
+   Deliberately NOT cards. The client asked for the box gone, so a region is
+   bare text sitting beside a floating photo: no background, border, radius
+   or shadow on the group itself. Nothing draws the boundary, which means
+   spacing has to — hence the big `gap` between regions against the small one
+   inside each. Change those two together or the four blocks stop reading as
+   four blocks. */
+/* `section.` is load-bearing: plain `.compass-section` loses to
+   `section.pad{padding:78px 0}` above, which is why this section silently
+   ran at 78px before. Padding + the row gap below are tuned so the whole
+   dial clears ~970px and fits a 1080p viewport under the compact header —
+   grow the type here and you lose that — and it now also has to hold as a
+   scroll-snap stop, where the whole dial wants to land on one screen. The
+   air above it comes from .choose-section's full-screen centring rather than
+   padding here, which is why the top padding is so small. */
+section.compass-section{padding:7px 0 54px;
+  /* /private-tours deep-links straight here and the header is fixed, so
+     without this the first row lands underneath the bar. Matches the compact
+     height because the header is always compact by the time you arrive. */
+  scroll-margin-top:var(--nav-h-compact)}
+/* Wider than the 1180px page shell: with the card padding gone the text
+   needs the room back, and the shrinking header (header.header-compact)
+   frees the height to match. */
+.compass-section .wrap{max-width:1300px}
 .compass-layout{
   display:grid;
-  grid-template-columns:minmax(240px,1fr) minmax(300px,380px) minmax(240px,1fr);
+  grid-template-columns:repeat(3,minmax(290px,384px));
   grid-template-areas:
     ".    north .   "
     "west hub   east"
     ".    south .   ";
-  gap:44px 32px;
-  align-items:center;
-  max-width:1180px;
+  gap:24px 44px;
+  align-items:stretch;
+  justify-content:center;
   margin:0 auto;
 }
 .region-north{grid-area:north}
 .region-east{grid-area:east}
 .region-west{grid-area:west}
 .region-south{grid-area:south}
-.compass-hub{grid-area:hub;display:flex;align-items:center;justify-content:center;padding:12px}
+.compass-hub{grid-area:hub;display:flex;align-items:center;justify-content:center;padding:4px}
 .compass-rose{overflow:visible;display:block}
-.compass-hub .compass-rose{width:min(240px,86%);height:auto}
+.compass-hub .compass-rose{width:min(146px,72%);height:auto}
 .compass-label{font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:.04em;fill:var(--ink-soft)}
-.region-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;height:100%;transition:transform .3s ease,box-shadow .3s ease}
-.region-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
 
-/* Editorial photo split: a large top photo with a smaller inset photo
-   hanging over its bottom-right corner, both shown in full colour. On card
-   hover the large photo zooms in very slightly and the inset nudges up —
-   see region-photo-main / -inset below. Swap a real photo in via
-   `region.photos[n].image` (lib/regions.ts). */
-.region-photos{position:relative;height:190px;flex-shrink:0}
-.region-photo-main-wrap{position:absolute;inset:0;overflow:hidden}
-.region-photo{background-size:cover;background-position:center}
-.region-photo-main{position:absolute;inset:0;transform:scale(1);transition:transform .5s ease}
-.region-card:hover .region-photo-main{transform:scale(1.045)}
-.region-photo-inset{position:absolute;right:18px;bottom:-26px;width:44%;height:110px;border-radius:10px;border:3px solid #fff;box-shadow:0 10px 24px rgba(43,38,34,.18);z-index:2;transition:transform .35s ease}
-.region-card:hover .region-photo-inset{transform:translateY(-6px)}
-.region-photo-label{position:absolute;left:10px;bottom:10px;z-index:3;color:#fff;font-size:.68rem;letter-spacing:.06em;background:rgba(43,38,34,.45);padding:.35em .8em;border-radius:100px}
-.region-photo-inset .region-photo-label{left:8px;bottom:8px;font-size:.62rem;padding:.3em .65em}
+/* Text left, photo right. RegionCard.tsx renders the photo first (so the
+   mobile stack below gets photo-on-top from plain `column`), so the desktop
+   row reverses to put the text on the left. */
+.region-card{display:flex;flex-direction:row-reverse;align-items:stretch;gap:20px;height:100%}
 
-.region-body{padding:44px 28px 30px;display:flex;flex-direction:column;flex:1}
-.region-badge{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--wine-solid);color:#fff;font-size:1.4rem;line-height:1;margin-bottom:12px}
-.region-direction{display:block;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--wine);font-weight:600;margin-bottom:6px}
-.region-card h3{font-size:1.3rem;margin-bottom:16px}
-.region-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:20px;flex:1}
-.region-list li{position:relative;padding-left:20px;font-size:.92rem;color:var(--ink-soft);line-height:1.5}
-.region-list li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:50%;background:var(--gold-muted)}
-.region-list li b{color:var(--ink);font-weight:600}
-.region-enquire{align-self:flex-start;font-size:.85rem;font-weight:600;color:var(--wine);border-bottom:1.5px solid var(--gold-muted);padding-bottom:2px;transition:color .15s ease}
+/* The only element still drawn as an object — its radius is what makes it
+   read as a photo laid on the page rather than the filled half of a card.
+   `overflow:hidden` is for the caption pill, which would otherwise poke out
+   of the rounded corner. */
+.region-photo{position:relative;width:34%;min-width:108px;flex-shrink:0;overflow:hidden;
+  border-radius:var(--r);background-size:cover;background-position:center;
+  transition:transform .35s ease}
+.region-card:hover .region-photo{transform:scale(1.02)}
+.region-photo-label{position:absolute;left:8px;bottom:8px;z-index:3;color:#fff;font-size:.62rem;letter-spacing:.04em;background:rgba(43,38,34,.55);padding:.3em .7em;border-radius:100px}
+
+/* No padding of its own: the text starts flush at the column edge, which is
+   what sells it as floating on the page instead of sitting inside a box. */
+.region-body{padding:2px 0;display:flex;flex-direction:column;flex:1;min-width:0}
+.region-lead{font-size:.95rem;font-weight:700;margin-bottom:9px;line-height:1.3}
+.region-lead span{color:var(--wine);font-weight:700}
+.region-list{list-style:none;margin:0 0 12px;padding:0;font-size:.74rem;color:var(--ink-soft);line-height:1.45;flex:1}
+.region-list li{margin-bottom:6px}
+.region-list li:last-child{margin-bottom:0}
+.region-list strong{color:var(--ink);font-weight:600}
+.region-enquire{align-self:flex-start;font-size:.76rem;font-weight:600;color:var(--wine);border-bottom:1.5px solid var(--gold-muted);padding-bottom:2px;transition:color .15s ease}
 .region-enquire:hover{color:var(--wine-deep)}
 @media(max-width:1000px){
-  /* No room for a true cross layout — compass becomes a heading graphic,
-     the four cards stack in reading order underneath. */
+  /* No room for a compact dial at this width — hide the compass graphic
+     and stack the four regions in a single reading-order column. */
+  .compass-section{padding:36px 0 48px}
   .compass-layout{
     grid-template-columns:1fr;
-    grid-template-areas:"hub" "north" "east" "west" "south";
-    gap:26px;max-width:520px;
+    grid-template-areas:"north" "east" "south" "west";
+    gap:44px;max-width:520px;
   }
-  .compass-hub .compass-rose{width:160px}
-  .region-card{height:auto}
+  .compass-hub{display:none}
+  /* 44px between regions vs 14px inside one: with no card outline left,
+     that ratio is the only thing grouping a photo with its own text. */
+  .region-card{flex-direction:column;gap:14px}
+  .region-photo{width:100%;height:190px}
+  .region-body{padding:0}
+  .region-lead{font-size:1.15rem;margin-bottom:10px}
+  .region-list{font-size:.9rem;line-height:1.55;margin-bottom:16px}
+  .region-list li{margin-bottom:8px}
+  .region-enquire{font-size:.9rem}
 }
 
 /* ===================== About page ===================== */
@@ -866,11 +1046,18 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
   .scroll-cue .arrow{animation:none}
   .reveal{opacity:1;transform:none;transition:none}
   *{scroll-behavior:auto}
-  .region-card,.region-photo-main,.region-photo-inset{transition:none}
-  .region-card:hover{transform:none}
-  .region-card:hover .region-photo-main{transform:none}
-  .region-card:hover .region-photo-inset{transform:none}
+  /* A scroll the visitor didn't ask for is exactly what this setting is about,
+     so the homepage's hero/choose/dial snap points come off too. */
+  html{scroll-snap-type:none}
+  .region-photo{transition:none}
+  .region-card:hover .region-photo{transform:none}
+  /* ChooseDirection.tsx also stops its own timer here, so the needle just
+     rests on North and picking a direction swaps instantly. Scoped to the
+     caption rather than bare .fade-swap, which WineFoodPairing shares. */
+  .choose-needle,.choose-photo-layer,.choose-point{transition:none}
+  .choose-photo-caption .fade-swap{animation:none}
   body{transition:none}
+  .nav,.header-logo{transition:none}
 }
 
 /* ===========================================================

@@ -9,36 +9,24 @@ export default function RegionCard({
   region: Region;
   className?: string;
 }) {
-  const [main, inset] = region.photos;
-
   return (
     <div className={className ? `region-card ${className}` : "region-card"}>
-      <div className="region-photos">
-        <div className="region-photo-main-wrap">
-          <div
-            className="region-photo region-photo-main"
-            style={{ background: mediaBg(main.bg, main.image, main.focus) }}
-          >
-            <span className="region-photo-label">{main.label}</span>
-          </div>
-        </div>
-        <div
-          className="region-photo region-photo-inset"
-          style={{ background: mediaBg(inset.bg, inset.image, inset.focus) }}
-        >
-          <span className="region-photo-label">{inset.label}</span>
-        </div>
+      <div
+        className="region-photo"
+        style={{
+          background: mediaBg(region.photo.bg, region.photo.image, region.photo.focus),
+        }}
+      >
+        <span className="region-photo-label">{region.photo.label}</span>
       </div>
       <div className="region-body">
-        <span className="region-badge" aria-hidden="true">
-          {region.arrow}
-        </span>
-        <span className="region-direction">{region.direction}</span>
-        <h3>{region.title}</h3>
+        <h3 className="region-lead">
+          {region.direction} leads to: <span>{region.title}</span>
+        </h3>
         <ul className="region-list">
           {region.destinations.map((d) => (
             <li key={d.name}>
-              <b>{d.name}</b> — {d.highlights}
+              <strong>{d.name}</strong> — {d.highlights}
             </li>
           ))}
         </ul>
