@@ -26,9 +26,9 @@ const south = REGIONS.find((r) => r.id === "south")!;
 // Re-fetch tour data on each request so Firestore edits show up without rebuild.
 export const dynamic = "force-dynamic";
 
-// Self-hosted (see public/videos/hero.mp4) rather than a YouTube embed —
-// see HeroVideo.tsx for why.
-const HERO_VIDEO_SRC = "/videos/hero.mp4";
+// Embedded from the client's YouTube channel ("Hunter promo video") — the
+// master file is too large to commit. See HeroVideo.tsx.
+const HERO_VIDEO_ID = "hrV081SCjbg";
 
 const GUEST_PHOTOS = [
   { src: "/images/SYDNEY080118_0010.jpg", caption: "Breakfast on the road" },
@@ -71,7 +71,7 @@ export default async function Home() {
       <section className="hero">
         <div className="video-frame">
           <HeroVideo
-            src={HERO_VIDEO_SRC}
+            videoId={HERO_VIDEO_ID}
             poster="/images/Hunter-Valley-Tour-image-2.jpg"
           />
           <div className="hero-promo-badge">
