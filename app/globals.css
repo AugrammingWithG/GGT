@@ -635,7 +635,13 @@ section.pad{padding:78px 0}
    their anchor links doubles as the offset that keeps them clear of the fixed
    header. The hero wants no offset — it snaps flush to the top of the page. */
 html{scroll-snap-type:y proximity}
-.hero,.choose-section,section.compass-section{scroll-snap-align:start}
+/* `scroll-snap-stop:always` is what makes this feel like one flick per
+   section: proximity on its own only pulls you in from about 30% of a
+   viewport away, so a firm scroll would sail straight past a section and
+   land in the dead space between two. `always` forbids passing over a snap
+   point at all, so a fling out of the hero stops dead on this section and the
+   next one stops on the dial. */
+.hero,.choose-section,section.compass-section{scroll-snap-align:start;scroll-snap-stop:always}
 @media(max-width:1000px){
   /* The dial stacks into a ~1900px single column here — more than twice a
      phone screen — so a snap point at its top would fight every swipe. */
