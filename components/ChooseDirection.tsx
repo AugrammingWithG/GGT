@@ -146,67 +146,69 @@ export default function ChooseDirection({ slides }: { slides: DirectionSlide[] }
 
   return (
     <section className="choose-section" id="choose" ref={sectionRef}>
-      <div className="wrap choose-grid">
-        <div className="choose-copy">
-          <span className="eyebrow">Make it personal</span>
-          <h2>Now choose your own adventure</h2>
-          <p>Private tours for 2 guests and above — pick a direction to begin.</p>
-        </div>
+      <div className="wrap">
+        <span className="choose-eyebrow">Make it personal</span>
+        <div className="choose-grid">
+          <div className="choose-copy">
+            <h2>Now choose your own adventure</h2>
+            <p>Private tours for 2 guests and above — pick a direction to begin.</p>
+          </div>
 
-        <div
-          className="choose-dial"
-          role="group"
-          aria-label="Choose a direction"
-          onMouseEnter={() => setHovering(true)}
-          onMouseLeave={() => setHovering(false)}
-          // React's onFocus/onBlur are backed by focusin/focusout and do
-          // bubble, so this one pair covers all four buttons.
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          onKeyDown={handleKeyDown}
-        >
-          <CompassDial
-            angle={angle}
-            activeIndex={index}
-            onPick={pick}
-            buttonsRef={buttonsRef}
-          />
-        </div>
-
-        <figure
-          className="choose-photo"
-          onMouseEnter={() => setHovering(true)}
-          onMouseLeave={() => setHovering(false)}
-        >
-          {/* All four photos are stacked here and only the active one is
-              opaque, so every one is fetched during the first parse and no
-              swap is ever blank — see .choose-photo-layer in globals.css for
-              why that has to stay opacity:0 rather than display:none. */}
-          {ordered.map((slide, i) => (
-            <div
-              key={slide.direction}
-              className={
-                i === index ? "choose-photo-layer is-active" : "choose-photo-layer"
-              }
-              style={{ background: slide.background }}
-              aria-hidden="true"
-            />
-          ))}
-          {/* aria-live only once pinned: announcing a caption every four
-              seconds unprompted is noise, but after the visitor takes over
-              it's the feedback they asked for. It lives on the stable
-              figcaption — a live region keyed to its own content is added and
-              changed in the same tick, which doesn't announce reliably. */}
-          <figcaption
-            className="choose-photo-caption"
-            aria-live={pinned ? "polite" : "off"}
-            aria-atomic="true"
+          <div
+            className="choose-dial"
+            role="group"
+            aria-label="Choose a direction"
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+            // React's onFocus/onBlur are backed by focusin/focusout and do
+            // bubble, so this one pair covers all four buttons.
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            onKeyDown={handleKeyDown}
           >
-            <span key={active.direction} className="fade-swap">
-              {active.label}
-            </span>
-          </figcaption>
-        </figure>
+            <CompassDial
+              angle={angle}
+              activeIndex={index}
+              onPick={pick}
+              buttonsRef={buttonsRef}
+            />
+          </div>
+
+          <figure
+            className="choose-photo"
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+          >
+            {/* All four photos are stacked here and only the active one is
+                opaque, so every one is fetched during the first parse and no
+                swap is ever blank — see .choose-photo-layer in globals.css for
+                why that has to stay opacity:0 rather than display:none. */}
+            {ordered.map((slide, i) => (
+              <div
+                key={slide.direction}
+                className={
+                  i === index ? "choose-photo-layer is-active" : "choose-photo-layer"
+                }
+                style={{ background: slide.background }}
+                aria-hidden="true"
+              />
+            ))}
+            {/* aria-live only once pinned: announcing a caption every four
+                seconds unprompted is noise, but after the visitor takes over
+                it's the feedback they asked for. It lives on the stable
+                figcaption — a live region keyed to its own content is added and
+                changed in the same tick, which doesn't announce reliably. */}
+            <figcaption
+              className="choose-photo-caption"
+              aria-live={pinned ? "polite" : "off"}
+              aria-atomic="true"
+            >
+              <span key={active.direction} className="fade-swap">
+                {active.label}
+              </span>
+            </figcaption>
+          </figure>
+        </div>
       </div>
     </section>
   );

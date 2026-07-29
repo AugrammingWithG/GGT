@@ -677,6 +677,12 @@ html{scroll-snap-type:y proximity}
   min-height:calc(100svh - var(--nav-h-compact));
   display:grid;align-content:center;align-content:safe center;
   padding:26px 0 31px;scroll-margin-top:var(--nav-h-compact)}
+/* Centred title sitting above the whole grid — unlike .choose-copy below it,
+   this one isn't left-aligned, so it reads as the section's name rather than
+   part of the copy block. */
+.choose-eyebrow{display:block;text-align:center;color:var(--wine);font-weight:700;
+  letter-spacing:.24em;text-transform:uppercase;font-size:clamp(.95rem,1.6vw,1.2rem);
+  margin:0 0 clamp(16px,3vw,30px)}
 /* The photo spans both rows and the `1fr` dial row absorbs the slack, so the
    compass sits directly under the copy with the whitespace below it. */
 .choose-grid{display:grid;grid-template-columns:1.06fr .94fr;
