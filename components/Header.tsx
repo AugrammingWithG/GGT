@@ -23,6 +23,7 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [compact, setCompact] = useState(false);
   const closeMenu = () => setOpen(false);
   const cta = FAREHARBOR_ENABLED ? "Book now" : "Build your tour";
 
@@ -38,8 +39,31 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
+  // The compass dial (#directions) is the densest block on the page and the
+  // fixed header floats right over its top edge. Shrink the bar while that
+  // section holds the viewport so the four cards get the space back, then let
+  // it grow again once the visitor scrolls on. Home only — no other page has
+  // the section, and elsewhere the header is in flow, so resizing it would
+  // reflow the whole page.
+  useEffect(() => {
+    if (!isHome) return;
+    const section = document.getElementById("directions");
+    if (!section || typeof IntersectionObserver === "undefined") return;
+    // Watches the band between 12% and 70% down the viewport: the section has
+    // to actually be the thing you're looking at, not merely peeking in at the
+    // bottom edge, before the bar collapses.
+    const observer = new IntersectionObserver(
+      ([entry]) => setCompact(entry.isIntersecting),
+      { rootMargin: "-12% 0px -30% 0px" },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [isHome]);
+
   const headerClassName = isHome
-    ? `header-overlay${scrolled ? " header-scrolled" : ""}`
+    ? `header-overlay${scrolled ? " header-scrolled" : ""}${
+        compact ? " header-compact" : ""
+      }`
     : undefined;
 
   return (

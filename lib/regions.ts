@@ -61,9 +61,9 @@ export const REGIONS: Region[] = [
     arrow: "→",
     title: "City & beaches",
     photo: {
-      label: "Bondi coastal walk",
+      label: "Seafood by the beach",
       bg: "linear-gradient(150deg,#8fb3c9,#2e4a56)",
-      image: "/images/beach-photo.jpg",
+      image: "/images/ggt-pictures/sydney-beaches-tour.jpg",
     },
     summary: ["Sydney City", "Fish Markets", "Beaches"],
     destinations: [
