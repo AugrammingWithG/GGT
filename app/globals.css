@@ -620,6 +620,28 @@ section.pad{padding:78px 0}
 .pickup-map .leaflet-popup-content{margin:10px 14px;font-family:var(--font);font-size:.85rem;line-height:1.5;color:var(--ink)}
 .pickup-map .leaflet-popup-content a{color:var(--wine);font-weight:600}
 
+/* ===================== HOME: scroll snapping ===================== */
+/* Hero -> choose a direction -> the dial: three full stops, so getting from
+   the video to the destinations is one flick each rather than a long drag.
+
+   `proximity`, never `mandatory`. Only three of the homepage's fifteen
+   sections are snap targets, and mandatory would haul the visitor back to the
+   nearest of them from anywhere further down the page. Proximity only bites
+   within about half a viewport of a target, so everything below the dial
+   scrolls normally.
+
+   No scroll-padding is needed: a snap area is the border box adjusted by
+   scroll-margin, so the scroll-margin-top these two sections already carry for
+   their anchor links doubles as the offset that keeps them clear of the fixed
+   header. The hero wants no offset — it snaps flush to the top of the page. */
+html{scroll-snap-type:y proximity}
+.hero,.choose-section,section.compass-section{scroll-snap-align:start}
+@media(max-width:1000px){
+  /* The dial stacks into a ~1900px single column here — more than twice a
+     phone screen — so a snap point at its top would fight every swipe. */
+  html{scroll-snap-type:none}
+}
+
 /* ===================== HOME: choose a direction ===================== */
 /* The compass narrative that hands straight off into the dial below
    (#directions). Copy left, big portrait photo right, and an interactive
@@ -629,8 +651,19 @@ section.pad{padding:78px 0}
 
    Deliberately not `.pad`: this section owns its padding so it can sit tight
    against the dial it introduces, and so it never has to out-specify
-   `section.pad{padding:78px 0}` the way `section.compass-section` below does. */
-.choose-section{padding:clamp(56px,7vw,86px) 0 30px;scroll-margin-top:var(--nav-h-compact)}
+   `section.pad{padding:78px 0}` the way `section.compass-section` below does.
+
+   It fills exactly one screen below the compact header, with the content
+   centred in it. That is what puts real air between this and the dial — the
+   leftover space lands as ~90px under the photo instead of the 30px of
+   padding it used to be — and it is what makes the snap points below sit
+   exactly one viewport apart. `safe center` on the second line so content
+   taller than the screen (short laptops) spills downward rather than sliding
+   up under the fixed bar; browsers without it keep plain `center`. */
+.choose-section{min-height:calc(100vh - var(--nav-h-compact));
+  min-height:calc(100svh - var(--nav-h-compact));
+  display:grid;align-content:center;align-content:safe center;
+  padding:26px 0 34px;scroll-margin-top:var(--nav-h-compact)}
 /* The photo spans both rows and the `1fr` dial row absorbs the slack, so the
    compass sits directly under the copy with the whitespace below it. */
 .choose-grid{display:grid;grid-template-columns:1.06fr .94fr;
@@ -691,7 +724,10 @@ section.pad{padding:78px 0}
      it IS the interaction, and without it the photo changes with nothing on
      screen driving it. Above the photo rather than below so the visual order
      still matches the DOM order. */
-  .choose-section{padding:46px 0 26px}
+  /* Height back to natural: with snapping off below this width there's nothing
+     for a full-screen section to line up with, and pinning it to the viewport
+     would only strand the stacked content against a hard edge. */
+  .choose-section{min-height:0;padding:46px 0 34px}
   .choose-grid{grid-template-columns:1fr;grid-template-rows:auto;
     grid-template-areas:"copy" "dial" "photo";max-width:560px;row-gap:24px}
   .choose-copy h2,.choose-copy p{max-width:none}
@@ -699,7 +735,7 @@ section.pad{padding:78px 0}
   .choose-photo{height:min(60vh,400px)}
 }
 @media(max-width:600px){
-  .choose-section{padding:38px 0 22px}
+  .choose-section{padding:38px 0 30px}
   .choose-dial{width:182px}
   .choose-point{width:28px;height:28px;font-size:.74rem}
   .choose-photo{height:290px}
@@ -719,10 +755,10 @@ section.pad{padding:78px 0}
    `section.pad{padding:78px 0}` above, which is why this section silently
    ran at 78px before. Padding + the row gap below are tuned so the whole
    dial clears ~970px and fits a 1080p viewport under the compact header —
-   grow the type here and you lose that. That budget is now shared with
-   .choose-section above, which carries this block's heading; the tiny top
-   padding is what makes the two read as one movement rather than two
-   sections. */
+   grow the type here and you lose that — and it now also has to hold as a
+   scroll-snap stop, where the whole dial wants to land on one screen. The
+   air above it comes from .choose-section's full-screen centring rather than
+   padding here, which is why the top padding is so small. */
 section.compass-section{padding:8px 0 54px;
   /* /private-tours deep-links straight here and the header is fixed, so
      without this the first row lands underneath the bar. Matches the compact
@@ -992,6 +1028,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
   .scroll-cue .arrow{animation:none}
   .reveal{opacity:1;transform:none;transition:none}
   *{scroll-behavior:auto}
+  /* A scroll the visitor didn't ask for is exactly what this setting is about,
+     so the homepage's hero/choose/dial snap points come off too. */
+  html{scroll-snap-type:none}
   .region-photo{transition:none}
   .region-card:hover .region-photo{transform:none}
   /* ChooseDirection.tsx also stops its own timer here, so the needle just
