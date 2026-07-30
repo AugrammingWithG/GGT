@@ -1,7 +1,6 @@
 import "../admin.css";
 import { AdminAuthProvider } from "@/components/admin/admin-auth";
 import AdminSidebar from "@/components/admin/AdminSidebar";
-import AdminBackdrop from "@/components/admin/AdminBackdrop";
 
 /**
  * Shared shell for every signed-in admin route (Overview, Enquiries,
@@ -19,7 +18,6 @@ export default function DashboardLayout({
   return (
     <AdminAuthProvider>
       <div className="admin-root flex min-h-screen">
-        <AdminBackdrop />
         <AdminSidebar />
         <main className="flex-1 overflow-x-hidden p-6 animate-in fade-in duration-500 md:p-8">
           {children}

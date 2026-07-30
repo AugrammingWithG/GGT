@@ -61,7 +61,7 @@ export default function ToursPage() {
   return (
     <div className="flex animate-in flex-col gap-6 fade-in slide-in-from-bottom-2 duration-500">
       <div>
-        <h1 className="text-3xl font-semibold text-white">Tours</h1>
+        <h1 className="text-3xl font-semibold text-foreground">Tours</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
           Itinerary, capacity and add-ons. Base rates live on the Pricing tab. Click a tour to edit it.
         </p>
@@ -84,7 +84,7 @@ export default function ToursPage() {
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && setCreating(true)}
-            className="flex h-full min-h-[168px] w-full cursor-pointer items-center justify-center border-dashed py-0 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--gold)]/50"
+            className="flex h-full min-h-[168px] w-full cursor-pointer items-center justify-center border-dashed py-0 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--wine)]/50"
           >
             <CardContent className="flex flex-col items-center gap-2 p-5 text-muted-foreground">
               <Plus className="size-6" />

@@ -12,9 +12,12 @@ import {
 
 type DayStat = { date: string; pageviews: number; visitors: number };
 
-const LINE = "#F4B400"; // brand gold — the admin's --primary on this glass theme
-const GRID = "rgba(255,255,255,.14)"; // hairline, one step off the dark glass surface
-const AXIS_TEXT = "rgba(255,255,255,.55)"; // on-glass-dim
+// Live CSS custom properties, not resolved hex — same trick KanbanColumn and
+// TourCard already use inline (style={{color:"var(--gold)"}}) — so the chart
+// re-colors itself for free when ThemeToggle flips data-theme.
+const LINE = "var(--gold-muted)";
+const GRID = "var(--line)";
+const AXIS_TEXT = "var(--ink-soft)";
 
 function shortDate(iso: string): string {
   const [, m, d] = iso.split("-");
@@ -94,7 +97,7 @@ export default function VisitorChart({
             strokeWidth={2}
             fill="url(#visitorFill)"
             dot={false}
-            activeDot={{ r: 5, fill: LINE, stroke: "rgba(9,14,10,.9)", strokeWidth: 2 }}
+            activeDot={{ r: 5, fill: LINE, stroke: "var(--card)", strokeWidth: 2 }}
             isAnimationActive
             animationDuration={900}
             animationEasing="ease-out"

@@ -34,7 +34,7 @@ export default function KanbanCard({
     >
       <CardContent className="p-4">
         <div className="flex min-w-0 items-start justify-between gap-2">
-          <p className="min-w-0 truncate text-sm font-semibold leading-tight text-white">{e.name}</p>
+          <p className="min-w-0 truncate text-sm font-semibold leading-tight text-foreground">{e.name}</p>
           <button
             onClick={(ev) => {
               ev.stopPropagation();
@@ -56,7 +56,7 @@ export default function KanbanCard({
             <Users className="size-3" />
             {e.guests}
           </span>
-          <span className="font-mono font-semibold text-[var(--gold)]">
+          <span className="font-mono font-semibold text-[var(--wine)]">
             {money(e.total)}
           </span>
         </div>

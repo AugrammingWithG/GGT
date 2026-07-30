@@ -34,8 +34,8 @@ export default function KanbanColumn({
   return (
     <div className="flex w-80 shrink-0 flex-col md:w-96">
       <div className="mb-3 flex items-center gap-2 px-1.5">
-        <span className={cn("size-2 rounded-full shadow-[0_0_8px_currentColor]", ACCENT[status])} />
-        <h2 className="text-sm font-semibold text-white">{title}</h2>
+        <span className={cn("size-2 rounded-full", ACCENT[status])} />
+        <h2 className="text-sm font-semibold text-foreground">{title}</h2>
         <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
           {enquiries.length}
         </span>
@@ -54,26 +54,21 @@ export default function KanbanColumn({
         style={{ transform: isOver ? "scale(1.01)" : undefined }}
       >
         {/*
-          The frosted tray, as its own layer *behind* the cards rather than a
-          backdrop-filter on the column itself — for the same backdrop-root
-          reason. Blurring the column would frost the tray but leave the cards
-          sampling the column instead of the photo. As a sibling they each frost
-          the backdrop independently: tray over the photo, cards over the tray.
-          Fill is the shared --glass white tinted with the column's status
-          colour, so it reads as glass first and status second (the old 6% pure
-          colour wash was a tint with no glass in it).
+          The tray, as its own layer *behind* the cards — a paper-tinted
+          panel, not a separate card shape, so a column full of cards reads
+          as one tray rather than a card nested inside a card. Fill is a
+          faint wash of the column's status colour into the site's paper
+          tint (matches how .tint-wine/.tint-green work on the public site).
         */}
         <div
           aria-hidden
           className="absolute inset-0 rounded-xl transition-all duration-200"
           style={{
-            background: `color-mix(in oklab, ${color} ${isOver ? 14 : 8}%, var(--glass))`,
-            border: `2px solid color-mix(in oklab, ${color} ${isOver ? 75 : 45}%, transparent)`,
-            WebkitBackdropFilter: "var(--glass-blur)",
-            backdropFilter: "var(--glass-blur)",
+            background: `color-mix(in oklab, ${color} ${isOver ? 10 : 5}%, var(--paper))`,
+            border: `1.5px solid color-mix(in oklab, ${color} ${isOver ? 55 : 25}%, var(--line))`,
             boxShadow: isOver
-              ? `0 0 0 3px color-mix(in oklab, ${color} 25%, transparent), 0 6px 16px -10px rgba(0, 0, 0, 0.55)`
-              : "0 6px 16px -10px rgba(0, 0, 0, 0.55)",
+              ? `0 0 0 3px color-mix(in oklab, ${color} 18%, transparent), var(--shadow-sm)`
+              : "var(--shadow-sm)",
           }}
         />
         <div className="relative flex flex-1 flex-col gap-3 p-3.5">

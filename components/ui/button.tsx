@@ -8,16 +8,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Matches the public site's own glass-theme CTA (.nature-page
-        // .btn-primary in globals.css): translucent white, not a brand fill —
-        // the site deliberately drops marmalade over photo backdrops.
+        // Matches the public site's own primary CTA (.btn-wine in
+        // globals.css): a solid wine pill.
         default:
-          "border border-white/30 bg-white/16 text-white shadow-[0_14px_32px_-16px_rgba(0,0,0,.6)] backdrop-blur-md hover:-translate-y-0.5 hover:bg-white/27",
+          "bg-primary text-primary-foreground shadow-[0_10px_24px_-12px_rgba(110,30,46,.55)] hover:-translate-y-0.5 hover:bg-[var(--wine-deep)]",
         secondary:
-          "border border-white/15 bg-white/10 text-secondary-foreground backdrop-blur-md hover:bg-white/20",
+          "border border-border bg-secondary text-secondary-foreground hover:bg-[var(--paper)]",
         outline:
-          "border border-input bg-transparent hover:border-white/40 hover:bg-white/10",
-        ghost: "hover:bg-white/10",
+          "border border-input bg-transparent text-foreground hover:border-[var(--wine)] hover:bg-[var(--tint-wine)]",
+        ghost: "hover:bg-muted",
         destructive: "bg-destructive text-white hover:opacity-90",
       },
       size: {

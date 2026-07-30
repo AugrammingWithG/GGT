@@ -1120,46 +1120,49 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
 }
 
 /* ===========================================================
-   ADMIN-LEGACY — verbatim from the pre-redesign stylesheet.
-   Used only by app/admin/login/page.tsx and (defensively) any
-   admin surface still on bare h1-h4. Never touched by the public
-   redesign above; references the admin-legacy tokens in :root.
+   ADMIN-LEGACY — now restyled to match the public paper/wine/gold
+   theme (only app/admin/login/page.tsx still uses these classes; the
+   signed-in dashboard uses app/admin/admin.css's Tailwind/shadcn
+   tokens instead). Font/token names are kept verbatim per the note
+   above admin-legacy tokens in :root — only the rules consuming them
+   changed, not the raw --olive/--glass* etc. custom properties.
    =========================================================== */
-.admin,.admin h1,.admin h2,.admin h3,.admin h4{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+.admin,.admin h1,.admin h2,.admin h3,.admin h4{font-family:var(--font)}
 .admin{
-  min-height:100vh;padding:40px 0;color:var(--on-glass);
-  background:linear-gradient(135deg,rgba(19,34,22,.78),rgba(25,46,39,.48)),url('/images/Hunter-Valley-Tour-image-1.jpg') center/cover fixed;
+  min-height:100vh;padding:40px 0;color:var(--ink);
+  background:var(--paper-2);
 }
 .admin .wrap{max-width:980px;padding:0 24px}
-.admin h1{font-size:32px;margin-bottom:24px}
-.admin h2{font-size:22px;margin:32px 0 14px}
+.admin h1{font-family:var(--font-display);font-size:32px;margin-bottom:24px}
+.admin h2{font-family:var(--font-display);font-size:22px;margin:32px 0 14px}
 .admin-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.card-box{background:#fff;border:1.5px solid rgba(33,28,36,.12);border-radius:16px;padding:20px;margin-bottom:14px}
-.admin .card-box,.admin .login-box{background:var(--glass);border:1px solid var(--glass-border);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow),var(--glass-hi)}
+.card-box{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.admin .card-box,.admin .login-box{background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
 .enq-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .enq-head b{font-size:16px}
-.enq-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--stone)}
-.admin .enq-meta,.admin .muted,.admin .addon-flag{color:var(--on-glass-dim)}
-.admin .badge{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.14);color:var(--on-glass)}
-.admin .badge.handled{background:rgba(135,169,77,.3)}
-.login-box{max-width:380px;margin:80px auto;background:#fff;border:1.5px solid rgba(33,28,36,.12);border-radius:20px;padding:32px}
+.enq-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft)}
+.admin .enq-meta,.admin .muted,.admin .addon-flag{color:var(--ink-soft)}
+.admin .badge{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--tint-wine);color:var(--wine)}
+.admin .badge.handled{background:var(--tint-green);color:var(--green)}
+.login-box{max-width:380px;margin:80px auto;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:32px;box-shadow:var(--shadow)}
 .login-box .field{margin-bottom:16px}
-.login-box input{width:100%;padding:12px 14px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15px;border:1.5px solid rgba(33,28,36,.2);border-radius:12px;background:#fff}
+.login-box input{width:100%;padding:12px 14px;font-family:var(--font);font-size:15px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper)}
 .tour-edit{display:grid;grid-template-columns:1fr 90px 70px;gap:10px;align-items:center;margin-bottom:8px}
 .tour-edit.nums{grid-template-columns:1fr 90px 70px 70px}
 .tour-edit.addon-row{grid-template-columns:1fr 90px auto 70px}
-.addon-flag{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--stone);white-space:nowrap;cursor:pointer}
+.addon-flag{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);white-space:nowrap;cursor:pointer}
 @media(max-width:640px){.tour-edit.addon-row{grid-template-columns:1fr 90px}}
-.tour-edit input{padding:10px 12px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;border:1.5px solid rgba(33,28,36,.2);border-radius:10px}
-.admin input{color:var(--on-glass);background:rgba(8,20,15,.28);border-color:var(--glass-border);outline:none}
-.admin input::placeholder{color:rgba(255,255,255,.48)}
-.admin input:focus{border-color:rgba(255,255,255,.58);box-shadow:0 0 0 3px rgba(255,255,255,.1)}
-.admin .btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:bold;font-size:15px;padding:14px 22px;border-radius:999px;border:1.5px solid transparent;transition:transform .14s ease,box-shadow .14s ease,background .14s ease}
+.tour-edit input{padding:10px 12px;font-family:var(--font);font-size:14px;border:1.5px solid var(--line);border-radius:10px}
+.admin input{color:var(--ink);background:var(--paper);border-color:var(--line);outline:none}
+.admin input::placeholder{color:var(--ink-soft)}
+.admin input:focus{border-color:var(--wine);box-shadow:0 0 0 3px var(--tint-wine)}
+.admin .btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--font);font-weight:600;font-size:15px;padding:14px 22px;border-radius:999px;border:1.5px solid transparent;transition:transform .14s ease,box-shadow .14s ease,background .14s ease}
 .admin .btn:hover{transform:translateY(-2px)}
-.admin .btn-ghost{color:var(--on-glass);border-color:var(--glass-border);background:rgba(255,255,255,.06)}
-.admin .btn-ghost:hover{background:var(--glass-strong);color:#fff}
-.admin .btn-primary{background:rgba(255,255,255,.18);border-color:var(--glass-border);box-shadow:var(--glass-hi);color:#fff}
+.admin .btn-ghost{color:var(--ink);border-color:var(--line);background:transparent}
+.admin .btn-ghost:hover{background:var(--paper-2)}
+.admin .btn-primary{background:var(--wine-solid);border-color:var(--wine-solid);color:#fff}
+.admin .btn-primary:hover{background:var(--wine-deep)}
 .admin .form-msg{padding:12px 14px;border-radius:12px;font-size:14px;margin-bottom:16px}
-.admin .form-msg.ok{background:rgba(95,115,33,.12);color:#dff0c0}
-.admin .form-msg.err{background:rgba(255,94,26,.12);color:#ffcdb8}
-.muted{color:var(--stone);font-size:14px}
+.admin .form-msg.ok{background:var(--tint-green);color:var(--green)}
+.admin .form-msg.err{background:var(--tint-wine);color:var(--wine)}
+.muted{color:var(--ink-soft);font-size:14px}

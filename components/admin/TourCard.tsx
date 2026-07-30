@@ -35,10 +35,10 @@ export default function TourCard({
           <div
             className="flex size-9 items-center justify-center rounded-full"
             style={{
-              backgroundColor: "color-mix(in oklab, var(--gold) 20%, transparent)",
+              backgroundColor: "color-mix(in oklab, var(--gold-muted) 20%, transparent)",
             }}
           >
-            <Map className="size-5" style={{ color: "var(--gold)" }} />
+            <Map className="size-5" style={{ color: "var(--gold-muted)" }} />
           </div>
           {tour.fareharborItemId && (
             <Badge variant="secondary" className="gap-1">
@@ -48,7 +48,7 @@ export default function TourCard({
           )}
         </div>
 
-        <p className="mt-2.5 text-base font-semibold leading-tight text-white">
+        <p className="mt-2.5 text-base font-semibold leading-tight text-foreground">
           {tour.name}
         </p>
         <p className="mt-0.5 font-mono text-[11px] text-muted-foreground">{tour.id}</p>
