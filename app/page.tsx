@@ -1,10 +1,8 @@
 import { Wine, Fish, ChefHat, UtensilsCrossed, Bus } from "lucide-react";
 import Price from "@/components/Price";
-import CurrencyPicker from "@/components/CurrencyPicker";
 import BookingCta from "@/components/BookingCta";
 import TourCard from "@/components/TourCard";
 import HeroVideo from "@/components/HeroVideo";
-import NextDeparture from "@/components/NextDeparture";
 import CompassRose from "@/components/CompassRose";
 import ChooseDirection from "@/components/ChooseDirection";
 import RegionCard from "@/components/RegionCard";
@@ -18,7 +16,6 @@ import { getTours } from "@/lib/tours.server";
 import { toursJsonLd, SOCIAL_LINKS } from "@/lib/seo";
 import { SHOWCASE_TOURS } from "@/lib/showcase";
 import { REGIONS } from "@/lib/regions";
-import { mediaBg } from "@/lib/media";
 import { FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
 
 const north = REGIONS.find((r) => r.id === "north")!;
@@ -109,15 +106,9 @@ export default async function Home() {
           hit scrolling down from the hero. It carries the heading copy that
           used to sit above the dial below, so #directions now reads as this
           section's continuation rather than a separately-titled block. The
-          compass here cycles the big photo; the small rose in the dial below
-          still tracks the cursor. Two compasses, on purpose. */}
-      <ChooseDirection
-        slides={[north, east, south, west].map((r) => ({
-          direction: r.direction,
-          label: r.photo.label,
-          background: mediaBg(r.photo.bg, r.photo.image, r.photo.focus),
-        }))}
-      />
+          photo beside it is fixed, not tied to the compass; the small rose in
+          the dial below still tracks the cursor. Two compasses, on purpose. */}
+      <ChooseDirection />
 
       {/* The dial itself — the continuation of the section above, which
           carries this block's heading. Keeps #directions: /private-tours
@@ -257,86 +248,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      {/* Signature tour: pricing + facts */}
-      {hunterValley && (
-        <section className="signature">
-          <div className="wrap sig-grid">
-            <div className="sig-left">
-              <NextDeparture />
-              <span className="eyebrow">Our flagship day</span>
-              <h2>Hunter Valley Food &amp; Wine Tour</h2>
-              <p>
-                Cellar doors, a progressive breakfast and lunch cooked by
-                your guide, and three wines matched to the menu. The one
-                tour you can book straight online.
-              </p>
-              <div className="sig-facts">
-                <div className="fact">
-                  <b>{hunterValley.days ?? "Mon & Wed"}</b>
-                  <span>Departs weekly</span>
-                </div>
-                <div className="fact">
-                  <b>{hunterValley.duration ?? "Up to 11 hrs"}</b>
-                  <span>Full day</span>
-                </div>
-                <div className="fact">
-                  <b>{hunterValley.min ?? 2}–{hunterValley.max} guests</b>
-                  <span>Small group</span>
-                </div>
-                <div className="fact">
-                  <b>Ages {hunterValley.minAge ?? 4}+</b>
-                  <span>Family friendly</span>
-                </div>
-              </div>
-            </div>
-            <div className="price-card">
-              <h3>Book this tour</h3>
-              <div className="price-row">
-                <div>
-                  <b>Adult</b>
-                  <br />
-                  <small>Ages 17+</small>
-                </div>
-                <div className="amt">
-                  <Price aud={hunterValley.priceAdult!} />
-                </div>
-              </div>
-              {hunterValley.priceSenior != null && (
-                <div className="price-row">
-                  <div>
-                    <b>Senior</b>
-                    <br />
-                    <small>65+</small>
-                  </div>
-                  <div className="amt">
-                    <Price aud={hunterValley.priceSenior} />
-                  </div>
-                </div>
-              )}
-              {hunterValley.priceChild != null && (
-                <div className="price-row">
-                  <div>
-                    <b>Child / student</b>
-                    <br />
-                    <small>4–16 years</small>
-                  </div>
-                  <div className="amt">
-                    <Price aud={hunterValley.priceChild} />
-                  </div>
-                </div>
-              )}
-              <BookingCta
-                itemId={hunterValley.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-                className="btn btn-wine"
-              >
-                Check availability
-              </BookingCta>
-              <CurrencyPicker />
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* The story of the day */}
       <section className="pad story">
