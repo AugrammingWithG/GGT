@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import BookingCta from "./BookingCta";
 import {
   ACCREDITATION_NUMBER,
@@ -17,6 +18,11 @@ import {
 } from "@/lib/fareharbor";
 
 export default function Footer() {
+  const pathname = usePathname();
+  // Self-contained card page with its own footer-free layout — see the
+  // matching guard in Header.tsx.
+  if (pathname === "/qrpage") return null;
+
   return (
     <footer>
       <div className="wrap foot-grid">
