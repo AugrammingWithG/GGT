@@ -28,6 +28,15 @@ import { Minus, Plus, Volume2, VolumeX } from "lucide-react";
  * that policy. `isMuted()`/`getVolume()` tell us the real state, which
  * drives the control cluster's icons, and those controls let a visitor
  * mute/unmute or nudge the volume by hand at any point.
+ *
+ * The video itself keeps looping (it's the whole background), but the sound
+ * only plays through once. The `loop=1` + single-item-playlist trick seeks
+ * back to 0 without reliably emitting an ENDED state (some browsers just
+ * keep reporting PLAYING straight through the restart), so ENDED can't be
+ * trusted to catch the loop point. Instead a poll compares `getCurrentTime()`
+ * on a short interval and treats a backwards jump as "the loop just
+ * restarted," muting at that moment and then stopping the poll — so a
+ * visitor who manually unmutes afterward doesn't get stomped by a repeat.
  */
 
 /** The slice of the YouTube IFrame Player API this component touches. */
@@ -40,6 +49,7 @@ type YTPlayer = {
   isMuted: () => boolean;
   setVolume: (volume: number) => void;
   getVolume: () => number;
+  getCurrentTime: () => number;
 };
 type YTApi = {
   Player: new (
@@ -140,6 +150,8 @@ export default function HeroVideo({
   const autoUnmuteAttempted = useRef(false);
   const awaitingUnmuteOutcome = useRef(false);
   const unmuteConfirmTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loopWatchTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lastCurrentTime = useRef(0);
   const [inView, setInView] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [muted, setMuted] = useState(true);
@@ -189,6 +201,21 @@ export default function HeroVideo({
             hideCaptions(e.target);
             playerRef.current = e.target;
             e.target.playVideo();
+            // The playlist-loop trick seeks back to 0 without reliably
+            // emitting an ENDED state, so catch the loop point by watching
+            // for playback time jumping backwards instead. Stops itself
+            // after the first catch so a later manual unmute isn't stomped.
+            loopWatchTimer.current = setInterval(() => {
+              const time = e.target.getCurrentTime();
+              if (time < lastCurrentTime.current - 1) {
+                e.target.mute();
+                setMuted(true);
+                if (loopWatchTimer.current) clearInterval(loopWatchTimer.current);
+                loopWatchTimer.current = null;
+                return;
+              }
+              lastCurrentTime.current = time;
+            }, 500);
           },
           onStateChange: (e) => {
             if (e.data === YT.PlayerState.PAUSED && awaitingUnmuteOutcome.current) {
@@ -239,6 +266,7 @@ export default function HeroVideo({
       cancelled = true;
       playerRef.current = null;
       if (unmuteConfirmTimer.current) clearTimeout(unmuteConfirmTimer.current);
+      if (loopWatchTimer.current) clearInterval(loopWatchTimer.current);
       player?.destroy();
     };
   }, [inView]);

@@ -803,17 +803,6 @@ html{scroll-snap-type:y proximity}
 .choose-photo{grid-area:photo;position:relative;margin:0;overflow:hidden;
   border-radius:var(--r);box-shadow:var(--shadow);background:var(--paper-2);
   height:clamp(430px,60vh,640px)}
-/* All four region photos are stacked here and only the active one is opaque,
-   so every photo is fetched during the first parse and no swap is ever blank.
-   opacity:0, NOT display:none — a display:none layer is never fetched and the
-   pre-warm silently breaks. No background-size/position here either: mediaBg()
-   bakes `center/cover no-repeat` into the inline shorthand. */
-.choose-photo-layer{position:absolute;inset:0;opacity:0;transition:opacity .7s ease}
-.choose-photo-layer.is-active{opacity:1}
-/* Same pill as .region-photo-label below, one size up for the bigger frame. */
-.choose-photo-caption{position:absolute;left:16px;bottom:16px;z-index:3;color:#fff;
-  font-size:.78rem;letter-spacing:.04em;background:rgba(43,38,34,.55);
-  padding:.45em 1.05em;border-radius:100px;backdrop-filter:blur(3px)}
 @media(max-width:1000px){
   /* One column, source order kept: copy, compass, photo. Unlike the dial below
      — which drops its compass entirely at this width — the compass stays here:
@@ -835,7 +824,6 @@ html{scroll-snap-type:y proximity}
   .choose-dial{width:182px}
   .choose-point{width:28px;height:28px;font-size:.74rem}
   .choose-photo{height:290px}
-  .choose-photo-caption{left:12px;bottom:12px;font-size:.72rem}
 }
 
 /* Destinations grouped by direction: a compass dial — North sits above the
@@ -855,7 +843,7 @@ html{scroll-snap-type:y proximity}
    scroll-snap stop, where the whole dial wants to land on one screen. The
    air above it comes from .choose-section's full-screen centring rather than
    padding here, which is why the top padding is so small. */
-section.compass-section{padding:7px 0 54px;
+section.compass-section{padding:7px 0 42px;
   /* /private-tours deep-links straight here and the header is fixed, so
      without this the first row lands underneath the bar. Matches the compact
      height because the header is always compact by the time you arrive. */
@@ -871,7 +859,7 @@ section.compass-section{padding:7px 0 54px;
     ".    north .   "
     "west hub   east"
     ".    south .   ";
-  gap:24px 44px;
+  gap:16px 44px;
   align-items:stretch;
   justify-content:center;
   margin:0 auto;
@@ -894,7 +882,7 @@ section.compass-section{padding:7px 0 54px;
    read as a photo laid on the page rather than the filled half of a card.
    `overflow:hidden` is for the caption pill, which would otherwise poke out
    of the rounded corner. */
-.region-photo{position:relative;width:34%;min-width:108px;flex-shrink:0;overflow:hidden;
+.region-photo{position:relative;width:56%;min-width:165px;flex-shrink:0;overflow:hidden;
   border-radius:var(--r);background-size:cover;background-position:center;
   transition:transform .35s ease}
 .region-card:hover .region-photo{transform:scale(1.02)}
@@ -911,6 +899,13 @@ section.compass-section{padding:7px 0 54px;
 .region-list strong{color:var(--ink);font-weight:600}
 .region-enquire{align-self:flex-start;font-size:.76rem;font-weight:600;color:var(--wine);border-bottom:1.5px solid var(--gold-muted);padding-bottom:2px;transition:color .15s ease}
 .region-enquire:hover{color:var(--wine-deep)}
+/* North carries 4 destinations against 2-3 for the other three — at the same
+   type size its list runs onto more lines than the others and the card grows
+   taller. Trimming font-size/line-height/margin here (not the photo width,
+   which stays equal across all four) closes most of that gap without
+   touching layout. */
+.region-card.region-north .region-list{font-size:.68rem;line-height:1.36}
+.region-card.region-north .region-list li{margin-bottom:4px}
 @media(max-width:1000px){
   /* No room for a compact dial at this width — hide the compass graphic
      and stack the four regions in a single reading-order column. */
@@ -923,7 +918,7 @@ section.compass-section{padding:7px 0 54px;
   .compass-hub{display:none}
   /* 44px between regions vs 14px inside one: with no card outline left,
      that ratio is the only thing grouping a photo with its own text. */
-  .region-card{flex-direction:column;gap:14px}
+  .region-card{flex-direction:column;gap:14px;min-height:0}
   .region-photo{width:100%;height:190px}
   .region-body{padding:0}
   .region-lead{font-size:1.15rem;margin-bottom:10px}
