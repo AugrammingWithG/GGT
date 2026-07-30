@@ -395,6 +395,9 @@ section.pad{padding:78px 0}
    than <img>, so StoryChapters.tsx names them with role="img"/aria-label. */
 .ch-media{aspect-ratio:1;border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.42);
   overflow:hidden;background-size:cover;background-position:center}
+/* These supplied PNGs include an inset transparent frame. Scale past it so
+   the photograph itself covers the card, while preserving its proportions. */
+.ch-media--framed{background-size:115.4% auto}
 .ch-text h3{font-size:clamp(1.7rem,3vw,2.15rem);margin:0 0 .55em;color:var(--on-slate)}
 .ch-text p{color:var(--on-slate-soft);font-size:1rem}
 .ch-text p+p{margin-top:1em}

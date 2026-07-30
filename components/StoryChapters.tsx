@@ -9,6 +9,8 @@ type Chapter = {
   /** One <p> per entry — the original site's copy, kept paragraph-for-paragraph. */
   body: string[];
   image: string;
+  /** Removes the transparent frame baked into the supplied PNG exports. */
+  framedImage?: boolean;
   /** The photos are CSS backgrounds, so this is the accessible name (role="img"). */
   alt: string;
 };
@@ -28,7 +30,8 @@ const CHAPTERS: Chapter[] = [
     body: [
       "We have hand picked 3 vineyards for you to visit so you can take your time enjoying the food and wine on offer at a relaxed pace. There is plenty of time to enjoy the beautiful scenery as we journey from location to location, and you will love the 3 vineyards we have chosen for you. As fellow food and wine lovers, we know that food and wine connoisseurs and Hunter Valley debutantes alike have different needs. If you have any special dietary requirements, we will do our utmost to accommodate them.",
     ],
-    image: "/images/Hunter-Valley-Tour-image-3.jpg",
+    image: "/images/3.png",
+    framedImage: true,
     alt: "Rows of vines across a Hunter Valley vineyard",
   },
   {
@@ -37,7 +40,8 @@ const CHAPTERS: Chapter[] = [
       "We are very proud to be in the Hunter Valley food and wine tour business. We are committed to learning everything we can about the region so we can build our expertise in our trade.",
       "We love taking our customers to our favourite locations to explore and experience what we have come to learn to be world-class wine.",
     ],
-    image: "/images/Hunter-Valley-Tour-image-4.jpg",
+    image: "/images/2_e4c93c.png",
+    framedImage: true,
     alt: "Wine being poured at a Hunter Valley cellar door",
   },
   {
@@ -45,7 +49,8 @@ const CHAPTERS: Chapter[] = [
     body: [
       "As fellow food and wine lovers, we know that food and wine connoisseurs and Hunter Valley debutantes alike have different needs. If you have any special dietary requirements, we will do our utmost to accommodate them.",
     ],
-    image: "/images/creme-brulee-and-white-wine-1024x439-1.jpg",
+    image: "/images/4.png",
+    framedImage: true,
     alt: "Crème brûlée served with a glass of white wine",
   },
 ];
@@ -55,7 +60,7 @@ function ChapterMedia({ chapter, order }: { chapter: Chapter; order: number }) {
   return (
     <div
       ref={reveal.ref}
-      className={reveal.className}
+      className={`${reveal.className}${chapter.framedImage ? " ch-media--framed" : ""}`}
       role="img"
       aria-label={chapter.alt}
       style={{ backgroundImage: `url(${chapter.image})`, order }}
