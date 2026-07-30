@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
-  BUSINESS_ADDRESS,
   BUSINESS_EMAIL,
   BUSINESS_PHONE,
   SITE_NAME,
@@ -48,9 +46,6 @@ export default function PrivacyPolicy() {
         <h2>Who we are</h2>
         <p>
           {SITE_NAME}
-          <br />
-          {BUSINESS_ADDRESS.street}, {BUSINESS_ADDRESS.suburb}{" "}
-          {BUSINESS_ADDRESS.stateCode} {BUSINESS_ADDRESS.postcode}, Australia
           <br />
           Email: {BUSINESS_EMAIL}
           <br />
@@ -150,12 +145,6 @@ export default function PrivacyPolicy() {
         <p>
           If how we collect or use your details changes, we&apos;ll update this
           page.
-        </p>
-
-        <p className="legal-more">
-          <Link href="/terms-and-conditions">Terms and conditions</Link>
-          {" · "}
-          <Link href="/cancellation-policy">Cancellation policy</Link>
         </p>
       </div>
     </>

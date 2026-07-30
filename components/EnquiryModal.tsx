@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { PartyPopper } from "lucide-react";
 import Price, { ChargedInAud } from "./Price";
-import PolicyGate from "./PolicyGate";
 import { FAREHARBOR_ENABLED } from "@/lib/fareharbor";
 import { openFareHarbor } from "@/lib/fareharbor.client";
 
@@ -79,32 +78,30 @@ export default function EnquiryModal({
     }
   }
 
-  // With FareHarbor configured, its own checkout collects name/email/date —
-  // asking again on-site is the redundant double-entry step we're removing.
-  // Guests just clear the policy gate and go straight to booking; the plain
-  // enquiry form (and its /api/enquiries lead record) only exists as the
-  // fallback for when there's no FareHarbor checkout to hand off to.
+  // With FareHarbor configured, its own checkout collects name/email/date and
+  // presents its own cancellation policy and terms & conditions — asking
+  // again on-site is the redundant double-entry step we're removing. Guests
+  // go straight to booking; the plain enquiry form (and its /api/enquiries
+  // lead record) only exists as the fallback for when there's no FareHarbor
+  // checkout to hand off to.
+  useEffect(() => {
+    if (!FAREHARBOR_ENABLED) return;
+    openFareHarbor({
+      itemId: draft.fareharborItemId || undefined,
+      guests: draft.guests,
+      context: {
+        tour: draft.tourName,
+        extras: draft.addOns.map((a) => a.name).join(", "),
+        extrasPaidOnDay: draft.payOnDayAddOns.map((a) => a.name).join(", "),
+        estimate: draft.total,
+      },
+    });
+    onClose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (FAREHARBOR_ENABLED) {
-    return (
-      <PolicyGate
-        onClose={onClose}
-        onAgree={() => {
-          openFareHarbor({
-            itemId: draft.fareharborItemId || undefined,
-            guests: draft.guests,
-            context: {
-              tour: draft.tourName,
-              extras: draft.addOns.map((a) => a.name).join(", "),
-              extrasPaidOnDay: draft.payOnDayAddOns
-                .map((a) => a.name)
-                .join(", "),
-              estimate: draft.total,
-            },
-          });
-          onClose();
-        }}
-      />
-    );
+    return null;
   }
 
   // Portaled straight to <body>: rendered from inside .nature-page, whose

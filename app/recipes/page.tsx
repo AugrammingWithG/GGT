@@ -10,11 +10,8 @@ export const metadata: Metadata = {
 };
 
 type Recipe = {
-  eyebrow: string;
   name: string;
-  intro: string;
   image: string;
-  imageCaption: string;
   ingredients: string[];
   method: string[];
   note?: string;
@@ -22,12 +19,9 @@ type Recipe = {
 
 const RECIPES: Recipe[] = [
   {
-    eyebrow: "Starter",
-    name: "Asparagus with Truffle Oil & Grated Parmesan",
-    intro:
-      "A five-minute plate that leans entirely on good produce — the kind of thing Jimmy throws together between cellar doors.",
-    image: "/images/SYDNEY080118_0210-1.jpg",
-    imageCaption: "Fresh local produce",
+    name: "Asparagus with Truffle Oil and Grated Parmesan Cheese",
+    image:
+      "/images/asparagus-truffle-oil-grated-parmesan-cheese-1152x1536-1.jpeg",
     ingredients: [
       "16 asparagus spears",
       "Truffle oil",
@@ -44,12 +38,9 @@ const RECIPES: Recipe[] = [
     ],
   },
   {
-    eyebrow: "Main",
-    name: "Pumpkin & Cashew Nut Stuffed Field Mushrooms",
-    intro:
-      "Slow-roasted pumpkin, crushed cashews and a hit of chilli, stuffed into field mushrooms and finished on the grill.",
-    image: "/images/SYDNEY080118_0168.jpg",
-    imageCaption: "On the grill",
+    name: "Pumpkin and Cashew Nut Stuffed Field Mushrooms",
+    image:
+      "/images/pumpkin-and-cashew-nut-stuffed-field-mushrooms-1536x960-1.jpg",
     ingredients: [
       "¼ Japanese pumpkin, sliced",
       "½ bunch mint",
@@ -76,12 +67,8 @@ const RECIPES: Recipe[] = [
     ],
   },
   {
-    eyebrow: "Dessert",
     name: "Jimmy's Wattleseed Crème Brûlée",
-    intro:
-      "A native twist on the classic — wattleseed through the custard, finished with a torched sugar crust.",
-    image: "/images/creme-brulee-and-white-wine-1024x439-1.jpg",
-    imageCaption: "The finished dish",
+    image: "/images/jimmys-wattleseed-creme-brule-1536x960-1.jpg",
     ingredients: [
       "300ml cream",
       "200ml milk",
@@ -123,34 +110,39 @@ export default function RecipesPage() {
         </div>
       </section>
 
-      <section className="pad">
-        <div className="wrap" style={{ display: "grid", gap: 44 }}>
-          {RECIPES.map((r) => (
-            <div key={r.name} className="recipe-card">
-              <div
-                className="recipe-photo"
-                style={{ backgroundImage: `url(${r.image})` }}
-              >
-                <span>{r.imageCaption}</span>
-              </div>
-              <div className="recipe-body">
-                <span className="eyebrow">{r.eyebrow}</span>
-                <h3>{r.name}</h3>
-                <p>{r.intro}</p>
-                <ul className="recipe-ingredients">
-                  {r.ingredients.map((ing) => (
-                    <li key={ing}>{ing}</li>
-                  ))}
-                </ul>
-                <ol className="recipe-method">
-                  {r.method.map((step, i) => (
-                    <li key={i}>{step}</li>
-                  ))}
-                </ol>
-                {r.note && <p className="recipe-note">{r.note}</p>}
-              </div>
-            </div>
-          ))}
+      <section className="pad recipes-section">
+        <div className="wrap">
+          <div className="recipes-grid">
+            {RECIPES.map((r) => (
+              <article key={r.name} className="recipe-card">
+                <div
+                  className="recipe-photo"
+                  style={{ backgroundImage: `url(${r.image})` }}
+                />
+                <div className="recipe-body">
+                  <h3>{r.name}</h3>
+                  <span className="recipe-byline">By Jimmy Henry</span>
+                  <details className="recipe-accordion">
+                    <summary>Ingredients</summary>
+                    <ul className="recipe-ingredients">
+                      {r.ingredients.map((ing) => (
+                        <li key={ing}>{ing}</li>
+                      ))}
+                    </ul>
+                  </details>
+                  <details className="recipe-accordion">
+                    <summary>Method</summary>
+                    <ol className="recipe-method">
+                      {r.method.map((step, i) => (
+                        <li key={i}>{step}</li>
+                      ))}
+                    </ol>
+                    {r.note && <p className="recipe-note">{r.note}</p>}
+                  </details>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

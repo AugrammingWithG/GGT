@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Phone, Mail, Clock } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import PickupMap from "@/components/PickupMap";
-import { BUSINESS_BASE_POINT, PICKUP_POINTS } from "@/lib/pickups";
-import {
-  BUSINESS_ADDRESS,
-  BUSINESS_EMAIL,
-  BUSINESS_PHONE,
-} from "@/lib/seo";
+import { PICKUP_POINTS } from "@/lib/pickups";
+import { BUSINESS_EMAIL, BUSINESS_PHONE } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -55,15 +51,6 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic"><MapPin size={20} color="var(--wine)" strokeWidth={1.75} /></div>
-              <div>
-                <b>Base</b>
-                <br />
-                {BUSINESS_ADDRESS.street}, {BUSINESS_ADDRESS.suburb}{" "}
-                {BUSINESS_ADDRESS.stateCode} {BUSINESS_ADDRESS.postcode}
-              </div>
-            </div>
-            <div className="contact-item">
               <div className="ci-ic"><Clock size={20} color="var(--wine)" strokeWidth={1.75} /></div>
               <div>
                 <b>Tours run</b>
@@ -72,7 +59,7 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="contact-map">
-              <PickupMap points={PICKUP_POINTS} basePoint={BUSINESS_BASE_POINT} />
+              <PickupMap points={PICKUP_POINTS} />
             </div>
           </div>
           <div className="contact-form">

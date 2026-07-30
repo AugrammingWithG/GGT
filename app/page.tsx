@@ -296,47 +296,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Why book with us */}
-      <section className="pad why" id="why">
-        <div className="wrap why-grid">
-          <div>
-            <span className="eyebrow">Why guests come back</span>
-            <h2 style={{ fontSize: "2.2rem", margin: ".3em 0 .2em" }}>
-              Your driver, your chef, your guide
-            </h2>
-            <p style={{ color: "var(--ink-soft)" }}>
-              Thirty years cooking and guiding, in small vehicles, never a
-              coach. Every tour is Jimmy&apos;s, start to finish — that&apos;s
-              the whole point.
-            </p>
-            <div className="stats">
-              <div className="stat">
-                <b>Jimmy</b>
-                <span>Owner, driver &amp; chef</span>
-              </div>
-              <div className="stat">
-                <b>30 years</b>
-                <span>On the road</span>
-              </div>
-              <div className="stat">
-                <b>Never a coach</b>
-                <span>Small vehicles only</span>
-              </div>
-              <div className="stat">
-                <b>5.0 ★</b>
-                <span>Tripadvisor rating</span>
-              </div>
-            </div>
-          </div>
-          <div
-            className="why-photo"
-            style={{ backgroundImage: "url(/images/jimmy.webp)" }}
-          >
-            <span>Jimmy, cooking on the road</span>
-          </div>
-        </div>
-      </section>
-
       {/* Reviews */}
       <section className="pad">
         <div className="wrap">

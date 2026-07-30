@@ -6,7 +6,6 @@ import BookingCta from "./BookingCta";
 import {
   ACCREDITATION_NUMBER,
   BUSINESS_ACN,
-  BUSINESS_ADDRESS,
   BUSINESS_EMAIL,
   BUSINESS_PHONE,
   SITE_NAME,
@@ -86,10 +85,6 @@ export default function Footer() {
             <li>
               <a href={`mailto:${BUSINESS_EMAIL}`}>{BUSINESS_EMAIL}</a>
             </li>
-            <li>
-              {BUSINESS_ADDRESS.street}, {BUSINESS_ADDRESS.suburb}{" "}
-              {BUSINESS_ADDRESS.stateCode} {BUSINESS_ADDRESS.postcode}
-            </li>
           </ul>
         </div>
       </div>
@@ -97,11 +92,6 @@ export default function Footer() {
         <div className="foot-bottom">
           <span>
             &copy; {new Date().getFullYear()} {SITE_NAME} · ACN {BUSINESS_ACN}
-          </span>
-          <span>
-            <Link href="/cancellation-policy">Cancellation policy</Link>
-            {" · "}
-            <Link href="/terms-and-conditions">Terms &amp; conditions</Link>
           </span>
         </div>
       </div>

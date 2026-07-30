@@ -64,18 +64,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.4,
     },
     {
-      url: `${SITE_URL}/cancellation-policy`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: `${SITE_URL}/terms-and-conditions`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
       url: `${SITE_URL}/privacy-policy`,
       lastModified: new Date(),
       changeFrequency: "yearly",
