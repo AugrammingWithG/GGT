@@ -96,7 +96,7 @@ export default function TourEditor({
         {draft.addOns.map((a, i) => (
           <div
             key={a.id}
-            className="grid gap-3 rounded-lg border border-white/12 bg-black/8 p-3.5"
+            className="grid gap-3 rounded-lg border border-border bg-muted/60 p-3.5"
           >
             <div className="flex items-center gap-3">
               <Input
@@ -172,7 +172,7 @@ export default function TourEditor({
         </Button>
       </div>
 
-      <div className="flex items-center justify-between border-t border-white/10 pt-3">
+      <div className="flex items-center justify-between border-t border-border pt-3">
         <Button variant="ghost" onClick={onDelete} className="text-destructive hover:text-destructive">
           <Trash2 className="size-3.5" />
           Delete tour

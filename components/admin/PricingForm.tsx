@@ -51,7 +51,7 @@ export default function PricingForm() {
       setRateMsg(d.error ?? "Failed to save.");
       return;
     }
-    setRateMsg("Saved — the public booking widget now quotes from this rate.");
+    setRateMsg("Saved — now live on the Private Tours page.");
   }
 
   const { tours, saveTour } = useTours();
@@ -157,15 +157,15 @@ export default function PricingForm() {
             />
           </div>
 
-          <div className="border-t border-white/10 pt-3">
+          <div className="border-t border-border pt-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Guest preview
             </p>
-            <div className="mt-3 grid grid-cols-4 divide-x divide-white/10">
+            <div className="mt-3 grid grid-cols-4 divide-x divide-border">
               {PREVIEW_GUESTS.map((g) => (
                 <div key={g} className="min-w-0 truncate text-center">
                   <p className="truncate text-[11px] text-muted-foreground">{g} guests</p>
-                  <p className="mt-0.5 truncate font-mono text-sm font-semibold text-[var(--gold)]">
+                  <p className="mt-0.5 truncate font-mono text-sm font-semibold text-[var(--wine)]">
                     {money(privateTourEstimate(rate, g))}
                   </p>
                 </div>
@@ -179,7 +179,7 @@ export default function PricingForm() {
             </Button>
             {rateMsg && (
               <p
-                className={`animate-in fade-in text-sm ${rateMsg.startsWith("Saved") ? "text-[var(--gold)]" : "text-destructive"}`}
+                className={`animate-in fade-in text-sm ${rateMsg.startsWith("Saved") ? "text-[var(--green)]" : "text-destructive"}`}
               >
                 {rateMsg}
               </p>
@@ -231,11 +231,11 @@ export default function PricingForm() {
                 </div>
               </div>
 
-              <div className="border-t border-white/10 pt-3">
+              <div className="border-t border-border pt-3">
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   Example party: 2 adults, 1 senior, 2 children
                 </p>
-                <p className="mt-2 font-mono text-lg font-semibold text-[var(--gold)]">
+                <p className="mt-2 font-mono text-lg font-semibold text-[var(--wine)]">
                   {money(
                     2 * (hv.priceAdult ?? 0) +
                       1 * (hv.priceSenior ?? 0) +
@@ -249,10 +249,10 @@ export default function PricingForm() {
                   <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     Included
                   </p>
-                  <ul className="mt-2 grid gap-1 text-sm text-white/80">
+                  <ul className="mt-2 grid gap-1 text-sm text-foreground/80">
                     {hunterValley.inclusions.map((inc) => (
                       <li key={inc} className="flex items-start gap-2">
-                        <span className="mt-1.5 size-1 shrink-0 rounded-full bg-[var(--gold)]" />
+                        <span className="mt-1.5 size-1 shrink-0 rounded-full bg-[var(--gold-muted)]" />
                         {inc}
                       </li>
                     ))}
@@ -266,7 +266,7 @@ export default function PricingForm() {
                 </Button>
                 {hvMsg && (
                   <p
-                    className={`animate-in fade-in text-sm ${hvMsg === "Saved." ? "text-[var(--gold)]" : "text-destructive"}`}
+                    className={`animate-in fade-in text-sm ${hvMsg === "Saved." ? "text-[var(--green)]" : "text-destructive"}`}
                   >
                     {hvMsg}
                   </p>

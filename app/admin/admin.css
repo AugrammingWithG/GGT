@@ -2,9 +2,13 @@
   Tailwind + shadcn/ui, scoped to /admin only: imported solely by
   app/admin/(dashboard)/layout.tsx, so Next's per-layout CSS bundling keeps
   this out of every public route. The public site keeps using ../globals.css
-  untouched — but its :root tokens (--glass, --on-glass, --marmalade, etc.)
-  are already loaded everywhere via the root layout, so this file draws its
-  whole palette from them rather than redefining brand hex a second time.
+  untouched — but its :root tokens (--paper, --wine-solid, --gold-muted,
+  --line, etc.) are already loaded everywhere via the root layout, so this
+  file draws its whole palette from the same public "paper/wine/gold" tokens
+  the site itself uses, rather than a separate admin palette. Because those
+  tokens already carry :root[data-theme="dark"] overrides in ../globals.css,
+  and the admin shell now renders a ThemeToggle (AdminSidebar.tsx), dark mode
+  falls out for free — no admin-specific dark rules needed here.
 */
 /*
   Tailwind's utilities are imported UNLAYERED on purpose — do not collapse
@@ -35,51 +39,44 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --radius: 1rem;
+  --radius: var(--r);
 
-  /* Same frosted-glass system as the public "nature" pages
-     (app/globals.css's --glass/--on-glass family), applied here to every
-     admin surface instead of just the .bill/.social panels. */
-  --background: transparent;
-  --foreground: var(--on-glass);
-  --card: var(--glass);
-  --card-foreground: var(--on-glass);
-  --popover: rgba(19, 30, 20, 0.7);
-  --popover-foreground: var(--on-glass);
-  /*
-     The public site retires marmalade on every dark-glass surface — see
-     globals.css's "De-orange" block (.nature-page .btn-primary etc.):
-     CTAs become translucent white glass, gold carries accent text instead.
-     The admin is glass throughout now, so it follows the same rule rather
-     than reintroducing the orange the rest of the glass UI deliberately
-     dropped. --primary is gold (rings, chart line, emphasis numbers); the
-     Button component's "default" variant is the white-glass CTA directly.
-  */
-  --primary: var(--gold);
-  --primary-foreground: #211c24;
-  --secondary: var(--glass-strong);
-  --secondary-foreground: var(--on-glass);
-  --muted: var(--glass-strong);
-  --muted-foreground: var(--on-glass-dim);
-  --accent: var(--gold);
-  --accent-foreground: #211c24;
-  --destructive: #ff6a52;
-  --border: var(--glass-border);
-  --input: var(--glass-border);
-  --ring: var(--gold);
+  /* The admin's whole palette, drawn from the public site's paper/wine/gold
+     tokens (see the file banner above) instead of the old glass/olive set. */
+  --background: var(--paper-2);
+  --foreground: var(--ink);
+  --card: var(--white);
+  --card-foreground: var(--ink);
+  --popover: var(--white);
+  --popover-foreground: var(--ink);
+  --primary: var(--wine-solid);
+  --primary-foreground: #fff;
+  --secondary: var(--paper-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-2);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--gold-muted);
+  --accent-foreground: #2b2210;
+  /* Deliberately not wine — wine is the brand/primary action color here, so
+     a wine-colored destructive action would read as "the same thing" as
+     Save/Confirm buttons instead of a distinct, careful warning color. */
+  --destructive: #b3261e;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--wine-solid);
 
-  --sidebar: rgba(15, 26, 17, 0.22);
-  --sidebar-foreground: var(--on-glass);
-  --sidebar-primary: rgba(244, 180, 0, 0.2);
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: rgba(255, 255, 255, 0.1);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: var(--glass-border);
-  --sidebar-ring: var(--marmalade);
+  --sidebar: var(--white);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--tint-wine);
+  --sidebar-primary-foreground: var(--wine);
+  --sidebar-accent: var(--paper-2);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--wine-solid);
 
-  --status-new: var(--sea);
-  --status-confirmed: var(--gold);
-  --status-handled: var(--olive);
+  --status-new: var(--wine);
+  --status-confirmed: var(--gold-muted);
+  --status-handled: var(--green);
 }
 
 @theme inline {
@@ -116,14 +113,14 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Verdana, matching the public site's --font exactly (app/globals.css). */
-  --font-sans: Verdana, Geneva, Tahoma, sans-serif;
+  /* Poppins, exactly the public site's --font (app/globals.css). */
+  --font-sans: var(--font);
   --font-mono: var(--font-mono), "IBM Plex Mono", monospace;
 }
 
 @layer base {
   .admin-root {
-    background: transparent;
+    background: var(--paper-2);
     color: var(--foreground);
     font-family: var(--font-sans);
   }
@@ -131,30 +128,13 @@
     border-color: var(--border);
     outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
   }
-  .admin-root h1,
-  .admin-root h2,
-  .admin-root h3 {
-    color: #fff;
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
-  }
 }
 
 /*
-  The same globals.css leak, for the one rule that survives the fix above:
-  `h1,h2,h3,h4{font-family:var(--font-display);letter-spacing:-.02em}` is
-  unlayered at (0,0,1), so no *layered* admin rule can reach it — it would
-  re-skin every admin heading in the public site's display face. Deliberately
-  unlayered and matched to that exact specificity (`:where()` contributes
-  none): admin.css loads after globals.css, so it wins the tie, while still
-  losing to any (0,1,0) utility a component sets (font-*, tracking-*).
+  globals.css's own `h1,h2,h3,h4{font-family:var(--font-display);...}` rule
+  is unlayered at (0,0,1), so admin headings already pick up the public
+  Quicksand display face for free — no override needed here any more.
 */
-:where(.admin-root) h1,
-:where(.admin-root) h2,
-:where(.admin-root) h3,
-:where(.admin-root) h4 {
-  font-family: var(--font-sans);
-  letter-spacing: normal;
-}
 
 /* These two are `@utility`, not `@layer utilities {}`, so they land in the
    same unlayered utilities output as Tailwind's own (see the import block at
@@ -162,27 +142,21 @@
    every Tailwind utility and below all of globals.css, which is the opposite
    of how a base surface recipe should cascade. */
 
-/* The one recipe every glass pane in this dashboard shares: fill, edge and
-   blur, straight from the public site's tokens — but NOT the public site's
-   --glass-shadow. That shadow (60px blur) is tuned for a few big, widely
-   spaced panels (.bill, testimonials); reused on small cards packed into a
-   tight grid (stat tiles, kanban cards) its blur radius is wider than the
-   gap between cards, so it visibly bleeds across the gap and reads as
-   panels overlapping. This is a much tighter shadow sized for that. */
+/* The one recipe every panel in this dashboard shares: solid white fill,
+   hairline edge and soft shadow — the same recipe as the public site's own
+   cards (.price-card, .tour-card, .review-card in globals.css), not a glass
+   effect any more. */
 @utility glass-pane {
   background: var(--card);
-  border: 1px solid var(--glass-border);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 /* The lighter alternative for grouped stats: one outlined strip with
    internal divider lines, not N separate boxes — used where several
    related numbers sit side by side (stat tiles, pipeline-by-stage). */
 @utility glass-outline {
-  border: 1px solid var(--glass-border);
-  background: color-mix(in oklab, var(--glass) 35%, transparent);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
 }

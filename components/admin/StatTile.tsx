@@ -24,14 +24,14 @@ export default function StatTile({
   /** A CSS color (hex or var(--x)) the icon is tinted with. Defaults to gold. */
   color?: string;
 }) {
-  const tint = color ?? "var(--gold)";
+  const tint = color ?? "var(--gold-muted)";
   return (
     <div className="flex min-w-0 flex-1 items-center justify-between gap-3 px-5 py-4">
       <div className="min-w-0">
         <p className="truncate text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {label}
         </p>
-        <p className="mt-1.5 truncate text-2xl font-semibold text-white">{value}</p>
+        <p className="mt-1.5 truncate text-2xl font-semibold text-foreground">{value}</p>
       </div>
       <Icon className="size-5 shrink-0" style={{ color: tint }} />
     </div>

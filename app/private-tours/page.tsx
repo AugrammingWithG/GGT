@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import BookingCta from "@/components/BookingCta";
 import ContactForm from "@/components/ContactForm";
+import Price from "@/components/Price";
 import { tourItemId } from "@/lib/fareharbor";
+import { privateTourEstimate } from "@/lib/tours";
+import { getPrivateTourRate } from "@/lib/tours.server";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Private Tours",
@@ -11,7 +16,19 @@ export const metadata: Metadata = {
   alternates: { canonical: "/private-tours" },
 };
 
-export default function PrivateToursPage() {
+export default async function PrivateToursPage() {
+  const rate = await getPrivateTourRate();
+  // A few sample party sizes above the flat-rate tier, capped at maxGuests,
+  // so the estimate table scales with whatever the admin has set rather than
+  // assuming today's numbers.
+  const sampleGuestCounts = Array.from(
+    new Set(
+      [rate.baseCoversMax, rate.baseCoversMax + 2, rate.baseCoversMax + 4, rate.maxGuests].filter(
+        (g) => g <= rate.maxGuests,
+      ),
+    ),
+  ).sort((a, b) => a - b);
+
   return (
     <>
       <section
@@ -59,6 +76,49 @@ export default function PrivateToursPage() {
             </Link>
             .
           </p>
+        </div>
+      </section>
+
+      <section className="pad">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">What it costs</span>
+            <h2>Simple, guest-based pricing</h2>
+            <p>
+              One flat rate covers {rate.baseCoversMin}–{rate.baseCoversMax} guests, then a
+              per-guest rate for anyone extra, up to {rate.maxGuests}.
+            </p>
+          </div>
+          <div className="price-card" style={{ maxWidth: 420, margin: "0 auto" }}>
+            <h3>Estimate your day</h3>
+            <div className="price-row">
+              <div>
+                <b>
+                  {rate.baseCoversMin}–{rate.baseCoversMax} guests
+                </b>
+                <br />
+                <small>Flat rate</small>
+              </div>
+              <div className="amt">
+                <Price aud={rate.base} />
+              </div>
+            </div>
+            {sampleGuestCounts
+              .filter((g) => g > rate.baseCoversMax)
+              .map((g) => (
+                <div className="price-row" key={g}>
+                  <div>
+                    <b>{g} guests</b>
+                  </div>
+                  <div className="amt">
+                    <Price aud={privateTourEstimate(rate, g)} />
+                  </div>
+                </div>
+              ))}
+            <p style={{ fontSize: ".78rem", color: "var(--ink-soft)", marginTop: 12 }}>
+              Includes {rate.includes.join(", ")}. Exact quote confirmed when you enquire.
+            </p>
+          </div>
         </div>
       </section>
 

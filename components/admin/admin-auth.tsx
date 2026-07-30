@@ -4,7 +4,6 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { getFirebaseAuth } from "@/lib/firebase.client";
-import AdminBackdrop from "./AdminBackdrop";
 
 type AdminAuthValue = {
   user: User;
@@ -54,7 +53,6 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
   if (checking || !user) {
     return (
       <div className="admin-root flex min-h-screen items-center justify-center">
-        <AdminBackdrop />
         <p className="animate-in fade-in text-sm text-muted-foreground duration-700">
           Loading…
         </p>
