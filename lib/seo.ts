@@ -102,14 +102,6 @@ export function organizationJsonLd() {
       "@type": "State",
       name: "New South Wales",
     },
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: BUSINESS_ADDRESS.street,
-      addressLocality: BUSINESS_ADDRESS.suburb,
-      addressRegion: BUSINESS_ADDRESS.stateCode,
-      postalCode: BUSINESS_ADDRESS.postcode,
-      addressCountry: BUSINESS_ADDRESS.country,
-    },
   };
 }
 

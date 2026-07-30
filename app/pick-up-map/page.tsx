@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BUSINESS_ADDRESS, BUSINESS_PHONE, BUSINESS_EMAIL } from "@/lib/seo";
+import { BUSINESS_PHONE, BUSINESS_EMAIL } from "@/lib/seo";
 import PickupMap from "@/components/PickupMap";
 import { PICKUP_POINTS } from "@/lib/pickups";
 
@@ -10,10 +10,6 @@ export const metadata: Metadata = {
     "Where and when we pick up in Sydney — hotel pickup points and times for the Hunter Valley tour.",
   alternates: { canonical: "/pick-up-map" },
 };
-
-const MAP_QUERY = encodeURIComponent(
-  `${BUSINESS_ADDRESS.street}, ${BUSINESS_ADDRESS.suburb} ${BUSINESS_ADDRESS.stateCode} ${BUSINESS_ADDRESS.postcode}`
-);
 
 export default function PickUpMapPage() {
   return (
@@ -54,23 +50,6 @@ export default function PickUpMapPage() {
                 <span>{p.time}</span>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="pad" style={{ background: "var(--paper-2)" }}>
-        <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">Our base</span>
-            <h2>{BUSINESS_ADDRESS.street}, {BUSINESS_ADDRESS.suburb}</h2>
-          </div>
-          <div className="map-embed">
-            <iframe
-              src={`https://www.google.com/maps?q=${MAP_QUERY}&output=embed`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Map to Gourmet Getaway Tours"
-            />
           </div>
         </div>
       </section>
