@@ -147,6 +147,13 @@ header{position:sticky;top:0;z-index:50;background:var(--header-bg);backdrop-fil
    stretching the header to fill the whole viewport. */
 header.header-overlay{position:fixed;left:0;right:0;top:0;z-index:50;background:transparent;backdrop-filter:none;border-bottom-color:transparent}
 header.header-overlay.header-scrolled{background:var(--header-bg);backdrop-filter:blur(10px);border-bottom-color:var(--line)}
+/* Flagship scene: the artwork and copy get the full viewport while the brand
+   remains anchored above them. This fixed dark glass is theme-independent so
+   the treatment stays consistent over the photograph. */
+header.header-overlay.header-flagship{background:rgba(18,20,22,.78);backdrop-filter:blur(10px);border-bottom-color:rgba(255,255,255,.12)}
+header.header-flagship .nav-links,
+header.header-flagship .theme-toggle,
+header.header-flagship .burger{opacity:0;visibility:hidden;pointer-events:none}
 header.header-overlay:not(.header-scrolled) .nav-links a:not(.btn),
 header.header-overlay:not(.header-scrolled) .nav-links button:not(.btn){color:#fff}
 header.header-overlay:not(.header-scrolled) .nav-links a:not(.btn)::after,
@@ -166,7 +173,7 @@ header .wrap{max-width:1440px}
 .nav{display:flex;align-items:center;justify-content:space-between;height:var(--nav-h);gap:20px;transition:height .28s ease}
 .brand{display:flex;align-items:center;gap:10px;line-height:1;min-width:0;flex:none}
 .brand-mark{height:40px;width:auto;display:block}
-.nav-links{display:flex;align-items:center;gap:22px;flex-wrap:nowrap}
+.nav-links{display:flex;align-items:center;gap:22px;flex-wrap:nowrap;transition:opacity .22s ease,visibility .22s ease}
 .nav-links a,.nav-links button{font-size:.92rem;font-weight:500;color:var(--ink);position:relative;background:none;border:0;font-family:var(--font);cursor:pointer;white-space:nowrap}
 .nav-links a:not(.btn):hover,.nav-links button:not(.btn):hover{color:var(--wine)}
 .nav-links a[aria-current="page"]{color:var(--wine)}
@@ -187,7 +194,7 @@ header.header-compact .nav-links{top:var(--nav-h-compact)}
 .theme-toggle:hover{color:var(--wine);border-color:var(--wine)}
 header.header-overlay:not(.header-scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.5)}
 header.header-overlay:not(.header-scrolled) .theme-toggle:hover{color:var(--gold-soft);border-color:var(--gold-soft)}
-.burger{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:8px}
+.burger{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:8px;transition:opacity .22s ease,visibility .22s ease}
 .burger span{width:24px;height:2px;background:var(--ink);display:block}
 /* 1400px, not 900px: with 8 nav links + the Book Now button, the row needs
    ~1360px before it fits (see the Recipes-link-addition regression where

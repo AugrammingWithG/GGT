@@ -24,6 +24,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [compact, setCompact] = useState(false);
+  const [flagshipInView, setFlagshipInView] = useState(false);
   const closeMenu = () => setOpen(false);
   const cta = FAREHARBOR_ENABLED ? "Book now" : "Build your tour";
 
@@ -37,6 +38,39 @@ export default function Header() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, [isHome]);
+
+  // Give the flagship banner an unobstructed, cinematic treatment, but only
+  // once the banner physically meets the fixed header. Using their actual
+  // edges avoids switching early on tall screens or unusually tall sections.
+  useEffect(() => {
+    if (!isHome) return;
+    const flagship = document.getElementById("flagship-day");
+    if (!flagship) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const header = document.querySelector<HTMLElement>("header");
+      const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+      const bannerRect = flagship.getBoundingClientRect();
+      const active =
+        bannerRect.top <= headerBottom && bannerRect.bottom > headerBottom;
+      setFlagshipInView(active);
+      if (active) setOpen(false);
+    };
+    const scheduleUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [isHome]);
 
   // The compass narrative (#choose) and the dial it hands off into
@@ -72,6 +106,8 @@ export default function Header() {
   const headerClassName = isHome
     ? `header-overlay${scrolled ? " header-scrolled" : ""}${
         compact ? " header-compact" : ""
+      }${
+        flagshipInView ? " header-flagship" : ""
       }`
     : undefined;
 

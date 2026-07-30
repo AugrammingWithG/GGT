@@ -144,6 +144,7 @@ export default async function Home() {
           client-specified banner variant of .page-hero: copy stacked left over
           the photo, wide squared CTAs, white fact chips. */}
       <section
+        id="flagship-day"
         className="page-hero flagship-hero"
         style={{ backgroundImage: "url(/images/AdobeStock_280928026.webp)" }}
       >
