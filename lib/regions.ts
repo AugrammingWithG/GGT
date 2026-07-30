@@ -38,7 +38,7 @@ export const REGIONS: Region[] = [
     photo: {
       label: "Oyster shucking",
       bg: "linear-gradient(150deg,#cdbfa0,#5b4d34)",
-      image: "/images/tours/central-coast.webp",
+      image: "/images/north.jpg",
     },
     summary: ["Hunter Valley", "Central Coast", "Hawkesbury River", "Port Stephens"],
     destinations: [
@@ -87,7 +87,7 @@ export const REGIONS: Region[] = [
     photo: {
       label: "Three Sisters, Blue Mountains",
       bg: "linear-gradient(150deg,#7d93a3,#2c3a42)",
-      image: "/images/AdobeStock_204510460.jpeg",
+      image: "/images/ggt-pictures/blue-mountains-drink.jpg",
     },
     summary: ["Blue Mountains", "Hawkesbury", "Oberon"],
     destinations: [
@@ -127,3 +127,4 @@ export const REGIONS: Region[] = [
     ],
   },
 ];
+
