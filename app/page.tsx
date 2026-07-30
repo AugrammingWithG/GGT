@@ -9,7 +9,6 @@ import CompassRose from "@/components/CompassRose";
 import ChooseDirection from "@/components/ChooseDirection";
 import RegionCard from "@/components/RegionCard";
 import StoryChapters from "@/components/StoryChapters";
-import WineFoodPairing from "@/components/WineFoodPairing";
 import MissionBand from "@/components/MissionBand";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import Reviews from "@/components/Reviews";
@@ -341,27 +340,7 @@ export default async function Home() {
       {/* The story of the day */}
       <section className="pad story">
         <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">What makes the day</span>
-            <h2>The story of your Hunter Valley day</h2>
-            <p>
-              Four things set this tour apart, from the man behind the wheel
-              to the last glass poured.
-            </p>
-          </div>
           <StoryChapters />
-        </div>
-      </section>
-
-      {/* Wine & food pairing */}
-      <section className="pad" style={{ background: "var(--paper-2)" }}>
-        <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">Wine is our canvas, food is our paint</span>
-            <h2>See how we match the day</h2>
-            <p>Tap a wine to see the dish it&apos;s poured alongside.</p>
-          </div>
-          <WineFoodPairing />
         </div>
       </section>
 

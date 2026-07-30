@@ -24,6 +24,13 @@
   --tint-green:#eef3e6;
   --tint-wine:#fbf1f2;
   --tint-wine-border:#eccdd1;
+  /* Client-specified slate band. Sections painted with --slate read dark in
+     BOTH themes (it is deliberately not re-pointed in the dark block below),
+     so anything sitting on it must use these fixed on-slate values rather
+     than --ink/--wine/--green, which invert with the theme. */
+  --slate:#282E34;
+  --on-slate:#F4F1EC;
+  --on-slate-soft:rgba(244,241,236,.72);
   --r:14px;
   --nav-h:92px;
   /* Shrunken bar used while the compass dial is on screen — see
@@ -359,53 +366,51 @@ section.pad{padding:78px 0}
   .tour-card.featured .tour-photo{height:220px}
 }
 
-/* Story of the day — editorial chapters */
-.story{background:var(--paper);overflow:hidden}
-.chapters{position:relative;max-width:1000px;margin:0 auto}
-.chapters::before{content:"";position:absolute;left:50%;top:40px;bottom:40px;width:2px;
-  background:repeating-linear-gradient(to bottom,var(--gold-muted) 0 8px,transparent 8px 18px);transform:translateX(-50%);opacity:.5}
-.chapter{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center;padding:44px 0;position:relative}
-.chapter:nth-child(even) .ch-media{order:2}
-.ch-media{height:340px;border-radius:var(--r);position:relative;box-shadow:var(--shadow);overflow:hidden;background-size:cover;background-position:center}
-.ch-media span{position:absolute;bottom:14px;left:14px;color:#fff;font-size:.7rem;letter-spacing:.06em;
-  background:rgba(0,0,0,.4);padding:.4em .9em;border-radius:100px;z-index:2}
-.ch-media::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.35),transparent 55%)}
-.ch-num{font-family:var(--font-display);font-size:3.4rem;font-weight:600;color:var(--gold-muted);line-height:1;opacity:.55;display:block;margin-bottom:6px}
-.ch-text .eyebrow{color:var(--green)}
-.ch-text h3{font-size:1.9rem;margin:.15em 0 .5em}
-.ch-text p{color:var(--ink-soft);font-size:1rem}
-.chapter::after{content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;
-  background:var(--gold-muted);border:3px solid var(--paper);transform:translate(-50%,-50%);z-index:2}
+/* Story of the day — editorial chapters on the slate band. The whole
+   section is dark in both themes, so its type, rule and timeline dot are
+   pinned to the fixed --on-slate-* values (see :root) instead of the
+   theme tokens. .chapters only ever renders inside .story, so those rules
+   don't need re-scoping. */
+.story{background:var(--slate);overflow:hidden}
+/* Plain alternating photo/copy rows, per the client's reference: no
+   chapter numerals, no eyebrows, no dotted timeline, no caption pill or
+   scrim over the photos — just square images and the heading + copy. */
+/* Staggered, not row-aligned. The two columns are independent stacks, so a
+   block sits directly under the one above it in its own column instead of
+   waiting for a shared row baseline — which is what lets each photo ride up
+   alongside the copy beside it. (Real masonry, grid-template-rows:masonry,
+   still isn't shipped in any stable browser.) StoryChapters.tsx deals the
+   blocks out between the two columns. */
+.chapters{display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(32px,5vw,60px);
+  align-items:start;max-width:1060px;margin:0 auto}
+.ch-col{display:flex;flex-direction:column;gap:clamp(36px,4.5vw,56px)}
+/* Square crops, matching the reference. The images are backgrounds rather
+   than <img>, so StoryChapters.tsx names them with role="img"/aria-label. */
+.ch-media{aspect-ratio:1;border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.42);
+  overflow:hidden;background-size:cover;background-position:center}
+.ch-text h3{font-size:clamp(1.7rem,3vw,2.15rem);margin:0 0 .55em;color:var(--on-slate)}
+.ch-text p{color:var(--on-slate-soft);font-size:1rem}
+.ch-text p+p{margin-top:1em}
 @media(max-width:900px){
-  .chapters::before,.chapter::after{display:none}
-  .chapter{grid-template-columns:1fr;gap:24px;padding:26px 0}
-  .chapter:nth-child(even) .ch-media{order:0}
-  .ch-media{height:240px}
+  /* Single stack. The columns dissolve so every block becomes a direct grid
+     item, and the inline `order` from StoryChapters.tsx re-interleaves them
+     into photo-then-copy per chapter — otherwise you'd get one column's
+     worth of blocks followed by the other's. Row gap is the intra-chapter
+     spacing; .ch-text's margin tops it up to a wider gap between chapters. */
+  .chapters{grid-template-columns:1fr;row-gap:22px}
+  .ch-col{display:contents}
+  .ch-media{aspect-ratio:4/3}
+  .ch-text:not(:last-child){margin-bottom:26px}
 }
 
 /* Reveal on scroll */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease}
 .reveal.in{opacity:1;transform:none}
 
-/* Wine & food pairing */
-.pair-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:36px;max-width:940px;margin:0 auto;align-items:center}
-.pair-list{display:flex;flex-direction:column;gap:10px}
-.pair-opt{text-align:left;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:15px 18px;cursor:pointer;transition:all .18s;font-family:inherit;width:100%}
-.pair-opt b{font-family:var(--font-display);font-size:1.1rem;display:block;color:var(--ink);line-height:1.2}
-.pair-opt span{font-size:.82rem;color:var(--ink-soft)}
-.pair-opt:hover{border-color:var(--wine)}
-.pair-opt.active{border-color:var(--wine);background:var(--tint-wine);box-shadow:var(--shadow-sm)}
-.pair-opt.active b{color:var(--wine)}
-.pair-plate{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
-.pair-photo{height:210px;position:relative;background-size:cover;background-position:center}
-.pair-photo span{position:absolute;bottom:14px;left:14px;color:#fff;font-size:.7rem;letter-spacing:.06em;background:rgba(0,0,0,.4);padding:.4em .9em;border-radius:100px;z-index:2}
-.pair-plate-body{padding:26px}
-.pair-plate-body h3{font-size:1.5rem;margin-bottom:8px}
-.pair-plate-body p{color:var(--ink-soft);font-size:.96rem}
-.pair-match{display:inline-block;margin-top:14px;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:var(--tint-green);padding:.35em .9em;border-radius:100px}
+/* Cross-fade for content that swaps in place. Keyed re-mounts replay it —
+   ChooseDirection.tsx uses it on the caption as the direction changes. */
 .fade-swap{animation:fadeIn .35s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@media(max-width:900px){.pair-grid{grid-template-columns:1fr;gap:24px}}
 
 /* Mission band */
 .mission{background:linear-gradient(135deg,var(--green),#37472a);color:#fff;text-align:center}
@@ -452,16 +457,33 @@ section.pad{padding:78px 0}
   background:rgba(0,0,0,.35);padding:.4em .9em;border-radius:100px}
 @media(max-width:900px){.why-grid{grid-template-columns:1fr;gap:32px}}
 
-/* Reviews */
+/* Reviews — horizontal marquee */
 .reviews{background:var(--paper-2);padding:0}
-.reviews .review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.review-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px}
+.review-marquee{--review-gap:24px;--review-card-w:360px;
+  /* Runs edge to edge inside the wrap, with the ends faded so cards drift in
+     and out rather than being cut off by the viewport. */
+  /* Negative margins cancel the padding, which is only there to stop the
+     cards' drop shadow being clipped by the overflow. */
+  overflow:hidden;margin:-12px -24px -24px;padding:12px 24px 24px;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent)}
+.review-track{display:flex;align-items:stretch;gap:var(--review-gap);width:max-content;
+  /* The track holds two copies of the list, so one full set is half the track
+     plus the gap that sits between the copies. */
+  animation:review-marquee 48s linear infinite}
+.review-marquee:hover .review-track,
+.review-marquee:focus-within .review-track{animation-play-state:paused}
+@keyframes review-marquee{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(calc(-50% - var(--review-gap) / 2),0,0)}
+}
+.review-card{flex:0 0 var(--review-card-w);background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px}
 .review-card .stars{color:var(--gold-muted);letter-spacing:2px}
 .review-card blockquote{font-size:.95rem;color:var(--ink)}
-.review-card figcaption{display:flex;flex-direction:column;gap:2px}
+.review-card figcaption{display:flex;flex-direction:column;gap:2px;margin-top:auto}
 .review-card figcaption b{font-weight:600;font-size:.9rem}
 .review-card .review-source{font-size:.78rem;color:var(--ink-soft)}
-@media(max-width:900px){.reviews .review-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.review-marquee{--review-card-w:280px;--review-gap:16px}}
 
 /* Guest photo wall */
 .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -1053,9 +1075,15 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
   .region-card:hover .region-photo{transform:none}
   /* ChooseDirection.tsx also stops its own timer here, so the needle just
      rests on North and picking a direction swaps instantly. Scoped to the
-     caption rather than bare .fade-swap, which WineFoodPairing shares. */
+     caption in case anything else picks up .fade-swap later. */
   .choose-needle,.choose-photo-layer,.choose-point{transition:none}
   .choose-photo-caption .fade-swap{animation:none}
+  /* The review marquee becomes a manual scroller: motion only on demand, and
+     the duplicated half comes out so the list doesn't read twice. */
+  .review-track{animation:none;width:auto}
+  .review-marquee{overflow-x:auto;scroll-snap-type:x proximity}
+  .review-card[aria-hidden="true"]{display:none}
+  .review-card{scroll-snap-align:start}
   body{transition:none}
   .nav,.header-logo{transition:none}
 }
