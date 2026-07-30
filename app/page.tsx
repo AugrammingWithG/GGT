@@ -1,4 +1,4 @@
-import { Wine, Fish, ChefHat, UtensilsCrossed, Bus } from "lucide-react";
+import { Wine, Fish, ChefHat, UtensilsCrossed, Bus, User, Users, Hourglass } from "lucide-react";
 import Price from "@/components/Price";
 import BookingCta from "@/components/BookingCta";
 import TourCard from "@/components/TourCard";
@@ -7,7 +7,6 @@ import CompassRose from "@/components/CompassRose";
 import ChooseDirection from "@/components/ChooseDirection";
 import RegionCard from "@/components/RegionCard";
 import StoryChapters from "@/components/StoryChapters";
-import WineFoodPairing from "@/components/WineFoodPairing";
 import MissionBand from "@/components/MissionBand";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import Reviews from "@/components/Reviews";
@@ -132,17 +131,21 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Hunter Valley teaser, right after the compass */}
+      {/* Hunter Valley teaser, right after the compass. .flagship-hero is the
+          client-specified banner variant of .page-hero: copy stacked left over
+          the photo, wide squared CTAs, white fact chips. */}
       <section
-        className="page-hero"
+        id="flagship-day"
+        className="page-hero flagship-hero"
         style={{ backgroundImage: "url(/images/AdobeStock_280928026.webp)" }}
       >
         <div className="wrap">
           <span className="eyebrow">Our flagship day</span>
           <h2>Hunter Valley Food &amp; Wine Tour</h2>
           {hunterValley && (
-            <p style={{ fontWeight: 700, fontSize: "1.15rem", marginBottom: 6 }}>
-              From <Price aud={hunterValley.priceAdult!} />
+            <p className="flagship-price">
+              <span className="from">From</span>
+              <Price aud={hunterValley.priceAdult!} />
             </p>
           )}
           <p>
@@ -152,21 +155,30 @@ export default async function Home() {
             delicious, Australian made wines coupled with menus designed to
             complement every drop.
           </p>
-          <div className="hero-actions" style={{ justifyContent: "center", position: "relative", zIndex: 2 }}>
+          <div className="hero-actions">
             <BookingCta
               itemId={hunterValley?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-              className="btn btn-gold"
+              className="btn btn-book"
             >
               Book Now
             </BookingCta>
-            <a href="/hunter-valley-tour" className="btn btn-outline-light">
+            <a href="/hunter-valley-tour" className="btn btn-learn">
               Learn More
             </a>
           </div>
           <div className="hero-quickfacts">
-            <span>4+ years old</span>
-            <span>Up to 11 hours</span>
-            <span>2 – 16 passengers</span>
+            <span>
+              <User size={14} strokeWidth={2} aria-hidden />
+              4+ years old
+            </span>
+            <span>
+              <Hourglass size={14} strokeWidth={2} aria-hidden />
+              Up to 11 hours
+            </span>
+            <span>
+              <Users size={14} strokeWidth={2} aria-hidden />
+              2 – 16 passengers
+            </span>
           </div>
         </div>
       </section>
@@ -252,27 +264,7 @@ export default async function Home() {
       {/* The story of the day */}
       <section className="pad story">
         <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">What makes the day</span>
-            <h2>The story of your Hunter Valley day</h2>
-            <p>
-              Four things set this tour apart, from the man behind the wheel
-              to the last glass poured.
-            </p>
-          </div>
           <StoryChapters />
-        </div>
-      </section>
-
-      {/* Wine & food pairing */}
-      <section className="pad" style={{ background: "var(--paper-2)" }}>
-        <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">Wine is our canvas, food is our paint</span>
-            <h2>See how we match the day</h2>
-            <p>Tap a wine to see the dish it&apos;s poured alongside.</p>
-          </div>
-          <WineFoodPairing />
         </div>
       </section>
 

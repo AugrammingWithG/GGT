@@ -24,6 +24,13 @@
   --tint-green:#eef3e6;
   --tint-wine:#fbf1f2;
   --tint-wine-border:#eccdd1;
+  /* Client-specified slate band. Sections painted with --slate read dark in
+     BOTH themes (it is deliberately not re-pointed in the dark block below),
+     so anything sitting on it must use these fixed on-slate values rather
+     than --ink/--wine/--green, which invert with the theme. */
+  --slate:#282E34;
+  --on-slate:#F4F1EC;
+  --on-slate-soft:rgba(244,241,236,.72);
   --r:14px;
   --nav-h:92px;
   /* Shrunken bar used while the compass dial is on screen — see
@@ -140,6 +147,13 @@ header{position:sticky;top:0;z-index:50;background:var(--header-bg);backdrop-fil
    stretching the header to fill the whole viewport. */
 header.header-overlay{position:fixed;left:0;right:0;top:0;z-index:50;background:transparent;backdrop-filter:none;border-bottom-color:transparent}
 header.header-overlay.header-scrolled{background:var(--header-bg);backdrop-filter:blur(10px);border-bottom-color:var(--line)}
+/* Flagship scene: the artwork and copy get the full viewport while the brand
+   remains anchored above them. This fixed dark glass is theme-independent so
+   the treatment stays consistent over the photograph. */
+header.header-overlay.header-flagship{background:rgba(18,20,22,.78);backdrop-filter:blur(10px);border-bottom-color:rgba(255,255,255,.12)}
+header.header-flagship .nav-links,
+header.header-flagship .theme-toggle,
+header.header-flagship .burger{opacity:0;visibility:hidden;pointer-events:none}
 header.header-overlay:not(.header-scrolled) .nav-links a:not(.btn),
 header.header-overlay:not(.header-scrolled) .nav-links button:not(.btn){color:#fff}
 header.header-overlay:not(.header-scrolled) .nav-links a:not(.btn)::after,
@@ -159,7 +173,7 @@ header .wrap{max-width:1440px}
 .nav{display:flex;align-items:center;justify-content:space-between;height:var(--nav-h);gap:20px;transition:height .28s ease}
 .brand{display:flex;align-items:center;gap:10px;line-height:1;min-width:0;flex:none}
 .brand-mark{height:40px;width:auto;display:block}
-.nav-links{display:flex;align-items:center;gap:22px;flex-wrap:nowrap}
+.nav-links{display:flex;align-items:center;gap:22px;flex-wrap:nowrap;transition:opacity .22s ease,visibility .22s ease}
 .nav-links a,.nav-links button{font-size:.92rem;font-weight:500;color:var(--ink);position:relative;background:none;border:0;font-family:var(--font);cursor:pointer;white-space:nowrap}
 .nav-links a:not(.btn):hover,.nav-links button:not(.btn):hover{color:var(--wine)}
 .nav-links a[aria-current="page"]{color:var(--wine)}
@@ -180,7 +194,7 @@ header.header-compact .nav-links{top:var(--nav-h-compact)}
 .theme-toggle:hover{color:var(--wine);border-color:var(--wine)}
 header.header-overlay:not(.header-scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.5)}
 header.header-overlay:not(.header-scrolled) .theme-toggle:hover{color:var(--gold-soft);border-color:var(--gold-soft)}
-.burger{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:8px}
+.burger{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:8px;transition:opacity .22s ease,visibility .22s ease}
 .burger span{width:24px;height:2px;background:var(--ink);display:block}
 /* 1400px, not 900px: with 8 nav links + the Book Now button, the row needs
    ~1360px before it fits (see the Recipes-link-addition regression where
@@ -359,53 +373,54 @@ section.pad{padding:78px 0}
   .tour-card.featured .tour-photo{height:220px}
 }
 
-/* Story of the day — editorial chapters */
-.story{background:var(--paper);overflow:hidden}
-.chapters{position:relative;max-width:1000px;margin:0 auto}
-.chapters::before{content:"";position:absolute;left:50%;top:40px;bottom:40px;width:2px;
-  background:repeating-linear-gradient(to bottom,var(--gold-muted) 0 8px,transparent 8px 18px);transform:translateX(-50%);opacity:.5}
-.chapter{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center;padding:44px 0;position:relative}
-.chapter:nth-child(even) .ch-media{order:2}
-.ch-media{height:340px;border-radius:var(--r);position:relative;box-shadow:var(--shadow);overflow:hidden;background-size:cover;background-position:center}
-.ch-media span{position:absolute;bottom:14px;left:14px;color:#fff;font-size:.7rem;letter-spacing:.06em;
-  background:rgba(0,0,0,.4);padding:.4em .9em;border-radius:100px;z-index:2}
-.ch-media::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.35),transparent 55%)}
-.ch-num{font-family:var(--font-display);font-size:3.4rem;font-weight:600;color:var(--gold-muted);line-height:1;opacity:.55;display:block;margin-bottom:6px}
-.ch-text .eyebrow{color:var(--green)}
-.ch-text h3{font-size:1.9rem;margin:.15em 0 .5em}
-.ch-text p{color:var(--ink-soft);font-size:1rem}
-.chapter::after{content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;
-  background:var(--gold-muted);border:3px solid var(--paper);transform:translate(-50%,-50%);z-index:2}
+/* Story of the day — editorial chapters on the slate band. The whole
+   section is dark in both themes, so its type, rule and timeline dot are
+   pinned to the fixed --on-slate-* values (see :root) instead of the
+   theme tokens. .chapters only ever renders inside .story, so those rules
+   don't need re-scoping. */
+.story{background:var(--slate);overflow:hidden}
+/* Plain alternating photo/copy rows, per the client's reference: no
+   chapter numerals, no eyebrows, no dotted timeline, no caption pill or
+   scrim over the photos — just square images and the heading + copy. */
+/* Staggered, not row-aligned. The two columns are independent stacks, so a
+   block sits directly under the one above it in its own column instead of
+   waiting for a shared row baseline — which is what lets each photo ride up
+   alongside the copy beside it. (Real masonry, grid-template-rows:masonry,
+   still isn't shipped in any stable browser.) StoryChapters.tsx deals the
+   blocks out between the two columns. */
+.chapters{display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(32px,5vw,60px);
+  align-items:start;max-width:1060px;margin:0 auto}
+.ch-col{display:flex;flex-direction:column;gap:clamp(36px,4.5vw,56px)}
+/* Square crops, matching the reference. The images are backgrounds rather
+   than <img>, so StoryChapters.tsx names them with role="img"/aria-label. */
+.ch-media{aspect-ratio:1;border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.42);
+  overflow:hidden;background-size:cover;background-position:center}
+/* These supplied PNGs include an inset transparent frame. Scale past it so
+   the photograph itself covers the card, while preserving its proportions. */
+.ch-media--framed{background-size:115.4% auto}
+.ch-text h3{font-size:clamp(1.7rem,3vw,2.15rem);margin:0 0 .55em;color:var(--on-slate)}
+.ch-text p{color:var(--on-slate-soft);font-size:1rem}
+.ch-text p+p{margin-top:1em}
 @media(max-width:900px){
-  .chapters::before,.chapter::after{display:none}
-  .chapter{grid-template-columns:1fr;gap:24px;padding:26px 0}
-  .chapter:nth-child(even) .ch-media{order:0}
-  .ch-media{height:240px}
+  /* Single stack. The columns dissolve so every block becomes a direct grid
+     item, and the inline `order` from StoryChapters.tsx re-interleaves them
+     into photo-then-copy per chapter — otherwise you'd get one column's
+     worth of blocks followed by the other's. Row gap is the intra-chapter
+     spacing; .ch-text's margin tops it up to a wider gap between chapters. */
+  .chapters{grid-template-columns:1fr;row-gap:22px}
+  .ch-col{display:contents}
+  .ch-media{aspect-ratio:4/3}
+  .ch-text:not(:last-child){margin-bottom:26px}
 }
 
 /* Reveal on scroll */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease}
 .reveal.in{opacity:1;transform:none}
 
-/* Wine & food pairing */
-.pair-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:36px;max-width:940px;margin:0 auto;align-items:center}
-.pair-list{display:flex;flex-direction:column;gap:10px}
-.pair-opt{text-align:left;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:15px 18px;cursor:pointer;transition:all .18s;font-family:inherit;width:100%}
-.pair-opt b{font-family:var(--font-display);font-size:1.1rem;display:block;color:var(--ink);line-height:1.2}
-.pair-opt span{font-size:.82rem;color:var(--ink-soft)}
-.pair-opt:hover{border-color:var(--wine)}
-.pair-opt.active{border-color:var(--wine);background:var(--tint-wine);box-shadow:var(--shadow-sm)}
-.pair-opt.active b{color:var(--wine)}
-.pair-plate{background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
-.pair-photo{height:210px;position:relative;background-size:cover;background-position:center}
-.pair-photo span{position:absolute;bottom:14px;left:14px;color:#fff;font-size:.7rem;letter-spacing:.06em;background:rgba(0,0,0,.4);padding:.4em .9em;border-radius:100px;z-index:2}
-.pair-plate-body{padding:26px}
-.pair-plate-body h3{font-size:1.5rem;margin-bottom:8px}
-.pair-plate-body p{color:var(--ink-soft);font-size:.96rem}
-.pair-match{display:inline-block;margin-top:14px;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:var(--tint-green);padding:.35em .9em;border-radius:100px}
+/* Cross-fade for content that swaps in place. Keyed re-mounts replay it —
+   ChooseDirection.tsx uses it on the caption as the direction changes. */
 .fade-swap{animation:fadeIn .35s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@media(max-width:900px){.pair-grid{grid-template-columns:1fr;gap:24px}}
 
 /* Mission band */
 .mission{background:linear-gradient(135deg,var(--green),#37472a);color:#fff;text-align:center}
@@ -452,16 +467,33 @@ section.pad{padding:78px 0}
   background:rgba(0,0,0,.35);padding:.4em .9em;border-radius:100px}
 @media(max-width:900px){.why-grid{grid-template-columns:1fr;gap:32px}}
 
-/* Reviews */
+/* Reviews — horizontal marquee */
 .reviews{background:var(--paper-2);padding:0}
-.reviews .review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.review-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px}
+.review-marquee{--review-gap:24px;--review-card-w:360px;
+  /* Runs edge to edge inside the wrap, with the ends faded so cards drift in
+     and out rather than being cut off by the viewport. */
+  /* Negative margins cancel the padding, which is only there to stop the
+     cards' drop shadow being clipped by the overflow. */
+  overflow:hidden;margin:-12px -24px -24px;padding:12px 24px 24px;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent)}
+.review-track{display:flex;align-items:stretch;gap:var(--review-gap);width:max-content;
+  /* The track holds two copies of the list, so one full set is half the track
+     plus the gap that sits between the copies. */
+  animation:review-marquee 48s linear infinite}
+.review-marquee:hover .review-track,
+.review-marquee:focus-within .review-track{animation-play-state:paused}
+@keyframes review-marquee{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(calc(-50% - var(--review-gap) / 2),0,0)}
+}
+.review-card{flex:0 0 var(--review-card-w);background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px}
 .review-card .stars{color:var(--gold-muted);letter-spacing:2px}
 .review-card blockquote{font-size:.95rem;color:var(--ink)}
-.review-card figcaption{display:flex;flex-direction:column;gap:2px}
+.review-card figcaption{display:flex;flex-direction:column;gap:2px;margin-top:auto}
 .review-card figcaption b{font-weight:600;font-size:.9rem}
 .review-card .review-source{font-size:.78rem;color:var(--ink-soft)}
-@media(max-width:900px){.reviews .review-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.review-marquee{--review-card-w:280px;--review-gap:16px}}
 
 /* Guest photo wall */
 .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -534,6 +566,51 @@ section.pad{padding:78px 0}
 .hero-quickfacts{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:26px;position:relative;z-index:2}
 .hero-quickfacts span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.5);
   backdrop-filter:blur(4px);color:#fff;font-size:.8rem;font-weight:600;padding:8px 16px;border-radius:100px}
+
+/* ===================== Flagship hero (homepage Hunter Valley teaser) =========
+   Client-specified banner variant of .page-hero: the copy stacks to the LEFT
+   over the photo instead of centred, the scrim runs left→right so the vineyard
+   stays visible, the CTAs are wide squared blocks and the facts read as solid
+   white chips. Everything is scoped to .flagship-hero, so the plain
+   .page-hero used by about / contact / faq / tour pages is untouched. */
+.flagship-hero{
+  /* Bright CTA green from the client's reference image — deliberately local to
+     this band rather than added to the site palette, which has no such green
+     (--green is the deep olive used on paper backgrounds). */
+  --flagship-green:#77BC1F;
+  --flagship-green-deep:#68A519;
+  display:flex;
+  align-items:center;
+  min-height:clamp(420px,44vw,560px);
+  padding:clamp(56px,6vw,96px) 0;
+  text-align:left;
+}
+.flagship-hero .wrap{width:100%;position:relative;z-index:2}
+.flagship-hero::before{background:linear-gradient(90deg,rgba(18,14,11,.62),rgba(18,14,11,.34) 48%,rgba(18,14,11,0) 78%)}
+.flagship-hero .eyebrow{color:rgba(255,255,255,.82)}
+.flagship-hero h2{max-width:20ch;margin:.15em 0 .45em;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.flagship-hero p{margin:0;max-width:46ch;text-shadow:0 1px 12px rgba(0,0,0,.4)}
+.flagship-hero .flagship-price{font-family:var(--font-display);font-weight:700;font-size:1.6rem;
+  color:#fff;margin:0 0 .55em;display:flex;align-items:baseline;gap:.5em}
+.flagship-hero .flagship-price .from{font-family:var(--font);font-size:.72rem;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;opacity:.88}
+.flagship-hero .hero-actions{margin-top:28px;gap:18px}
+.flagship-hero .btn{justify-content:center;min-width:270px;border-radius:4px;padding:1em 1.6em;
+  font-size:.9rem;letter-spacing:.12em;text-transform:uppercase}
+.flagship-hero .btn-book{background:var(--flagship-green);border-color:var(--flagship-green);color:#fff}
+.flagship-hero .btn-book:hover{background:var(--flagship-green-deep);border-color:var(--flagship-green-deep)}
+.flagship-hero .btn-learn{background:transparent;border-color:var(--flagship-green);color:#fff}
+.flagship-hero .btn-learn:hover{background:var(--flagship-green);border-color:var(--flagship-green)}
+.flagship-hero .hero-quickfacts{justify-content:flex-start;gap:8px;margin-top:24px}
+.flagship-hero .hero-quickfacts span{display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.94);border:0;backdrop-filter:none;border-radius:3px;
+  color:#2B2622;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:7px 12px}
+.flagship-hero .hero-quickfacts svg{flex:none}
+@media(max-width:640px){
+  .flagship-hero h2{max-width:none}
+  .flagship-hero .hero-actions{gap:12px}
+  .flagship-hero .btn{min-width:0;width:100%}
+}
 
 /* Tour Highlights list (homepage) */
 .highlight-list{display:flex;flex-direction:column;justify-content:center;gap:20px;border-left:1px solid var(--line);padding-left:40px}
@@ -886,18 +963,6 @@ section.compass-section{padding:7px 0 42px;
 .form-field input:focus,.form-field textarea:focus,.form-field select:focus{outline:2px solid var(--gold-muted);border-color:var(--gold-muted)}
 @media(max-width:900px){.contact-grid{grid-template-columns:1fr;gap:36px}.contact-info{position:static}}
 
-/* ===================== Slim book bar ===================== */
-.bookbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--wine-solid);color:#fff;
-  transform:translateY(115%);transition:transform .32s ease;box-shadow:0 -6px 24px rgba(0,0,0,.18)}
-.bookbar.show{transform:none}
-.bookbar-inner{max-width:1180px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.bb-txt b{font-family:var(--font-display);font-size:1.05rem}
-.bb-txt span{font-size:.85rem;opacity:.85;margin-left:8px}
-.bb-actions{display:flex;align-items:center;gap:12px}
-.bookbar-close{background:rgba(255,255,255,.18);border:0;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1.05rem;line-height:1;flex:none}
-.bookbar-close:hover{background:rgba(255,255,255,.32)}
-@media(max-width:600px){.bb-txt span{display:none}}
-
 /* ===================== Footer ===================== */
 footer{background:var(--wine-deep);color:#f3e8df;padding:64px 0 30px}
 .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:40px}
@@ -937,15 +1002,8 @@ footer ul a:hover,footer ul button:hover{color:#fff}
    so the label stays in the accessibility tree at every width. */
 .wa-fab-text{white-space:nowrap;overflow:hidden;max-width:0;transition:max-width .2s ease}
 .wa-fab:hover .wa-fab-text,.wa-fab:focus-visible .wa-fab-text{max-width:180px}
-/* The slim book bar claims this same corner on / and /hunter-valley-tour
-   (.bookbar, z-60, slides up past 560px of scroll) and was burying the
-   button. Sibling selector works because BookBar renders immediately before
-   WhatsAppButton in app/layout.tsx; matching the bar's .32s timing keeps the
-   two moving as one. */
-.bookbar.show ~ .wa-fab{bottom:94px}
 @media(max-width:760px){
   .wa-fab{right:16px;bottom:16px}
-  .bookbar.show ~ .wa-fab{bottom:90px}
 }
 
 /* ===================== Currency picker ===================== */
@@ -1047,8 +1105,16 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
   .region-photo{transition:none}
   .region-card:hover .region-photo{transform:none}
   /* ChooseDirection.tsx also stops its own timer here, so the needle just
-     rests on North and picking a direction snaps instantly. */
-  .choose-needle,.choose-point{transition:none}
+     rests on North and picking a direction swaps instantly. Scoped to the
+     caption in case anything else picks up .fade-swap later. */
+  .choose-needle,.choose-photo-layer,.choose-point{transition:none}
+  .choose-photo-caption .fade-swap{animation:none}
+  /* The review marquee becomes a manual scroller: motion only on demand, and
+     the duplicated half comes out so the list doesn't read twice. */
+  .review-track{animation:none;width:auto}
+  .review-marquee{overflow-x:auto;scroll-snap-type:x proximity}
+  .review-card[aria-hidden="true"]{display:none}
+  .review-card{scroll-snap-align:start}
   body{transition:none}
   .nav,.header-logo{transition:none}
 }
