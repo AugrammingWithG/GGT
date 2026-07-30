@@ -4,7 +4,6 @@ import { IBM_Plex_Mono, Quicksand, Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import BookBar from "@/components/BookBar";
 import DirectBookingModal from "@/components/DirectBookingModal";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import VisitorBeacon from "@/components/VisitorBeacon";
@@ -109,7 +108,6 @@ export default async function RootLayout({
           <Header />
           {children}
           <Footer />
-          <BookBar />
           <DirectBookingModal />
           <WhatsAppButton />
         </CurrencyProvider>

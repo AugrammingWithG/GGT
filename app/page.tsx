@@ -1,4 +1,4 @@
-import { Wine, Fish, ChefHat, UtensilsCrossed, Bus } from "lucide-react";
+import { Wine, Fish, ChefHat, UtensilsCrossed, Bus, User, Users, Hourglass } from "lucide-react";
 import Price from "@/components/Price";
 import CurrencyPicker from "@/components/CurrencyPicker";
 import BookingCta from "@/components/BookingCta";
@@ -140,17 +140,20 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Hunter Valley teaser, right after the compass */}
+      {/* Hunter Valley teaser, right after the compass. .flagship-hero is the
+          client-specified banner variant of .page-hero: copy stacked left over
+          the photo, wide squared CTAs, white fact chips. */}
       <section
-        className="page-hero"
+        className="page-hero flagship-hero"
         style={{ backgroundImage: "url(/images/AdobeStock_280928026.webp)" }}
       >
         <div className="wrap">
           <span className="eyebrow">Our flagship day</span>
           <h2>Hunter Valley Food &amp; Wine Tour</h2>
           {hunterValley && (
-            <p style={{ fontWeight: 700, fontSize: "1.15rem", marginBottom: 6 }}>
-              From <Price aud={hunterValley.priceAdult!} />
+            <p className="flagship-price">
+              <span className="from">From</span>
+              <Price aud={hunterValley.priceAdult!} />
             </p>
           )}
           <p>
@@ -160,21 +163,30 @@ export default async function Home() {
             delicious, Australian made wines coupled with menus designed to
             complement every drop.
           </p>
-          <div className="hero-actions" style={{ justifyContent: "center", position: "relative", zIndex: 2 }}>
+          <div className="hero-actions">
             <BookingCta
               itemId={hunterValley?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-              className="btn btn-gold"
+              className="btn btn-book"
             >
               Book Now
             </BookingCta>
-            <a href="/hunter-valley-tour" className="btn btn-outline-light">
+            <a href="/hunter-valley-tour" className="btn btn-learn">
               Learn More
             </a>
           </div>
           <div className="hero-quickfacts">
-            <span>4+ years old</span>
-            <span>Up to 11 hours</span>
-            <span>2 – 16 passengers</span>
+            <span>
+              <User size={14} strokeWidth={2} aria-hidden />
+              4+ years old
+            </span>
+            <span>
+              <Hourglass size={14} strokeWidth={2} aria-hidden />
+              Up to 11 hours
+            </span>
+            <span>
+              <Users size={14} strokeWidth={2} aria-hidden />
+              2 – 16 passengers
+            </span>
           </div>
         </div>
       </section>
