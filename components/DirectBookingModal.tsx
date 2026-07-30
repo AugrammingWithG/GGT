@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Wine } from "lucide-react";
 
 /**
@@ -8,6 +9,7 @@ import { Wine } from "lucide-react";
  * it fires a single time per session load rather than on every page.
  */
 export default function DirectBookingModal() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -24,6 +26,9 @@ export default function DirectBookingModal() {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // The QR landing page is a single-purpose links card — a promo popup
+  // over it would just be noise for someone who just scanned a code.
+  if (pathname === "/qrpage") return null;
   if (!open) return null;
 
   return (

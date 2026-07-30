@@ -1,5 +1,7 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+
 // International guests often prefer WhatsApp over a phone call or email.
 // Update the number (international format, no + or spaces) if it changes.
 const WHATSAPP_NUMBER = "61416139567";
@@ -7,9 +9,14 @@ const PREFILL =
   "Hi Jimmy, I'm visiting Australia and would love to ask about a tour.";
 
 export default function WhatsAppButton() {
+  const pathname = usePathname();
   const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     PREFILL,
   )}`;
+
+  // The QR landing page is a minimal links card — no floating chat FAB
+  // over it, matching the header/footer guard for that route.
+  if (pathname === "/qrpage") return null;
 
   return (
     <a

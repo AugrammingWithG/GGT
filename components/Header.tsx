@@ -111,6 +111,11 @@ export default function Header() {
       }`
     : undefined;
 
+  // The QR landing page is a self-contained card with its own logo/call
+  // bar (app/qrpage/page.tsx) — the full site nav would just be a second,
+  // redundant header stacked above it.
+  if (pathname === "/qrpage") return null;
+
   return (
     <header className={headerClassName}>
       <div className="wrap nav">

@@ -1100,6 +1100,42 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
 .legal-prose em{color:var(--wine);font-style:italic}
 @media(max-width:560px){.legal{padding:36px 0 64px}.legal-inner{border-radius:12px}.legal-item{gap:14px;padding:20px}.legal-item p{font-size:15px}}
 
+/* ===================== QR link page (app/qrpage) ===================== */
+/* Self-contained "linktree" style card for a printed/table QR code — not
+   part of the paper/wine/gold site chrome (Header/Footer/WhatsApp fab are
+   suppressed for this route, see the pathname guards in those components).
+   Colours are fixed hex rather than the theme tokens, same reasoning as
+   .flagship-hero/.story: this band always reads dark, in both themes. */
+.qr-shell{min-height:100vh;display:flex;flex-direction:column;
+  background:
+    radial-gradient(130% 65% at 18% -8%, #7fc24d 0%, transparent 58%),
+    linear-gradient(180deg, #35601f 0%, #132009 100%)}
+.qr-header{background:#fff;padding:28px 20px 22px;box-shadow:0 2px 14px rgba(0,0,0,.18)}
+.qr-header-inner{position:relative;width:100%;max-width:480px;margin:0 auto;
+  display:flex;justify-content:center}
+.qr-logo{height:auto;width:min(72%,300px);flex:none}
+.qr-call-btn{position:absolute;right:0;bottom:-4px;display:inline-flex;align-items:center;gap:8px;flex:none;
+  background:#181c16;color:#fff;font-size:.85rem;font-weight:600;
+  padding:.7em 1.1em;border-radius:999px;white-space:nowrap;transition:transform .15s ease,background .15s ease}
+.qr-call-btn:hover{transform:translateY(-2px);background:#000}
+.qr-body{flex:1;padding:26px 16px 64px;display:flex;justify-content:center}
+.qr-links{width:100%;max-width:480px;display:flex;flex-direction:column;gap:14px}
+.qr-link{display:flex;align-items:center;gap:16px;
+  background:linear-gradient(160deg,#2c4020,#101609);
+  border:1.5px solid var(--gold-soft);border-radius:18px;padding:10px 18px 10px 10px;
+  box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .15s ease,box-shadow .15s ease}
+.qr-link:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.45)}
+.qr-link-avatar{width:58px;height:58px;flex:none;border-radius:12px;overflow:hidden;
+  background:#fff;display:grid;place-items:center;border:1px solid rgba(255,255,255,.3)}
+.qr-link-avatar img{width:100%;height:100%;object-fit:cover}
+.qr-link-label{color:#fff;font-weight:600;font-size:1rem;line-height:1.3}
+@media(max-width:420px){
+  .qr-logo{width:min(78%,240px)}
+  .qr-call-btn{font-size:.78rem;padding:.6em .95em}
+  .qr-link-avatar{width:50px;height:50px}
+  .qr-link-label{font-size:.92rem}
+}
+
 /* ===================== Responsive ===================== */
 @media(prefers-reduced-motion:reduce){
   .scroll-cue .arrow{animation:none}
