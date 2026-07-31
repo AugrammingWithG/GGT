@@ -67,46 +67,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="pad" style={{ background: "var(--paper-2)" }}>
-        <div className="wrap">
-          <div className="sec-head">
-            <span className="eyebrow">A taste before you go</span>
-            <h2>From Jimmy&apos;s kitchen</h2>
-            <p>
-              A little something we cook on the road — the rest, you&apos;ll
-              taste on tour.
-            </p>
-          </div>
-          <div className="recipe-card">
-            <div
-              className="recipe-photo"
-              style={{ backgroundImage: "url(/images/creme-brulee-and-white-wine-1024x439-1.jpg)" }}
-            >
-              <span>The finished dish</span>
-            </div>
-            <div className="recipe-body">
-              <span className="eyebrow">Roadside favourite</span>
-              <h3>Pan-seared barramundi, lemon &amp; herb</h3>
-              <p>
-                Bright, simple and built to sit beside a chilled Hunter
-                Semillon — the kind of plate that turns a lookout into a
-                long lunch.
-              </p>
-              <ul className="recipe-ingredients">
-                <li>Fresh barramundi fillets</li>
-                <li>Lemon, olive oil &amp; sea salt</li>
-                <li>Handful of local herbs</li>
-                <li>Knob of butter to finish</li>
-              </ul>
-              <p className="recipe-note">
-                Jimmy&apos;s tip: rest the fish skin-side up for a minute
-                before serving so it stays crisp.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <MissionBand />
 
       <TrustRow lead="Awarded and featured across NSW tourism." />
