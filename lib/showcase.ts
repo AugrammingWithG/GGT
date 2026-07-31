@@ -50,7 +50,7 @@ export const SHOWCASE_TOURS: ShowcaseTour[] = [
     blurb:
       "The coast at its best, finishing with a tasting paddle at a local brewery.",
     bg: "linear-gradient(150deg,#7d7f6e,#32332c)",
-    image: "/images/tours/beaches.webp",
+    image: "/images/tours/beaches.jpg",
     priceFromAdult: 237,
   },
   {

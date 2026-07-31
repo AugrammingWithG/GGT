@@ -329,6 +329,17 @@ section.pad{padding:78px 0}
 .price-card .btn{width:100%;justify-content:center;margin-top:18px}
 @media(max-width:900px){.sig-grid{grid-template-columns:1fr;gap:32px}}
 
+/* Tour Highlights — dark slate band, matching the client's old site.
+   Scoped to .highlights-band (not .sig-grid/.sig-left themselves) because
+   hunter-valley-tour/page.tsx reuses .sig-grid/.sig-left for its own light
+   "day at a glance" block. */
+.highlights-band{background:var(--slate)}
+.highlights-band .sig-left h2{color:var(--on-slate)}
+.highlights-band .sig-left p{color:var(--on-slate-soft)}
+.highlights-band .highlight-list{border-left-color:rgba(244,241,236,.18)}
+.highlights-band .contact-item div{color:var(--on-slate)}
+.highlights-band .ci-ic{background:rgba(244,241,236,.12)}
+
 /* Next-departure pill */
 .depart-pill{display:flex;width:fit-content;align-items:center;gap:9px;background:var(--tint-green);color:var(--green);
   font-size:.85rem;font-weight:600;padding:.5em 1em;border-radius:100px;margin-bottom:16px}
@@ -439,6 +450,13 @@ section.pad{padding:78px 0}
           mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") center/68% no-repeat}
 @media(max-width:900px){.expect-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.expect-grid{grid-template-columns:1fr}}
+
+/* "Everything that's included" — same dark slate band as .highlights-band */
+.expect-band{background:var(--slate)}
+.expect-band .sec-head .eyebrow{color:var(--gold-soft)}
+.expect-band .sec-head h2{color:var(--on-slate)}
+.expect-band .sec-head p{color:var(--on-slate-soft)}
+.expect-band .expect-grid li{color:var(--on-slate)}
 
 /* Direct-booking savings counter */
 .save-band{background:var(--paper-2)}

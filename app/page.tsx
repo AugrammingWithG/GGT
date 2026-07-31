@@ -184,11 +184,11 @@ export default async function Home() {
       </section>
 
       {/* Tour Highlights */}
-      <section className="pad">
+      <section className="pad highlights-band">
         <div className="wrap sig-grid">
           <div className="sig-left">
             <h2 style={{ fontSize: "2.2rem", margin: "0 0 .5em" }}>Tour Highlights</h2>
-            <p style={{ color: "var(--ink-soft)" }}>
+            <p>
               Our mission is to make your day, not just an outing, but an
               expedition, exploring vineyards, and experiencing first-class
               cooking in idyllic surrounds.
@@ -202,19 +202,19 @@ export default async function Home() {
           </div>
           <div className="highlight-list">
             <div className="contact-item">
-              <div className="ci-ic"><Fish size={20} color="var(--wine)" strokeWidth={1.75} /></div>
+              <div className="ci-ic"><Fish size={20} color="var(--on-slate)" strokeWidth={1.75} /></div>
               <div>See the Sydney Fish Markets and visit Hunter Valley boutique wineries.</div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic"><ChefHat size={20} color="var(--wine)" strokeWidth={1.75} /></div>
+              <div className="ci-ic"><ChefHat size={20} color="var(--on-slate)" strokeWidth={1.75} /></div>
               <div>Enjoy delicious food, cooked on the spot by your guide and chef.</div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic"><UtensilsCrossed size={20} color="var(--wine)" strokeWidth={1.75} /></div>
+              <div className="ci-ic"><UtensilsCrossed size={20} color="var(--on-slate)" strokeWidth={1.75} /></div>
               <div>Includes breakfast, lunch, wine tastings, and other chef-prepared foods.</div>
             </div>
             <div className="contact-item">
-              <div className="ci-ic"><Bus size={20} color="var(--wine)" strokeWidth={1.75} /></div>
+              <div className="ci-ic"><Bus size={20} color="var(--on-slate)" strokeWidth={1.75} /></div>
               <div>Hassle-free round-trip transportation from select Sydney hotels.</div>
             </div>
           </div>
@@ -233,18 +233,32 @@ export default async function Home() {
             </p>
           </div>
           <div className="tours">
-            {hunterValley && (
-              <TourCard
-                id={hunterValley.id}
-                image="/images/tours/hunter.webp"
-                label="Hunter Valley"
-                name="Hunter Valley Food & Wine"
-                blurb="Our signature day. Cellar doors, chef-cooked meals and wines matched to the menu."
-                fromPriceAud={hunterValley.priceChild ?? hunterValley.priceAdult}
-                online
-                featured
-              />
-            )}
+            <div className="tour-card featured guide-card">
+              <div
+                className="tour-photo"
+                style={{
+                  backgroundImage: "url(/images/jimmy.webp)",
+                  // Full portrait crop, top-anchored so his shoulders stay
+                  // in frame instead of getting cut by the wide banner box.
+                  backgroundPosition: "center 28%",
+                }}
+              >
+                <span>Your tour guide</span>
+              </div>
+              <div className="tour-body">
+                <h3>Meet Jimmy</h3>
+                <p className="line">
+                  Your driver, your chef and your guide — all the same
+                  person, for thirty years. Every tour is Jimmy&apos;s from
+                  the first pickup to the last drop-off.
+                </p>
+                <div className="tour-foot">
+                  <a href="/about" className="btn btn-outline">
+                    Meet your guide
+                  </a>
+                </div>
+              </div>
+            </div>
             {SHOWCASE_TOURS.map((t) => (
               <TourCard
                 key={t.id}
@@ -271,7 +285,7 @@ export default async function Home() {
       <MissionBand />
 
       {/* What to expect */}
-      <section className="pad">
+      <section className="pad expect-band">
         <div className="wrap">
           <div className="sec-head">
             <span className="eyebrow">What to expect</span>
