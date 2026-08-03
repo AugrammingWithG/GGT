@@ -1092,7 +1092,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
 /* ===================== Legal pages (cancellation policy, terms, privacy) ===================== */
 .legal-shell{display:flex;flex-direction:column;min-height:100vh}
 .legal{flex:1;padding:54px 0 90px;background:var(--paper-2)}
-.legal-inner{max-width:800px;background:var(--white);border:1px solid var(--line);border-radius:var(--r);
+.legal-inner{max-width:800px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:var(--r);
   padding:clamp(28px,4vw,52px);box-shadow:var(--shadow-sm)}
 .legal-inner .legal-title{font-family:var(--font-display);font-size:clamp(28px,4.2vw,42px);font-weight:600;margin:10px 0 0;color:var(--ink)}
 .legal-inner .legal-prose h2{font-family:var(--font-display);font-size:20px;font-weight:600;margin:34px 0 10px;color:var(--wine)}
@@ -1102,6 +1102,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-muted);outline
 .legal-item::before{counter-increment:clause;content:counter(clause,decimal-leading-zero);font-family:var(--font);font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--gold-muted);padding-top:2px}
 .legal-label{display:block;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--wine);margin-bottom:7px}
 .legal-item p{font-size:16px;line-height:1.6;color:var(--ink)}
+.legal-points{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:2px}
+.legal-points li{position:relative;padding-left:20px;font-size:16px;line-height:1.6;color:var(--ink)}
+.legal-points li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--gold-muted)}
 .legal-ids{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
 .legal-ids>div{display:flex;align-items:baseline;gap:9px;padding:9px 15px;border:1px solid var(--line);border-radius:999px;background:var(--paper-2)}
 .legal-ids dt{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--wine)}
