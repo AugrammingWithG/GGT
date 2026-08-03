@@ -99,6 +99,13 @@ export default function Footer() {
           <span>
             &copy; {new Date().getFullYear()} {SITE_NAME} · ACN {BUSINESS_ACN}
           </span>
+          <a
+            href="/terms-and-conditions"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Terms &amp; Conditions
+          </a>
         </div>
       </div>
     </footer>
