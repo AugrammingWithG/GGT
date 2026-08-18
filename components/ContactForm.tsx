@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ContactFallback from "./ContactFallback";
 
 const REGION_OPTIONS = ["North", "East", "West", "South", "Not sure"];
 
@@ -63,7 +64,11 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      {status === "err" && <div className="form-msg err">{error}</div>}
+      {status === "err" && (
+        <div className="form-msg err">
+          {error} <ContactFallback />
+        </div>
+      )}
       <div className="form-field">
         <label htmlFor="c-name">Name</label>
         <input

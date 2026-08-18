@@ -1062,9 +1062,10 @@ footer ul a:hover,footer ul button:hover{color:#fff}
 .modal-close,.modal-close-dark{background:var(--paper-2);border:0;color:var(--ink-soft);width:32px;height:32px;border-radius:50%;
   font-size:1.15rem;cursor:pointer;line-height:1;float:right}
 .modal-close:hover,.modal-close-dark:hover{background:var(--line)}
-.form-msg{padding:12px 14px;border-radius:12px;font-size:.85rem;margin-bottom:16px}
-.modal .form-msg.ok{background:var(--tint-green);color:var(--green)}
-.modal .form-msg.err{background:var(--tint-wine);color:var(--wine-deep)}
+.form-msg{padding:12px 14px;border-radius:12px;font-size:.85rem;margin-bottom:16px;line-height:1.5}
+.form-msg.ok{background:var(--tint-green);color:var(--green)}
+.form-msg.err{background:var(--tint-wine);color:var(--wine-deep)}
+.form-msg a{color:inherit;text-decoration:underline;font-weight:600}
 .modal .btn-ghost{border-color:var(--ink);color:var(--ink);background:transparent}
 .modal .btn-ghost:hover{background:var(--ink);color:var(--paper)}
 .modal .btn-primary{background:var(--wine-solid);color:#fff}
