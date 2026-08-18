@@ -28,7 +28,7 @@ const enquirySchema = z.object({
    */
   payOnDayAddOns: z.array(addOnSchema).default([]),
   total: z.number().nonnegative(),
-  /** `YYYY-MM-DD`, passed straight to the FareHarbor availability calendar. */
+  /** `YYYY-MM-DD`, the date the guest asked about; quoted by hand from here. */
   preferredDate: z
     .string()
     .regex(/^(\d{4}-\d{2}-\d{2})?$/, "Invalid date.")

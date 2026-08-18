@@ -15,8 +15,9 @@ export const metadata: Metadata = {
 
 /*
   DRAFT. Generated from a direct read of the enquiry flow's code (form ->
-  /api/enquiries -> Firestore -> Resend emails -> optional FareHarbor handoff
-  -> /admin dashboard) as it exists today, not a generic template. It has NOT
+  /api/enquiries -> Firestore -> Resend emails -> /admin dashboard), plus the
+  separate Bókun widget that books the Hunter Valley tour, as they exist
+  today, not a generic template. It has NOT
   been reviewed by the client or a lawyer and must not go live, be linked from
   the site nav, or be submitted anywhere until they've approved it. If the
   underlying code changes (new integration, new field collected, a retention
@@ -112,10 +113,12 @@ export default function PrivacyPolicy() {
             enquiries. Login is protected by Firebase Authentication.
           </li>
           <li>
-            <strong>FareHarbor</strong>, our booking platform. If you
-            continue from an enquiry through to checkout, your name, email,
-            phone and message are passed to FareHarbor to pre-fill the
-            booking form. This only happens if you proceed to that step.
+            <strong>Bókun</strong>, our booking platform. The Hunter Valley
+            tour is booked through a Bókun widget on its tour page. Anything
+            you type into that widget — name, email, phone, party details and
+            payment — is collected by Bókun under its own privacy policy, not
+            by this site, and Bókun sends your booking confirmation. Nothing
+            from the enquiry form is passed to it.
           </li>
         </ul>
         <p>

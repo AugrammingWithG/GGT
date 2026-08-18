@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Price from "@/components/Price";
 import CurrencyPicker from "@/components/CurrencyPicker";
-import BookingCta from "@/components/BookingCta";
+import BokunWidget from "@/components/BokunWidget";
 import NextDeparture from "@/components/NextDeparture";
 import RouteMap from "@/components/RouteMap";
 import FaqAccordion from "@/components/FaqAccordion";
 import { getTours } from "@/lib/tours.server";
-import { FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
+import { BOKUN_HUNTER_VALLEY_PRODUCT_ID } from "@/lib/bokun";
 
 export const dynamic = "force-dynamic";
 
@@ -112,9 +112,11 @@ export default async function HunterValleyTourPage() {
               <div className="price-row"><div><b>Adult</b><br /><small>Ages 17+</small></div><div className="amt"><Price aud={tour.priceAdult!} /></div></div>
               {tour.priceSenior != null && <div className="price-row"><div><b>Senior</b><br /><small>65+</small></div><div className="amt"><Price aud={tour.priceSenior} /></div></div>}
               {tour.priceChild != null && <div className="price-row"><div><b>Child / student</b><br /><small>4–16 years</small></div><div className="amt"><Price aud={tour.priceChild} /></div></div>}
-              <BookingCta itemId={tour.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined} className="btn btn-wine">
+              {/* Booking itself happens in the Bókun widget further down the
+                  page, so this scrolls there rather than opening anything. */}
+              <a href="#book" className="btn btn-wine">
                 Check availability
-              </BookingCta>
+              </a>
               <p style={{ fontSize: ".78rem", color: "var(--ink-soft)", marginTop: 12, textAlign: "center" }}>
                 Students of wine save $20 per adult when booking direct.
               </p>
@@ -136,13 +138,17 @@ export default async function HunterValleyTourPage() {
             ))}
           </div>
 
-          <div style={{ textAlign: "center", margin: "30px 0 44px" }}>
-            <BookingCta
-              itemId={tour?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-              className="btn btn-gold"
-            >
-              Book Now
-            </BookingCta>
+          {/* The booking surface. Bókun renders its own calendar, guest
+              picker and checkout in here, and sends its own confirmation
+              email — there is no separate booking flow on our side. */}
+          <div id="book" style={{ scrollMarginTop: 96, margin: "30px 0 44px" }}>
+            <div className="sec-head" style={{ marginBottom: 16 }}>
+              <span className="eyebrow">Book online</span>
+              <h2>Check dates &amp; book</h2>
+            </div>
+            <BokunWidget
+              productId={tour?.bokunProductId || BOKUN_HUNTER_VALLEY_PRODUCT_ID}
+            />
           </div>
 
           {tour && (
@@ -294,9 +300,9 @@ export default async function HunterValleyTourPage() {
         <div className="wrap">
           <h2>Ready for a day in the Hunter?</h2>
           <p>Monday and Wednesday, straight from Sydney.</p>
-          <BookingCta itemId={tour?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined} className="btn btn-gold">
+          <a href="#book" className="btn btn-gold">
             Check availability
-          </BookingCta>
+          </a>
         </div>
       </section>
     </>

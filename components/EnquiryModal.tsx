@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 import { PartyPopper } from "lucide-react";
 import Price, { ChargedInAud } from "./Price";
-import { FAREHARBOR_ENABLED } from "@/lib/fareharbor";
-import { openFareHarbor } from "@/lib/fareharbor.client";
 
 type DraftAddOn = { id: string; name: string; price?: number };
 
@@ -22,8 +20,6 @@ export type EnquiryDraft = {
    */
   payOnDayAddOns: DraftAddOn[];
   total: number;
-  /** FareHarbor item for the selected tour, if one is configured. */
-  fareharborItemId?: string;
 };
 
 type Status = "idle" | "sending" | "ok" | "err";
@@ -78,31 +74,10 @@ export default function EnquiryModal({
     }
   }
 
-  // With FareHarbor configured, its own checkout collects name/email/date and
-  // presents its own cancellation policy and terms & conditions — asking
-  // again on-site is the redundant double-entry step we're removing. Guests
-  // go straight to booking; the plain enquiry form (and its /api/enquiries
-  // lead record) only exists as the fallback for when there's no FareHarbor
-  // checkout to hand off to.
-  useEffect(() => {
-    if (!FAREHARBOR_ENABLED) return;
-    openFareHarbor({
-      itemId: draft.fareharborItemId || undefined,
-      guests: draft.guests,
-      context: {
-        tour: draft.tourName,
-        extras: draft.addOns.map((a) => a.name).join(", "),
-        extrasPaidOnDay: draft.payOnDayAddOns.map((a) => a.name).join(", "),
-        estimate: draft.total,
-      },
-    });
-    onClose();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (FAREHARBOR_ENABLED) {
-    return null;
-  }
+  // This modal is the whole booking path for private tours: they're quoted by
+  // hand, never sold online, so the enquiry lands in Firestore and email via
+  // /api/enquiries and Jimmy replies. (Hunter Valley is the exception — it
+  // books through the Bókun widget on its own page and never opens this.)
 
   // Portaled straight to <body>: rendered from inside .nature-page, whose
   // `isolation:isolate` traps this modal's z-index under its own stacking

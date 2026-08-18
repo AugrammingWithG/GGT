@@ -15,7 +15,7 @@ import { money } from "./money";
 /**
  * Whether the real AUD price stays visible next to the converted total.
  *
- * Guests are charged in AUD by FareHarbor, so someone who only ever saw a
+ * Guests are charged in AUD at checkout, so someone who only ever saw a
  * converted figure will see a different number on their card once their bank's
  * FX spread lands. This keeps the actual charged amount on the two surfaces
  * where the number becomes an obligation — the bill total and the enquiry

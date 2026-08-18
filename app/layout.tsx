@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { IBM_Plex_Mono, Quicksand, Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -9,7 +8,6 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import VisitorBeacon from "@/components/VisitorBeacon";
 import CurrencyProvider from "@/components/CurrencyProvider";
 import { SITE_URL, SITE_NAME, HOME_DESCRIPTION, organizationJsonLd } from "@/lib/seo";
-import { FAREHARBOR_ENABLED } from "@/lib/fareharbor";
 import { detectCountry } from "@/lib/geo.server";
 import { themeInitScript } from "@/lib/theme";
 
@@ -114,16 +112,10 @@ export default async function RootLayout({
         <VisitorBeacon />
 
         {/*
-          FareHarbor embed API. `autolightframe=yes` makes it intercept clicks
-          on any fareharbor.com/embeds/book/… link on the page and open it in a
-          modal, which is how every booking CTA here works.
+          No booking script here on purpose. Bókun renders inline rather than
+          intercepting clicks site-wide, so its loader belongs to the one page
+          that books — see components/BokunWidget.tsx.
         */}
-        {FAREHARBOR_ENABLED && (
-          <Script
-            src="https://fareharbor.com/embeds/api/v1/?autolightframe=yes"
-            strategy="afterInteractive"
-          />
-        )}
       </body>
     </html>
   );

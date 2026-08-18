@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BookingCta from "@/components/BookingCta";
 import ContactForm from "@/components/ContactForm";
 import Price from "@/components/Price";
-import { tourItemId } from "@/lib/fareharbor";
+import { ENQUIRY_HREF } from "@/lib/bokun";
 import { privateTourEstimate } from "@/lib/tours";
 import { getPrivateTourRate } from "@/lib/tours.server";
 
@@ -126,9 +125,11 @@ export default async function PrivateToursPage() {
         <div className="wrap">
           <h2>Let&apos;s plan your private day</h2>
           <p>Tell us your group and dates — Jimmy will take it from there.</p>
-          <BookingCta itemId={tourItemId()} className="btn btn-gold">
+          {/* Private tours aren't sold online — every one is quoted by hand,
+              so this goes to the enquiry form, not a checkout. */}
+          <Link href={ENQUIRY_HREF} className="btn btn-gold">
             Enquire now
-          </BookingCta>
+          </Link>
         </div>
       </section>
 

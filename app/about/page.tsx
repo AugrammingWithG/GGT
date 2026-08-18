@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import BookingCta from "@/components/BookingCta";
 import MissionBand from "@/components/MissionBand";
 import TrustRow from "@/components/TrustRow";
-import { FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
 
 export const metadata: Metadata = {
   title: "About Jimmy",
@@ -75,9 +73,9 @@ export default function AboutPage() {
         <div className="wrap">
           <h2>Come along for the ride</h2>
           <p>Book the signature day, or plan a private one.</p>
-          <BookingCta itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined} className="btn btn-gold">
+          <a href="/hunter-valley-tour" className="btn btn-gold">
             See the Hunter Valley tour
-          </BookingCta>
+          </a>
         </div>
       </section>
     </>
