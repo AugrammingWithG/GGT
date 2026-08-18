@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import BookingCta from "./BookingCta";
 import {
   ACCREDITATION_NUMBER,
   BUSINESS_ACN,
@@ -11,11 +10,7 @@ import {
   BUSINESS_PHONE,
   SITE_NAME,
 } from "@/lib/seo";
-import {
-  FAREHARBOR_FLAGSHIP_ITEM_ID,
-  giftBookingHref,
-  tourItemId,
-} from "@/lib/fareharbor";
+import { giftBookingHref } from "@/lib/fareharbor";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -47,12 +42,10 @@ export default function Footer() {
           <h4>Tours</h4>
           <ul>
             <li>
-              <BookingCta itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}>
-                Hunter Valley Tour
-              </BookingCta>
+              <Link href="/hunter-valley-tour">Hunter Valley Tour</Link>
             </li>
             <li>
-              <BookingCta itemId={tourItemId()}>Private Tours</BookingCta>
+              <Link href="/private-tours">Private Tours</Link>
             </li>
             <li>
               <a href={giftBookingHref()}>Gift cards</a>
