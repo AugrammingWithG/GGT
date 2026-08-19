@@ -87,10 +87,10 @@ export type Tour = {
   /** Optional display order in the builder dropdown. */
   order?: number;
   /**
-   * FareHarbor item ID this tour books against. Only Hunter Valley has one;
-   * every other tour is a private tour booked by enquiry, not FareHarbor.
+   * Bókun product ID this tour books against. Only Hunter Valley has one;
+   * every other tour is a private tour booked by enquiry, not sold online.
    */
-  fareharborItemId?: string;
+  bokunProductId?: string;
   /** Pickup window, e.g. "6:30-7:10am". */
   startTime?: string;
   /** Return time and/or drop-off point, e.g. "~5:52pm Circular Quay". */
@@ -137,9 +137,9 @@ export const isPriceConfirmed = (a: AddOn): boolean => a.price !== undefined;
 /**
  * The quoted estimate: base fare plus chargeable extras, per guest.
  *
- * The single source of the number we show, email and hand to FareHarbor, so
- * pay-on-the-day extras are dropped once, here, rather than at each call site.
- * Pass the full selected list — filtering is this function's job.
+ * The single source of the number we show and email, so pay-on-the-day extras
+ * are dropped once, here, rather than at each call site. Pass the full
+ * selected list — filtering is this function's job.
  */
 export function tourTotal(base: number, guests: number, selected: AddOn[]): number {
   const extras = chargeableAddOns(selected).reduce(
@@ -154,8 +154,8 @@ export function tourTotal(base: number, guests: number, selected: AddOn[]): numb
  * Used to seed Firestore (scripts/seed-tours.ts) and as a graceful fallback
  * when Firestore is empty or unreachable.
  *
- * Hunter Valley is the only tour sold as its own FareHarbor product (65971)
- * and priced per person (see priceAdult/priceSenior/priceChild). Every other
+ * Hunter Valley is the only tour sold as its own Bókun product (1269452) and
+ * priced per person (see priceAdult/priceSenior/priceChild). Every other
  * itinerary is a private tour: priced from PRIVATE_TOUR_RATE and booked by
  * enquiry only.
  */
@@ -198,7 +198,7 @@ export const SEED_TOURS: Tour[] = [
     min: 2,
     max: 16,
     order: 2,
-    fareharborItemId: "65971",
+    bokunProductId: "1269452",
     days: "Monday & Wednesday",
     duration: "Up to 11 hours",
     returnTime: "Sydney, around 6:30pm",

@@ -48,10 +48,10 @@ export default function TourEditor({
           className="mt-2 text-base font-semibold"
         />
         <p className="mt-2 font-mono text-xs text-muted-foreground">
-          id: {draft.id} · booking CTA opens{" "}
-          {draft.fareharborItemId
-            ? `FareHarbor item ${draft.fareharborItemId}`
-            : "the full FareHarbor item list"}
+          id: {draft.id} ·{" "}
+          {draft.bokunProductId
+            ? `books online via Bókun product ${draft.bokunProductId}`
+            : "booked by enquiry"}
         </p>
       </div>
 
@@ -79,11 +79,11 @@ export default function TourEditor({
           />
         </div>
         <div className="grid gap-2">
-          <Label>FareHarbor ID</Label>
+          <Label>Bókun product ID</Label>
           <Input
-            value={draft.fareharborItemId ?? ""}
-            onChange={(e) => setDraft({ ...draft, fareharborItemId: e.target.value.trim() })}
-            placeholder="e.g. 123456"
+            value={draft.bokunProductId ?? ""}
+            onChange={(e) => setDraft({ ...draft, bokunProductId: e.target.value.trim() })}
+            placeholder="e.g. 1269452"
           />
         </div>
       </div>

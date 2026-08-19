@@ -1,6 +1,5 @@
 import { Wine, Fish, ChefHat, UtensilsCrossed, Bus, User, Users, Hourglass } from "lucide-react";
 import Price from "@/components/Price";
-import BookingCta from "@/components/BookingCta";
 import TourCard from "@/components/TourCard";
 import HeroVideo from "@/components/HeroVideo";
 import CompassRose from "@/components/CompassRose";
@@ -15,7 +14,7 @@ import { getTours } from "@/lib/tours.server";
 import { toursJsonLd, SOCIAL_LINKS } from "@/lib/seo";
 import { SHOWCASE_TOURS } from "@/lib/showcase";
 import { REGIONS } from "@/lib/regions";
-import { FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
+import { HUNTER_VALLEY_BOOKING_HREF } from "@/lib/booking";
 
 const north = REGIONS.find((r) => r.id === "north")!;
 const east = REGIONS.find((r) => r.id === "east")!;
@@ -86,12 +85,9 @@ export default async function Home() {
               <h1>Gourmet Getaway Tours</h1>
               <p>Chef-led Hunter Valley food and wine tours, from Sydney.</p>
               <div className="hero-actions">
-                <BookingCta
-                  itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-                  className="btn btn-gold"
-                >
+                <a href={HUNTER_VALLEY_BOOKING_HREF} className="btn btn-gold">
                   Book Now
-                </BookingCta>
+                </a>
               </div>
             </div>
           </div>
@@ -156,12 +152,9 @@ export default async function Home() {
             complement every drop.
           </p>
           <div className="hero-actions">
-            <BookingCta
-              itemId={hunterValley?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-              className="btn btn-book"
-            >
+            <a href={HUNTER_VALLEY_BOOKING_HREF} className="btn btn-book">
               Book Now
-            </BookingCta>
+            </a>
             <a href="/hunter-valley-tour" className="btn btn-learn">
               Learn More
             </a>
@@ -193,12 +186,9 @@ export default async function Home() {
               expedition, exploring vineyards, and experiencing first-class
               cooking in idyllic surrounds.
             </p>
-            <BookingCta
-              itemId={hunterValley?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-              className="btn btn-wine"
-            >
+            <a href={HUNTER_VALLEY_BOOKING_HREF} className="btn btn-wine">
               Book Now
-            </BookingCta>
+            </a>
           </div>
           <div className="highlight-list">
             <div className="contact-item">

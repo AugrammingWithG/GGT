@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Price from "@/components/Price";
 import CurrencyPicker from "@/components/CurrencyPicker";
-import BookingCta from "@/components/BookingCta";
+import BokunWidget from "@/components/BokunWidget";
 import NextDeparture from "@/components/NextDeparture";
 import RouteMap from "@/components/RouteMap";
 import FaqAccordion from "@/components/FaqAccordion";
 import { getTours } from "@/lib/tours.server";
-import { FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
+import { BOKUN_HUNTER_VALLEY_PRODUCT_ID } from "@/lib/booking";
 
 export const dynamic = "force-dynamic";
 
@@ -112,9 +112,9 @@ export default async function HunterValleyTourPage() {
               <div className="price-row"><div><b>Adult</b><br /><small>Ages 17+</small></div><div className="amt"><Price aud={tour.priceAdult!} /></div></div>
               {tour.priceSenior != null && <div className="price-row"><div><b>Senior</b><br /><small>65+</small></div><div className="amt"><Price aud={tour.priceSenior} /></div></div>}
               {tour.priceChild != null && <div className="price-row"><div><b>Child / student</b><br /><small>4–16 years</small></div><div className="amt"><Price aud={tour.priceChild} /></div></div>}
-              <BookingCta itemId={tour.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined} className="btn btn-wine">
+              <a href="#book" className="btn btn-wine">
                 Check availability
-              </BookingCta>
+              </a>
               <p style={{ fontSize: ".78rem", color: "var(--ink-soft)", marginTop: 12, textAlign: "center" }}>
                 Students of wine save $20 per adult when booking direct.
               </p>
@@ -123,6 +123,25 @@ export default async function HunterValleyTourPage() {
           </div>
         </section>
       )}
+
+      {/* The booking box. Every "Book now"/"Check availability" CTA on the
+          site lands here — this is the only place the tour can be booked. */}
+      {/* scroll-margin-top so the heading clears the sticky header when a
+          CTA jumps here — same reason .choose-section carries one. */}
+      <section className="pad" id="book" style={{ scrollMarginTop: "var(--nav-h)" }}>
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">Book online</span>
+            <h2>Check dates &amp; book</h2>
+            <p>Pick a date and party size — confirmation is instant.</p>
+          </div>
+          {/* The admin dashboard can override the product ID per tour; the
+              constant is the fallback when Firestore has none set. */}
+          <BokunWidget
+            productId={tour?.bokunProductId || BOKUN_HUNTER_VALLEY_PRODUCT_ID}
+          />
+        </div>
+      </section>
 
       {/* Reproduces gourmetgetawaytours.com.au/hunter-valley-food-wine-tour/
           content and order exactly, restyled to match the new site. */}
@@ -137,12 +156,9 @@ export default async function HunterValleyTourPage() {
           </div>
 
           <div style={{ textAlign: "center", margin: "30px 0 44px" }}>
-            <BookingCta
-              itemId={tour?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-              className="btn btn-gold"
-            >
+            <a href="#book" className="btn btn-gold">
               Book Now
-            </BookingCta>
+            </a>
           </div>
 
           {tour && (
@@ -294,9 +310,9 @@ export default async function HunterValleyTourPage() {
         <div className="wrap">
           <h2>Ready for a day in the Hunter?</h2>
           <p>Monday and Wednesday, straight from Sydney.</p>
-          <BookingCta itemId={tour?.fareharborItemId || FAREHARBOR_FLAGSHIP_ITEM_ID || undefined} className="btn btn-gold">
+          <a href="#book" className="btn btn-gold">
             Check availability
-          </BookingCta>
+          </a>
         </div>
       </section>
     </>

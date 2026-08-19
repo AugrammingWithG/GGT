@@ -40,10 +40,10 @@ export default function TourCard({
           >
             <Map className="size-5" style={{ color: "var(--gold-muted)" }} />
           </div>
-          {tour.fareharborItemId && (
+          {tour.bokunProductId && (
             <Badge variant="secondary" className="gap-1">
               <Ticket className="size-3" />
-              FH
+              Bókun
             </Badge>
           )}
         </div>

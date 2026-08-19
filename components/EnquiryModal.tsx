@@ -76,9 +76,9 @@ export default function EnquiryModal({
   }
 
   // "Enquire" means enquire. These tours carry no fixed departure to sell
-  // through FareHarbor checkout — they're quoted by hand — so the button
+  // through an online checkout — they're quoted by hand — so the button
   // opens this form and the lead lands in /api/enquiries and the admin
-  // dashboard. Only the Hunter Valley "Book now" CTAs go to FareHarbor.
+  // dashboard. Only Hunter Valley sells online, through its Bókun widget.
   //
   // Portaled straight to <body>: rendered from inside .nature-page, whose
   // `isolation:isolate` traps this modal's z-index under its own stacking

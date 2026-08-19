@@ -4,9 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import BookingCta from "./BookingCta";
 import ThemeToggle from "./ThemeToggle";
-import { FAREHARBOR_ENABLED, FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
+import { HUNTER_VALLEY_BOOKING_HREF } from "@/lib/booking";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -26,7 +25,6 @@ export default function Header() {
   const [compact, setCompact] = useState(false);
   const [flagshipInView, setFlagshipInView] = useState(false);
   const closeMenu = () => setOpen(false);
-  const cta = FAREHARBOR_ENABLED ? "Book now" : "Build your tour";
 
   // Only the home page has a hero video for the header to float over — every
   // other page keeps the solid bar since there's nothing to show through it.
@@ -144,13 +142,13 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          <BookingCta
-            itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
+          <Link
+            href={HUNTER_VALLEY_BOOKING_HREF}
             className="btn btn-wine"
             onClick={closeMenu}
           >
-            {cta}
-          </BookingCta>
+            Book now
+          </Link>
         </nav>
 
         <ThemeToggle />

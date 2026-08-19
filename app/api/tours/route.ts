@@ -29,9 +29,9 @@ const tourSchema = z.object({
   max: z.number().int().min(1).default(DEFAULT_MAX_GUESTS),
   order: z.number().int().optional(),
   addOns: z.array(addOnSchema).default([]),
-  fareharborItemId: z
+  bokunProductId: z
     .string()
-    .regex(/^[0-9]*$/, "FareHarbor item IDs are numeric.")
+    .regex(/^[0-9]*$/, "Bókun product IDs are numeric.")
     .default(""),
 });
 

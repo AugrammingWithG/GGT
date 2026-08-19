@@ -10,7 +10,6 @@ import {
   BUSINESS_PHONE,
   SITE_NAME,
 } from "@/lib/seo";
-import { giftBookingHref } from "@/lib/fareharbor";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -46,9 +45,6 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/private-tours">Private Tours</Link>
-            </li>
-            <li>
-              <a href={giftBookingHref()}>Gift cards</a>
             </li>
           </ul>
         </div>

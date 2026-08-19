@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Price from "./Price";
-import BookingCta from "./BookingCta";
 import EnquiryModal, { type EnquiryDraft } from "./EnquiryModal";
-import { FAREHARBOR_FLAGSHIP_ITEM_ID } from "@/lib/fareharbor";
+import { HUNTER_VALLEY_BOOKING_HREF } from "@/lib/booking";
 
 export type TourCardProps = {
   id: string;
@@ -74,12 +74,9 @@ export default function TourCard({
             </div>
           )}
           {online ? (
-            <BookingCta
-              itemId={FAREHARBOR_FLAGSHIP_ITEM_ID || undefined}
-              className="btn btn-wine"
-            >
+            <Link href={HUNTER_VALLEY_BOOKING_HREF} className="btn btn-wine">
               Book now
-            </BookingCta>
+            </Link>
           ) : (
             <button
               type="button"
