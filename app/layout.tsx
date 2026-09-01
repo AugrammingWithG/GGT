@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { IBM_Plex_Mono, Quicksand, Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -7,6 +8,7 @@ import DirectBookingModal from "@/components/DirectBookingModal";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import VisitorBeacon from "@/components/VisitorBeacon";
 import CurrencyProvider from "@/components/CurrencyProvider";
+import { BOKUN_LOADER_SRC } from "@/lib/booking";
 import { SITE_URL, SITE_NAME, HOME_DESCRIPTION, organizationJsonLd } from "@/lib/seo";
 import { detectCountry } from "@/lib/geo.server";
 import { themeInitScript } from "@/lib/theme";
@@ -110,6 +112,13 @@ export default async function RootLayout({
           <WhatsAppButton />
         </CurrencyProvider>
         <VisitorBeacon />
+        {/* The Bókun widgets loader — the site's single instance. It scans for
+            `.bokunWidget` elements and keeps a MutationObserver on the body,
+            so the one widget (on /hunter-valley-tour) initialises whether it
+            was server-rendered or reached by a client-side nav. Never render a
+            second copy in a page or component: the widgets app alert()s the
+            visitor if it is initialised twice. */}
+        <Script src={BOKUN_LOADER_SRC} strategy="afterInteractive" />
       </body>
     </html>
   );

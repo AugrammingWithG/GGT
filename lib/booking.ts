@@ -17,7 +17,7 @@ export const BOKUN_BOOKING_CHANNEL_UUID = "9e58f814-1ad8-4004-a5ce-f59e2c2211aa"
 /** Bókun product ID for the Hunter Valley Food & Wine Tour. */
 export const BOKUN_HUNTER_VALLEY_PRODUCT_ID = "1269452";
 
-/** The widgets loader. Loaded once, on the page that has a widget on it. */
+/** The widgets loader. Loaded once for the whole site, from app/layout.tsx. */
 export const BOKUN_LOADER_SRC =
   `https://widgets.bokun.io/assets/javascripts/apps/build/BokunWidgetsLoader.js` +
   `?bookingChannelUUID=${BOKUN_BOOKING_CHANNEL_UUID}`;
